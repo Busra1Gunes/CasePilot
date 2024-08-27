@@ -15,7 +15,7 @@ namespace DataAccess.Concrete.EntityFramework
 		{
 			//optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-IUMMNFO\SQLEXPRESS;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
             //optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
-			optionsBuilder.UseSqlServer("Data Source=AYZASOFT-0000;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
+			optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
 
 		}
 		DbSet<User> Users { get; set; }
