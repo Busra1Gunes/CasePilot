@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Business.Abstract;
+using DataAccess.Abstract;
+using Entities.Concrete;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -7,7 +10,17 @@ namespace WebAPI.Controllers
 	[ApiController]
 	public class StocksController : ControllerBase
 	{
+		readonly IStockService _stockService;
+
+		public StocksController(IStockService stockService)
+		{
+			_stockService = stockService;
+		}
+
 		[HttpGet]
-		public string Get() => "Merhaba";
+		public List<Stock> Get()
+		{
+			return _stockService.GetAll();
+		}
 	}
 }
