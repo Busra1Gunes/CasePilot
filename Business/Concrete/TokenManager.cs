@@ -17,7 +17,7 @@ namespace Business.Concrete
         readonly IConfiguration _configuration;
         public TokenManager(IConfiguration configuration)
         {
-            _configuration = configuration;
+             _configuration = configuration;
         }
         public Task<GenerateTokenResponseDto> GenerateToken(GenerateTokenRequestDto request)
         {
