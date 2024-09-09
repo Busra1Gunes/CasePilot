@@ -45,10 +45,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddSingleton<IStockService, StockManager>();
-builder.Services.AddSingleton<IStockDal, EfStockDal>();
-builder.Services.AddSingleton<IAuthService, AuthManager>();
-builder.Services.AddSingleton<ITokenService, TokenManager>();
+
 
 //Eklenecek olan satırlar
 builder.Services.AddAuthentication(options =>

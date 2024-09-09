@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Authorization;
@@ -20,9 +21,14 @@ namespace WebAPI.Controllers
 
 		[HttpGet]
 		[Authorize]
-		public List<Stock> Get()
+		public IActionResult Get()
 		{
-			return _stockService.GetAll();
-		}
+			var result= _stockService.GetAll();
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
 	}
 }

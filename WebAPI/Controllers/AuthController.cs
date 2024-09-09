@@ -15,8 +15,7 @@ namespace WebAPI.Controllers
         {
             _authService = authService;
         }
-        [HttpPost("LoginUser")]
-        [AllowAnonymous]
+        [HttpPost]
         public async Task<ActionResult<UserLoginResponseDto>> LoginUserAsync([FromBody] UserLoginRequestDto request)
         {
             var result = await _authService.LoginUserAsync(request);
