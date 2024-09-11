@@ -21,6 +21,8 @@ namespace DataAccess.Concrete.EntityFramework
 		DbSet<User> Users { get; set; }
 		DbSet<Stock> Stocks { get; set; }
 		DbSet<Supplier> Suppliers { get; set; }
+		DbSet<Movement> Movements { get; set; }
+		DbSet<Stock_Movement> Stock_Movements { get; set; }
 
 	}
 }

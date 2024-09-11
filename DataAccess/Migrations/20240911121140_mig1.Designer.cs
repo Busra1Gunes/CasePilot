@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240826202427_mig1")]
+    [Migration("20240911121140_mig1")]
     partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,23 @@ namespace DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Entities.Concrete.Movement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("MovementName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Movements");
+                });
 
             modelBuilder.Entity("Entities.Concrete.Stock", b =>
                 {
@@ -41,6 +58,9 @@ namespace DataAccess.Migrations
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.Property<string>("StockName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -57,6 +77,35 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Stocks");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Stock_Movement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("movementDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("movementId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("stockID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("movementId");
+
+                    b.HasIndex("stockID");
+
+                    b.ToTable("Stock_Movements");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Supplier", b =>
@@ -107,6 +156,35 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Stock_Movement", b =>
+                {
+                    b.HasOne("Entities.Concrete.Movement", "Movement")
+                        .WithMany("Stock_Movements")
+                        .HasForeignKey("movementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Concrete.Stock", "Stock")
+                        .WithMany("Stock_Movements")
+                        .HasForeignKey("stockID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movement");
+
+                    b.Navigation("Stock");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Movement", b =>
+                {
+                    b.Navigation("Stock_Movements");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Stock", b =>
+                {
+                    b.Navigation("Stock_Movements");
                 });
 #pragma warning restore 612, 618
         }

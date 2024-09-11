@@ -1,5 +1,6 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
+using Entities.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,9 @@ namespace Business.Abstract
 {
 	public interface IStockService
 	{
-        IDataResult<List<Stock>> GetAll();
+        Task<object> GetAll();
         IDataResult<Stock> GetById(int id);
-        IResult Add(Stock stock);
+        IResult Add(StockDto stock);
 
     }
 }
