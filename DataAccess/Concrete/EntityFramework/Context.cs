@@ -1,6 +1,8 @@
 ﻿using Entities.Concrete;
+using Entities.Seeds;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
@@ -16,13 +18,22 @@ namespace DataAccess.Concrete.EntityFramework
             //optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-IUMMNFO\SQLEXPRESS;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
             //optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
             //	optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
-            optionsBuilder.UseSqlServer("Data Source=AYZASOFT-0000;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
+            optionsBuilder.UseSqlServer("Data Source=AYZASOFT-0000;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
         }
-		DbSet<User> Users { get; set; }
-		DbSet<Stock> Stocks { get; set; }
-		DbSet<Supplier> Suppliers { get; set; }
-		DbSet<Movement> Movements { get; set; }
-		DbSet<Stock_Movement> Stock_Movements { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new IlSeed());
+            modelBuilder.ApplyConfiguration(new IlceSeed());
+            modelBuilder.ApplyConfiguration(new KullaniciSeed());
+            base.OnModelCreating(modelBuilder);
+        }
+        DbSet<Il> Iller { get; set; }
+		DbSet<Ilce> Ilceler { get; set; }
+		DbSet<DavaTur> DavaTurleri { get; set; }
+		DbSet<BasvuruTur> BasvuruTurleri { get; set; }
+		DbSet<Kullanici> Kullanicilar { get; set; }
+		DbSet<Dosya> Dosyalar { get; set; }
+
 
 	}
 }

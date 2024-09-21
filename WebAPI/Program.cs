@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Business.Abstract;
@@ -13,6 +14,7 @@ using Service.Mapping;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped(provider =>
 {
     var httpContextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
@@ -27,6 +29,7 @@ builder.Services.AddScoped(provider =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 
 

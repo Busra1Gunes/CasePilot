@@ -63,5 +63,13 @@ namespace Core.DataAccess.EntityFramework
                 context.SaveChanges(); //güncelle
             }
         }
+
+        public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> expression)
+        {
+            using (TContext context = new())
+            {
+                return context.Set<TEntity>().Where(expression);
+            }
+        }
     }
 }

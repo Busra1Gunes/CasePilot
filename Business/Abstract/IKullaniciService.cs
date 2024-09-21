@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-	public interface IStockService
+	public interface IKullaniciService
 	{
-        Task<object> GetAll();
-        IDataResult<Stock> GetById(int id);
-        IResult Add(StockDto stock);
+       Task<object> GetAll();
+        IDataResult<Kullanici> GetById(int id);
+        IResult Add(KullaniciDto kullanici);
 
     }
 }

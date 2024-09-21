@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete
 {
-    public class EfStockDal : EfEntityRepositoryBase<Stock, Context>, IStockDal
+    public class EfKullaniciDal : EfEntityRepositoryBase<Kullanici, Context>, IKullanici
     {
 
     }

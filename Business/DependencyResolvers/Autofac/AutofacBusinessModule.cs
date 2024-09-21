@@ -20,10 +20,8 @@ namespace Business.DependencyResolvers.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             //Birisi senden IStockService isterse ona StockManager registe et
-            builder.RegisterType<StockManager>().As<IStockService>().SingleInstance();
-            builder.RegisterType<EfStockDal>().As<IStockDal>().SingleInstance();
-            builder.RegisterType<AuthManager>().As<IAuthService>().SingleInstance();
-            builder.RegisterType<TokenManager>().As<ITokenService>().SingleInstance();
+            builder.RegisterType<KullaniciManager>().As<IKullaniciService>().SingleInstance();
+            builder.RegisterType<EfKullaniciDal>().As<IKullanici>().SingleInstance();
 
 
 
