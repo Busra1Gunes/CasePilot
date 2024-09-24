@@ -21,7 +21,7 @@ namespace Business.DependencyResolvers.Autofac
         {
             //Birisi senden IStockService isterse ona StockManager registe et
             builder.RegisterType<KullaniciManager>().As<IKullaniciService>().SingleInstance();
-            builder.RegisterType<EfKullaniciDal>().As<IKullanici>().SingleInstance();
+            builder.RegisterType<EfKullaniciDal>().As<IKullaniciDal>().SingleInstance();
 
 
 

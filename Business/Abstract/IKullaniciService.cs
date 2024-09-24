@@ -12,7 +12,7 @@ namespace Business.Abstract
 	public interface IKullaniciService
 	{
        Task<object> GetAll();
-        IDataResult<Kullanici> GetById(int id);
+        IDataResult<KullaniciListeDto> GetById(int id);
         IResult Add(KullaniciDto kullanici);
 
     }

@@ -12,7 +12,11 @@ namespace Service.Mapping
 
         public MapProfile(IHttpContextAccessor httpContextAccessor)
         {
-            CreateMap<Kullanici, KullaniciDto>().ReverseMap();
+            CreateMap<Kullanici, KullaniciDto>()
+                //.ForMember(dest=>dest.Il,opt=>opt.MapFrom(k=>k.Il.Adi))
+                //.ForMember(dest=>dest.Ilce,opt=>opt.MapFrom(k=>k.Ilce.IlceAdi))
+                .ReverseMap();
+
             CreateMap<Kullanici, KullaniciListeDto>()
                 .ForMember(dest => dest.Il, opt => opt.MapFrom(x => x.Il.Adi))
                 .ForMember(dest => dest.Ilce, opt => opt.MapFrom(x => x.Ilce.IlceAdi))

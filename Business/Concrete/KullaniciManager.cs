@@ -16,47 +16,33 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class KullaniciManager : IKullaniciService
-    {
-        IKullanici _kullaniciDal;
-        readonly IMapper _mapper;
-
-        public KullaniciManager(IKullanici kullaniciDal, IMapper mapper)
-        {
-            _kullaniciDal = kullaniciDal;
-            _mapper = mapper;
-        }
-        // [LogAspect] --> AOP, Autofac ,AOP imkanı sunar
-        [ValidationAspect(typeof(KullaniciValidator))]
-        public IResult Add(KullaniciDto kullanici)
-        {
-            Kullanici kullanici1 = new()
-            {
-                Adi = kullanici.Adi,
-                Soyadi = kullanici.Soyadi,
-                IlId = kullanici.IlId,
-                IlceId = kullanici.IlceId,
-                KullaniciAdi = kullanici.KullaniciAdi,
-                Sifre = kullanici.Sifre,
-                EklenmeTarihi=DateTime.Now
-
-
-            };
-
-            _kullaniciDal.Add(kullanici1);
-            return new SuccessResult("Kullanıcı eklendi");
-
-        }
-        public IDataResult<Kullanici> GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<object> GetAll()
-        {
-            var list = _kullaniciDal.GetAll(k=>k.Id>0);
-            return _mapper.Map<List<KullaniciListeDto>>(list);
-            
-        }
-    }
+	public class KullaniciManager : IKullaniciService
+	{
+		IKullaniciDal _kullaniciDal;
+		readonly IMapper _mapper;
+		public KullaniciManager(IKullaniciDal kullaniciDal, IMapper mapper)
+		{
+			_kullaniciDal = kullaniciDal;
+			_mapper = mapper;
+		}
+		// [LogAspect] --> AOP, Autofac ,AOP imkanı sunar
+		[ValidationAspect(typeof(KullaniciValidator))]
+		public IResult Add(KullaniciDto kullanici)
+		{
+			Kullanici liste=_mapper.Map<KullaniciDto,Kullanici >(kullanici);
+			_kullaniciDal.Add(liste);
+			return new SuccessResult("Kullanıcı eklendi");
+		}
+		public IDataResult<KullaniciListeDto> GetById(int id)
+		{
+			var kullanici = _kullaniciDal.Get(k => k.Id.Equals(id), "Il", "Ilce");
+			var liste = _mapper.Map<KullaniciListeDto>(kullanici);
+			return new SuccessDataResult<KullaniciListeDto>(liste);
+		}
+		public async Task<object> GetAll()
+		{
+			var list = _kullaniciDal.GetAll();
+			return _mapper.Map<List<KullaniciListeDto>>(list);
+		}
+	}
 }

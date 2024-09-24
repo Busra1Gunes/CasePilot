@@ -9,7 +9,7 @@ namespace Entities.Dto
     public class KullaniciDto
     {
         public int IlId { get; set; }
-        public int IlceId { get; set; }
+        public int İlceId { get; set; }
         public string Adi { get; set; }
         public string Soyadi { get; set; }
         public string KullaniciAdi { get; set; }

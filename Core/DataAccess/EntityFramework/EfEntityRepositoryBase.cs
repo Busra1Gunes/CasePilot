@@ -34,13 +34,25 @@ namespace Core.DataAccess.EntityFramework
             }
         }
 
-        public TEntity Get(Expression<Func<TEntity, bool>> filter)
+        public TEntity Get(Expression<Func<TEntity, bool>> filter, params string[] includeProperties)
         {
-            using (TContext context = new())
-            {
-                return context.Set<TEntity>().SingleOrDefault(filter);
-            }
-        }
+			//using (TContext context = new())
+			//{
+			//    return context.Set<TEntity>().SingleOrDefault(filter);
+			//}
+			using (TContext context = new())
+			{
+				var query = context.Set<TEntity>().AsQueryable();
+
+				// Include işlemleri
+				foreach (var includeProperty in includeProperties)
+				{
+					query = query.Include(includeProperty);
+				}
+
+				return query.FirstOrDefault(filter);
+			}
+		}
 
         public List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
         {

@@ -24,6 +24,9 @@ namespace WebAPI.Controllers
 		public IActionResult Get() => Ok(_kullaniciService.GetAll());
 
 
+		[HttpGet("/getbyID")]
+		public IActionResult GetById(int kullaniciId) => Ok(_kullaniciService.GetById(kullaniciId));
+
 		[HttpPost]
 		public IActionResult Post(KullaniciDto kullanici)
 		{
