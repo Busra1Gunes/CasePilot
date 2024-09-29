@@ -6,13 +6,15 @@ using Core.Utilities.Messages;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
-using Entities.Dto;
+using Entities.Dto.KullaniciDto;
+using Entities.Dto.KullaniciDto.KullaniciDto;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Business.Concrete
 {
@@ -27,15 +29,15 @@ namespace Business.Concrete
 		}
 		// [LogAspect] --> AOP, Autofac ,AOP imkanı sunar
 		[ValidationAspect(typeof(KullaniciValidator))]
-		public IResult Add(KullaniciDto kullanici)
+		public IResult Add(KullaniciKayitDto kullanici)
 		{
-			Kullanici liste=_mapper.Map<KullaniciDto,Kullanici >(kullanici);
+			Kullanici liste = _mapper.Map<KullaniciKayitDto, Kullanici>(kullanici);
 			_kullaniciDal.Add(liste);
 			return new SuccessResult("Kullanıcı eklendi");
 		}
 		public IDataResult<KullaniciListeDto> GetById(int id)
 		{
-			var kullanici = _kullaniciDal.Get(k => k.Id.Equals(id), "Il", "Ilce");
+			var kullanici = _kullaniciDal.Get(k => k.Id.Equals(id));
 			var liste = _mapper.Map<KullaniciListeDto>(kullanici);
 			return new SuccessDataResult<KullaniciListeDto>(liste);
 		}
@@ -43,6 +45,14 @@ namespace Business.Concrete
 		{
 			var list = _kullaniciDal.GetAll();
 			return _mapper.Map<List<KullaniciListeDto>>(list);
+		}
+
+
+		public IResult DeleteById(int id)
+		{
+			var kullanici = _kullaniciDal.Get(k => k.Id.Equals(id)).FirstOrDefault(); ;
+			_kullaniciDal.Delete(kullanici);
+			return new SuccessResult("Kullanıcı Silindi");
 		}
 	}
 }

@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.Dto
+namespace Entities.Dto.KullaniciDto.KullaniciDto
 {
-    public class KullaniciDto
+    public class KullaniciListeDto
     {
-        public int IlId { get; set; }
-        public int İlceId { get; set; }
+        public int Id { get; set; }
+        public string Il { get; set; }
+        public string Ilce { get; set; }
         public string Adi { get; set; }
         public string Soyadi { get; set; }
         public string KullaniciAdi { get; set; }

@@ -1,6 +1,7 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
-using Entities.Dto;
+using Entities.Dto.KullaniciDto;
+using Entities.Dto.KullaniciDto.KullaniciDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,13 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-	public interface IKullaniciService
+    public interface IKullaniciService
 	{
        Task<object> GetAll();
         IDataResult<KullaniciListeDto> GetById(int id);
-        IResult Add(KullaniciDto kullanici);
+        IResult Add(KullaniciKayitDto kullanici);
+
+        IResult DeleteById(int id);
 
     }
 }

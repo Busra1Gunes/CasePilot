@@ -11,5 +11,9 @@ namespace Entities.Concrete
     {
         public int Id { get; set; }
         public string Adi { get; set; }
+
+        public ICollection<Dosya> Dosyalar { get; set; }
+        public BasvuruTur BasvuruTur { get; set; }
+
     }
 }

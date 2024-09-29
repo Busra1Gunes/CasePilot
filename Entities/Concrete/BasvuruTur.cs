@@ -10,7 +10,11 @@ namespace Entities.Concrete
     public class BasvuruTur:Entity,IEntity
     {
         public int Id { get; set; }
-        public string DavaTurId { get; set; }
+        public int DavaTurId { get; set; }
         public string Adi { get; set; }
+
+
+        public ICollection<Dosya> Dosyalar { get;set; }
+        public DavaTur DavaTur { get; set; }
     }
 }

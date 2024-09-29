@@ -3,6 +3,7 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dto;
+using Entities.Dto.KullaniciDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,7 @@ namespace WebAPI.Controllers
 		public IActionResult GetById(int kullaniciId) => Ok(_kullaniciService.GetById(kullaniciId));
 
 		[HttpPost]
-		public IActionResult Post(KullaniciDto kullanici)
+		public IActionResult Post(KullaniciKayitDto kullanici)
 		{
             var result = _kullaniciService.Add(kullanici);
             if (result.Success)

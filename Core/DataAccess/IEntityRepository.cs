@@ -11,11 +11,12 @@ namespace Core.DataAccess
 	public interface IEntityRepository<T> where T : class, IEntity, new()
     {
         IQueryable<T> Where(Expression<Func<T, bool>> expression);
-        List<T> GetAll(Expression<Func<T, bool>> filter = null);
-		T  Get(Expression<Func<T, bool>> filter, params string[] includeProperties);
+		IQueryable<T> GetAll(Expression<Func<T, bool>> filter = null);
+		IQueryable<T> Get(Expression<Func<T, bool>> filter);
 		void Add(T entity);
 		void Update(T entity);
 		void Delete(T entity);
+		void IkiIslem(T entity, T entity1);
 
 	}
 }

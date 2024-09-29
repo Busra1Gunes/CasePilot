@@ -23,6 +23,9 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<KullaniciManager>().As<IKullaniciService>().SingleInstance();
             builder.RegisterType<EfKullaniciDal>().As<IKullaniciDal>().SingleInstance();
 
+            builder.RegisterType<DosyaManager>().As<IDosyaService>().SingleInstance();
+            builder.RegisterType<EfDosyaDal>().As<IDosyaDal>().SingleInstance();
+
 
 
 

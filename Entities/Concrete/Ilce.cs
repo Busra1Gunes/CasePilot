@@ -14,6 +14,7 @@ namespace Entities.Concrete
         public string IlceAdi { get; set; }
         public Il Il { get; set; }
         public ICollection<Kullanici> Kullanicilar { get; set; }
+		public ICollection<Dosya> Dosyalar { get; set; }
 
-    }
+	}
 }
