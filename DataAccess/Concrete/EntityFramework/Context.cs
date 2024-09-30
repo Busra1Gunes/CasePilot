@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using DataAccess.Configuration;
+using Entities.Concrete;
 using Entities.Seeds;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,15 +19,17 @@ namespace DataAccess.Concrete.EntityFramework
             //optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-IUMMNFO\SQLEXPRESS;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
             //optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
             //	optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
-            optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
+          //  optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
+            optionsBuilder.UseSqlServer("Data Source=AYZASOFT-0000;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+          //  modelBuilder.ApplyConfiguration(new DosyaConfiguration());
             modelBuilder.ApplyConfiguration(new IlSeed());
             modelBuilder.ApplyConfiguration(new IlceSeed());
-			modelBuilder.ApplyConfiguration(new DavaTurSeed());
-			modelBuilder.ApplyConfiguration(new BasvuruTurSeed());
-			modelBuilder.ApplyConfiguration(new KullaniciSeed());
+            modelBuilder.ApplyConfiguration(new DavaTurSeed());
+            modelBuilder.ApplyConfiguration(new BasvuruTurSeed());
+            modelBuilder.ApplyConfiguration(new KullaniciSeed());
             base.OnModelCreating(modelBuilder);
         }
         DbSet<Il> Iller { get; set; }

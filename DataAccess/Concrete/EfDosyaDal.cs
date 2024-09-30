@@ -10,8 +10,10 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete
 {
-	public class EfDosyaDal : EfEntityRepositoryBase<Dosya, Context>, IDosyaDal
-	{
-		
-	}
+    public class EfDosyaDal : EfEntityRepositoryBase<Dosya, Context>, IDosyaDal
+    {
+        public EfDosyaDal(Context context) : base(context)
+        {
+        }
+    }
 }

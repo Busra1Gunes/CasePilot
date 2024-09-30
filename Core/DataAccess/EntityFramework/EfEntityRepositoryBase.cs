@@ -15,102 +15,82 @@ namespace Core.DataAccess.EntityFramework
         where TEntity : class, IEntity, new()
         where TContext : DbContext, new()
     {
-        public void Add(TEntity entity)
+        protected readonly TContext _context;
+        readonly DbSet<TEntity> _dbSet;
+
+        public EfEntityRepositoryBase(TContext context)
         {
-            //using içindeki yazılan nesneler using işlemi bitince bellekten atılır
-            using (TContext context = new())
-            {
-				IDbContextTransaction transaction =  context.Database.BeginTransaction(); //bu işlemi yaparak transaction
-                //işlemini manuel yaptık 
-				var addedEntity = context.Entry(entity); //referansı yakala
-                addedEntity.State = EntityState.Added;//eklenecek bir nesne
-                context.SaveChanges(); //ekle
-
-                transaction.Commit();//bu işlemle yapılan değişikliklerin veritabanına uygulanmasını saglarız
-                //eger commit işlemi yapılmazsa veritabanında değişiklik olmayacaktır
-
-                //transaction commit edilmezse default rollback anlamına gelir 
-            }
+            _context = context;
+            _dbSet = context.Set<TEntity>();
         }
 
-        public async void Delete(TEntity entity)
+
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
-            using (TContext context = new())
-            {
-				IDbContextTransaction transaction = context.Database.BeginTransaction(); //bu işlemi yaparak transaction
-																						 //işlemini manuel yaptık 
-				var deletedEntity = context.Entry(entity); //referansı yakala
-                deletedEntity.State = EntityState.Deleted;//silinecek bir nesne
-                await transaction.CreateSavepointAsync("Geri dönüş noktası"); //Bu adımda, işlem sırasında bir geri dönüş noktası oluşturuluyor.
-                                                                              //Eğer ilerleyen adımlarda bir hata olursa, bu noktaya geri dönülebilir. Böylece veritabanında yapılan işlemler geri alınabilir.
-
-				context.SaveChanges(); //sil
-                await transaction.RollbackToSavepointAsync("Geri dönüş noktası"); //Bu adımda, önceki adımda oluşturulan geri dönüş noktasına geri dönülür.
-                                                                                  //Yani, yapılan silme işlemi geri alınır ve veritabanındaki duruma geri dönülür.
-
-				transaction.CommitAsync(); //Son olarak, bu işlem (transaction) sonlandırılır ve kaydedilmesi gereken işlemler commit edilerek kesinleştirilir.
-                                           //Ancak rollback işlemi yapıldığı için silme işlemi aslında gerçekleşmez.
-			}
+            await _dbSet.AddAsync(entity);
+            // _context.SaveChanges();
+            return entity;
         }
 
-		public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> filter)
+        public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
-			using (TContext context = new())
-			{
-				var query = context.Set<TEntity>().AsQueryable();
-				return query.Where(filter);
-			}
-		}
-
-        public IQueryable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
-        {
-            using (TContext context = new())
-            {
-                // Set<TEntity>() ifadesi,TEntity tipi varlıklarla ilgili işlemleri yapabilmeniz için
-                // veritabanındaki TEntity tablosuna erişmenizi sağlar.
-                return filter == null
-                    ? context.Set<TEntity>().AsQueryable()
-                    : context.Set<TEntity>().Where(filter).AsQueryable();
-            }
+            await _dbSet.AddRangeAsync(entities);
+            //_context.SaveChanges();
         }
 
-        public void Update(TEntity entity)
+        public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> expression)
         {
-            using (TContext context = new())
-            {
-
-				var updatedEntity = context.Entry(entity); //referansı yakala
-                updatedEntity.State = EntityState.Modified;//güncellenecek bir nesne
-                context.SaveChanges(); //güncelle
-            }
+            return await _dbSet.AnyAsync(expression);
         }
+
+        public async Task<List<TEntity>> GetAll(Expression<Func<TEntity, bool>> expression = null)
+        {
+            return await _dbSet.Where(expression).ToListAsync();
+        }
+
+        public IQueryable<TEntity> GetAll()
+        {
+            return _dbSet.AsNoTracking().AsQueryable();
+        }
+
+        public async Task<TEntity> GetByIdAsync(int id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
+
+        public void Remove(TEntity entity)
+        {
+            _dbSet.Remove(entity);
+            //_context.SaveChanges();
+        }
+
+        public void RemoveRange(IEnumerable<TEntity> entities)
+        {
+            _dbSet.RemoveRange(entities);
+            // _context.SaveChanges();
+        }
+
+        public async Task<TEntity> Update(TEntity entity)
+        {
+            _dbSet.Update(entity);
+            //_context.SaveChanges();
+            return entity;
+        }
+
+        public async Task UpdateRangeAsync(IEnumerable<TEntity> entities)
+        {
+            _dbSet.UpdateRange(entities);
+            //await _context.SaveChangesAsync();
+        }
+
+        //public async Task<TEntity> Update(TEntity entity)
+        //{
+        //   await _dbSet.Update(entity);
+        //}
 
         public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> expression)
         {
-            using (TContext context = new())
-            {
-                return context.Set<TEntity>().Where(expression);
-            }
+            return _dbSet.Where(expression).AsQueryable();
         }
-		public void IkiIslem(TEntity entity,TEntity entity1)
-		{
-			using (TransactionScope scope = new TransactionScope())
-			{
-				using (TContext context = new())
-				{
-
-					// İlk işlem
-					var updatedEntity = context.Entry(entity); //referansı yakala
-					updatedEntity.State = EntityState.Modified;//güncellenecek bir nesne
-					context.SaveChanges();
-					// İkinci işlem
-					var updatedEntity2 = context.Entry(entity1); //referansı yakala
-					updatedEntity.State = EntityState.Deleted;//güncellenecek bir nesne
-					context.SaveChanges();
-				}
-				scope.Complete(); // İşlemler başarıyla tamamlandığında commit edilir.
-			}
-		}
-
-	}
+    }
 }

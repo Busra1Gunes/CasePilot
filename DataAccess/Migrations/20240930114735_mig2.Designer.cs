@@ -12,18 +12,17 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240929183714_mig1")]
-    partial class mig1
+    [Migration("20240930114735_mig2")]
+    partial class mig2
     {
-        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.20")
+                .HasAnnotation("ProductVersion", "6.0.25")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Entities.Concrete.BasvuruTur", b =>
                 {
@@ -31,7 +30,7 @@ namespace DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Adi")
                         .IsRequired()
@@ -54,9 +53,6 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DavaTurId")
-                        .IsUnique();
-
                     b.ToTable("BasvuruTurleri");
 
                     b.HasData(
@@ -66,7 +62,7 @@ namespace DataAccess.Migrations
                             Adi = "Araç Hasarı",
                             DavaTurId = 1,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2024, 9, 29, 21, 37, 14, 395, DateTimeKind.Local).AddTicks(3728)
+                            EklenmeTarihi = new DateTime(2024, 9, 30, 14, 47, 34, 571, DateTimeKind.Local).AddTicks(4416)
                         },
                         new
                         {
@@ -74,7 +70,7 @@ namespace DataAccess.Migrations
                             Adi = "Manevi",
                             DavaTurId = 1,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2024, 9, 29, 21, 37, 14, 395, DateTimeKind.Local).AddTicks(3730)
+                            EklenmeTarihi = new DateTime(2024, 9, 30, 14, 47, 34, 571, DateTimeKind.Local).AddTicks(4418)
                         },
                         new
                         {
@@ -82,7 +78,7 @@ namespace DataAccess.Migrations
                             Adi = "İdari Dava",
                             DavaTurId = 1,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2024, 9, 29, 21, 37, 14, 395, DateTimeKind.Local).AddTicks(3731)
+                            EklenmeTarihi = new DateTime(2024, 9, 30, 14, 47, 34, 571, DateTimeKind.Local).AddTicks(4419)
                         },
                         new
                         {
@@ -90,7 +86,7 @@ namespace DataAccess.Migrations
                             Adi = "Kamulaştırma",
                             DavaTurId = 4,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2024, 9, 29, 21, 37, 14, 395, DateTimeKind.Local).AddTicks(3732)
+                            EklenmeTarihi = new DateTime(2024, 9, 30, 14, 47, 34, 571, DateTimeKind.Local).AddTicks(4420)
                         });
                 });
 
@@ -100,7 +96,7 @@ namespace DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Adi")
                         .IsRequired()
@@ -128,28 +124,28 @@ namespace DataAccess.Migrations
                             Id = 1,
                             Adi = "Trafik Kazası",
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2024, 9, 29, 21, 37, 14, 395, DateTimeKind.Local).AddTicks(3680)
+                            EklenmeTarihi = new DateTime(2024, 9, 30, 14, 47, 34, 571, DateTimeKind.Local).AddTicks(4355)
                         },
                         new
                         {
                             Id = 2,
                             Adi = "Arabuluculuk",
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2024, 9, 29, 21, 37, 14, 395, DateTimeKind.Local).AddTicks(3691)
+                            EklenmeTarihi = new DateTime(2024, 9, 30, 14, 47, 34, 571, DateTimeKind.Local).AddTicks(4365)
                         },
                         new
                         {
                             Id = 3,
                             Adi = "İdari Dava",
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2024, 9, 29, 21, 37, 14, 395, DateTimeKind.Local).AddTicks(3691)
+                            EklenmeTarihi = new DateTime(2024, 9, 30, 14, 47, 34, 571, DateTimeKind.Local).AddTicks(4366)
                         },
                         new
                         {
                             Id = 4,
                             Adi = "Kamulaştırma",
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2024, 9, 29, 21, 37, 14, 395, DateTimeKind.Local).AddTicks(3692)
+                            EklenmeTarihi = new DateTime(2024, 9, 30, 14, 47, 34, 571, DateTimeKind.Local).AddTicks(4367)
                         });
                 });
 
@@ -159,14 +155,15 @@ namespace DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("AcilisTarihi")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Adi")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime>("DogumTarihi")
                         .HasColumnType("datetime2");
@@ -184,6 +181,7 @@ namespace DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("HaklilikOrani")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("KapanisTarihi")
@@ -193,6 +191,7 @@ namespace DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("SakatlikOrani")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("SilinmeTarihi")
@@ -232,7 +231,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("ilceId");
 
-                    b.ToTable("Dosyalar");
+                    b.ToTable("Dosyalar", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Concrete.Il", b =>
@@ -241,7 +240,7 @@ namespace DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Adi")
                         .IsRequired()
@@ -665,7 +664,7 @@ namespace DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("IlId")
                         .HasColumnType("int");
@@ -6527,7 +6526,7 @@ namespace DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Adi")
                         .IsRequired()
@@ -6577,7 +6576,7 @@ namespace DataAccess.Migrations
                             Id = 1,
                             Adi = "Büşra",
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2024, 9, 29, 21, 37, 14, 395, DateTimeKind.Local).AddTicks(3769),
+                            EklenmeTarihi = new DateTime(2024, 9, 30, 14, 47, 34, 571, DateTimeKind.Local).AddTicks(4467),
                             IlId = 1,
                             IlceId = 1,
                             KullaniciAdi = "busra",
@@ -6586,41 +6585,30 @@ namespace DataAccess.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Entities.Concrete.BasvuruTur", b =>
-                {
-                    b.HasOne("Entities.Concrete.DavaTur", "DavaTur")
-                        .WithOne("BasvuruTur")
-                        .HasForeignKey("Entities.Concrete.BasvuruTur", "DavaTurId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DavaTur");
-                });
-
             modelBuilder.Entity("Entities.Concrete.Dosya", b =>
                 {
                     b.HasOne("Entities.Concrete.BasvuruTur", "BasvuruTur")
                         .WithMany("Dosyalar")
                         .HasForeignKey("basvuruturId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Entities.Concrete.DavaTur", "DavaTur")
                         .WithMany("Dosyalar")
                         .HasForeignKey("davaturId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Entities.Concrete.Il", "Il")
                         .WithMany("Dosyalar")
                         .HasForeignKey("ilId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Entities.Concrete.Ilce", "Ilce")
                         .WithMany("Dosyalar")
                         .HasForeignKey("ilceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("BasvuruTur");
@@ -6665,9 +6653,6 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concrete.DavaTur", b =>
                 {
-                    b.Navigation("BasvuruTur")
-                        .IsRequired();
-
                     b.Navigation("Dosyalar");
                 });
 

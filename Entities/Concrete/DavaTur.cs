@@ -13,7 +13,7 @@ namespace Entities.Concrete
         public string Adi { get; set; }
 
         public ICollection<Dosya> Dosyalar { get; set; }
-        public BasvuruTur BasvuruTur { get; set; }
+    //    public BasvuruTur BasvuruTur { get; set; }
 
     }
 }

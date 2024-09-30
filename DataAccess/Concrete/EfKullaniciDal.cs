@@ -14,8 +14,10 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete
 {
-	public class EfKullaniciDal : EfEntityRepositoryBase<Kullanici, Context>, IKullaniciDal
-	{
-		
-	}
+    public class EfKullaniciDal : EfEntityRepositoryBase<Kullanici, Context>, IKullaniciDal
+    {
+        public EfKullaniciDal(Context context) : base(context)
+        {
+        }
+    }
 }

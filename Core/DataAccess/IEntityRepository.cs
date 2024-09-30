@@ -10,13 +10,18 @@ namespace Core.DataAccess
 {
 	public interface IEntityRepository<T> where T : class, IEntity, new()
     {
+        Task<T> GetByIdAsync(int id);
         IQueryable<T> Where(Expression<Func<T, bool>> expression);
-		IQueryable<T> GetAll(Expression<Func<T, bool>> filter = null);
-		IQueryable<T> Get(Expression<Func<T, bool>> filter);
-		void Add(T entity);
-		void Update(T entity);
-		void Delete(T entity);
-		void IkiIslem(T entity, T entity1);
+        Task<List<T>> GetAll(Expression<Func<T, bool>> expression = null);
+        IQueryable<T> GetAll();
+        Task<bool> AnyAsync(Expression<Func<T, bool>> expression);
+        Task<T> AddAsync(T entity);
+        Task AddRangeAsync(IEnumerable<T> entities);
+        Task<T> Update(T entity);
+        void Remove(T entity);
+        void RemoveRange(IEnumerable<T> entities);
 
-	}
+        Task UpdateRangeAsync(IEnumerable<T> entities);
+
+    }
 }

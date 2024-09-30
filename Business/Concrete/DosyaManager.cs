@@ -31,13 +31,13 @@ namespace Business.Concrete
 			dosyakayit.AcilisTarihi=DateTime.Now;
 			dosyakayit.DosyaDurum = 0;
 
-			_dosyaDal.Add(dosyakayit);
+			_dosyaDal.AddAsync(dosyakayit);
 			return new SuccessResult("Dosya Kaydedildi");
 		}
 
 		public IDataResult<List<DosyaDetayDto>> GetAll()
 		{
-			var liste = _dosyaDal.GetAll(d => d.DosyaDurum.Equals(false))
+			var liste = _dosyaDal.Where(d => d.DosyaDurum.Equals(false))
 					.Include(d => d.DavaTur)
 					.Include(b => b.BasvuruTur)
 					.Include(i => i.Il)
@@ -48,7 +48,7 @@ namespace Business.Concrete
 
 		public IDataResult<List<DosyaDetayDto>> GetAllByDavaTurId(int id)
 		{
-			var liste = _dosyaDal.GetAll(d => d.DosyaDurum.Equals(false) && d.davaturId.Equals(id))
+			var liste = _dosyaDal.Where(d => d.DosyaDurum.Equals(false) && d.davaturId.Equals(id))
 				.Include(d => d.DavaTur)
 				.Include(b => b.BasvuruTur)
 				.Include(i => i.Il)
@@ -60,12 +60,11 @@ namespace Business.Concrete
 		public IDataResult<DosyaDetayDto> GetById(int dosyaId)
 		{
 
-			var dosya = _dosyaDal.Get(d => d.Id.Equals(dosyaId))
+			var dosya = _dosyaDal.Where(k => k.Id == dosyaId )
 				.Include(d => d.DavaTur)
 				.Include(b => b.BasvuruTur)
 				.Include(i => i.Il)
-				.Include(c => c.Ilce)
-				.FirstOrDefault(); // veya First() gibi bir yöntem kullanın
+				.Include(c => c.Ilce).SingleOrDefault();
 
 			var liste = _mapper.Map<DosyaDetayDto>(dosya);
 			return new SuccessDataResult<DosyaDetayDto>(liste);

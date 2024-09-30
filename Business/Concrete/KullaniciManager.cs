@@ -32,12 +32,12 @@ namespace Business.Concrete
 		public IResult Add(KullaniciKayitDto kullanici)
 		{
 			Kullanici liste = _mapper.Map<KullaniciKayitDto, Kullanici>(kullanici);
-			_kullaniciDal.Add(liste);
+			_kullaniciDal.AddAsync(liste);
 			return new SuccessResult("Kullanıcı eklendi");
 		}
 		public IDataResult<KullaniciListeDto> GetById(int id)
 		{
-			var kullanici = _kullaniciDal.Get(k => k.Id.Equals(id));
+			var kullanici = _kullaniciDal.GetByIdAsync(id);
 			var liste = _mapper.Map<KullaniciListeDto>(kullanici);
 			return new SuccessDataResult<KullaniciListeDto>(liste);
 		}
@@ -50,8 +50,8 @@ namespace Business.Concrete
 
 		public IResult DeleteById(int id)
 		{
-			var kullanici = _kullaniciDal.Get(k => k.Id.Equals(id)).FirstOrDefault(); ;
-			_kullaniciDal.Delete(kullanici);
+			//var kullanici = _kullaniciDal.GetByIdAsync(id);
+			//_kullaniciDal.de(kullanici);
 			return new SuccessResult("Kullanıcı Silindi");
 		}
 	}
