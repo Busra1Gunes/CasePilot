@@ -16,7 +16,7 @@ namespace Business.Abstract
 
 		IDataResult<DosyaDetayDto> GetById(int dosyaId);
 		IResult Add(DosyaKayitDto dosya);
-		IResult Update(Dosya dosya);
+		IResult Update(DosyaGuncelleDto dosya);
 	//	IResult AddTransactional(Dosya dosya);
 
 	}

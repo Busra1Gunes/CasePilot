@@ -33,6 +33,9 @@ namespace Service.Mapping
 				.ForMember(dest => dest.DavaTur, opt => opt.MapFrom(x => x.DavaTur.Adi))
 				.ForMember(dest => dest.BasvuruTur, opt => opt.MapFrom(x => x.BasvuruTur.Adi))
 				.ReverseMap();
+
+
+			CreateMap<Dosya,DosyaGuncelleDto>().ReverseMap();	
 		}
 	}
 }

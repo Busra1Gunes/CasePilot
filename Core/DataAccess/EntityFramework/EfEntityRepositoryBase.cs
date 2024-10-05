@@ -28,14 +28,14 @@ namespace Core.DataAccess.EntityFramework
         public async Task<TEntity> AddAsync(TEntity entity)
         {
             await _dbSet.AddAsync(entity);
-            // _context.SaveChanges();
+             _context.SaveChanges();
             return entity;
         }
 
         public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
             await _dbSet.AddRangeAsync(entities);
-            //_context.SaveChanges();
+            _context.SaveChanges();
         }
 
         public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> expression)
@@ -61,19 +61,19 @@ namespace Core.DataAccess.EntityFramework
         public void Remove(TEntity entity)
         {
             _dbSet.Remove(entity);
-            //_context.SaveChanges();
+            _context.SaveChanges();
         }
 
         public void RemoveRange(IEnumerable<TEntity> entities)
         {
             _dbSet.RemoveRange(entities);
-            // _context.SaveChanges();
+             _context.SaveChanges();
         }
 
         public async Task<TEntity> Update(TEntity entity)
         {
             _dbSet.Update(entity);
-            //_context.SaveChanges();
+            _context.SaveChanges();
             return entity;
         }
 
