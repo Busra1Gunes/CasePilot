@@ -25,7 +25,9 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<DosyaManager>().As<IDosyaService>().InstancePerLifetimeScope();
             builder.RegisterType<EfDosyaDal>().As<IDosyaDal>().InstancePerLifetimeScope();
-            builder.RegisterType<Context>().AsSelf().InstancePerLifetimeScope();
+			builder.RegisterType<DavaTurManager>().As<IDavaTurService>().InstancePerLifetimeScope();
+			builder.RegisterType<EfDavaTurDal>().As<IDavaTurDal>().InstancePerLifetimeScope();
+			builder.RegisterType<Context>().AsSelf().InstancePerLifetimeScope();
 
 
 

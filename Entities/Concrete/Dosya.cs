@@ -28,7 +28,7 @@ namespace Entities.Concrete
 		public Il Il { get; set; }
 		public Ilce Ilce { get; set; }
 		public DavaTur DavaTur { get; set; }
-		public BasvuruTur BasvuruTur { get; set; }
+		public BasvuruTur BasvuruTur { get; set; }  
 
 	}
 }

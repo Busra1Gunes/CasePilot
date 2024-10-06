@@ -15,6 +15,6 @@ namespace Entities.Concrete
 
 
         public ICollection<Dosya> Dosyalar { get;set; }
-       // public DavaTur DavaTur { get; set; }
+        //public DavaTur DavaTur { get; set; }
     }
 }

@@ -8,7 +8,8 @@ namespace Entities.Dto.DosyaDto
 {
 	public class DosyaDetayDto
 	{
-		public string DavaTur { get; set; }
+        public int Id { get; set; }
+        public string DavaTur { get; set; }
 		public string BasvuruTur { get; set; }
 		public string Il { get; set; }
 		public string Ilce { get; set; }
