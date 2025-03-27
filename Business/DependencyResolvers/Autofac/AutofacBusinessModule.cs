@@ -5,7 +5,6 @@ using Business.Concrete;
 using Castle.DynamicProxy;
 using Core.Utilities.Interceptors;
 using DataAccess.Abstract;
-using DataAccess.Concrete;
 using DataAccess.Concrete.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -25,9 +24,14 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<DosyaManager>().As<IDosyaService>().InstancePerLifetimeScope();
             builder.RegisterType<EfDosyaDal>().As<IDosyaDal>().InstancePerLifetimeScope();
+
 			builder.RegisterType<DavaTurManager>().As<IDavaTurService>().InstancePerLifetimeScope();
 			builder.RegisterType<EfDavaTurDal>().As<IDavaTurDal>().InstancePerLifetimeScope();
-			builder.RegisterType<Context>().AsSelf().InstancePerLifetimeScope();
+
+            builder.RegisterType<BasvuruTurManager>().As<IBasvuruTurService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfBasvuruTurDal>().As<IBasvuruTurDal>().InstancePerLifetimeScope();
+
+            builder.RegisterType<Context>().AsSelf().InstancePerLifetimeScope();
 
 
 

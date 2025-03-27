@@ -30,10 +30,10 @@ namespace DataAccess.Configuration
                    .HasForeignKey(x => x.davaturId)
                    .OnDelete(DeleteBehavior.Restrict); // Cascade Delete'i engellemek için 'Restrict'
 
-            builder.HasOne(x => x.BasvuruTur)
-                   .WithMany(b => b.Dosyalar)
-                   .HasForeignKey(x => x.basvuruturId)
-                   .OnDelete(DeleteBehavior.Restrict); // Cascade Delete'i engelle
+            //builder.HasOne(x => x.BasvuruTur)
+            //       .WithMany(b => b.Dosyalar)
+            //       .HasForeignKey(x => x.basvuruturId)
+            //       .OnDelete(DeleteBehavior.Restrict); // Cascade Delete'i engelle
 
             builder.HasOne(x => x.Il)
                    .WithMany(i => i.Dosyalar)

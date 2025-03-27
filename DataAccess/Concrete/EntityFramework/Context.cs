@@ -19,7 +19,7 @@ namespace DataAccess.Concrete.EntityFramework
             //optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-IUMMNFO\SQLEXPRESS;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
             //optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
             //	optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
-          optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
+          optionsBuilder.UseSqlServer("Data Source=DESKOP123;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
           //  optionsBuilder.UseSqlServer("Data Source=AYZASOFT-0000;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,7 +40,7 @@ namespace DataAccess.Concrete.EntityFramework
 		DbSet<BasvuruTur> BasvuruTurleri { get; set; }
 		DbSet<Kullanici> Kullanicilar { get; set; }
 		DbSet<Dosya> Dosyalar { get; set; }
-
-
-	}
+        DbSet<EvrakTur> EvrakTurler { get; set; }
+        DbSet<DosyaEvrak> DosyaEvraklar { get; set; }
+    }
 }
