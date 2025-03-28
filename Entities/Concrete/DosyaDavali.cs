@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class DosyaEvrak : Entity, IEntity
+    public class DosyaDavali : Entity, IEntity
     {
         public int Id { get; set; }
         public int DosyaId { get; set; }
 
-        public int EvrakId { get; set; }
-        public string EvrakUrl { get; set; }
-        public Dosya Dosya { get; set; } // Navigation property
-        public EvrakTur Evrak { get; set; } // Navigation property
+        public int DavaliId { get; set; }
+
+        public Dosya Dosya { get; set; }
+
+        public Davali Davali { get; set; }
     }
 }

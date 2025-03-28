@@ -3,6 +3,7 @@ using Core;
 
 using Entities.Concrete;
 using Entities.Dto.DosyaDto;
+using Entities.Dto.EvrakDto;
 using Entities.Dto.KullaniciDto;
 using Entities.Dto.KullaniciDto.KullaniciDto;
 using Microsoft.AspNetCore.Http;
@@ -35,7 +36,9 @@ namespace Service.Mapping
 				.ReverseMap();
 
 
-			CreateMap<Dosya,DosyaGuncelleDto>().ReverseMap();	
-		}
+			CreateMap<Dosya,DosyaGuncelleDto>().ReverseMap();
+            CreateMap<DosyaEvrak, DosyaEvrakEkleDto>()
+				.ReverseMap();
+        }
 	}
 }

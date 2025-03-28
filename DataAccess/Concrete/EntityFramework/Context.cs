@@ -31,7 +31,8 @@ namespace DataAccess.Concrete.EntityFramework
             modelBuilder.ApplyConfiguration(new DavaTurSeed());
             modelBuilder.ApplyConfiguration(new BasvuruTurSeed());
             modelBuilder.ApplyConfiguration(new KullaniciSeed());
-            
+            modelBuilder.ApplyConfiguration(new EvrakTurSeed());
+
             base.OnModelCreating(modelBuilder);
         }
         DbSet<Il> Iller { get; set; }

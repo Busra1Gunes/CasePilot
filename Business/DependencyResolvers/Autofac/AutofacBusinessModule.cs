@@ -31,6 +31,13 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<BasvuruTurManager>().As<IBasvuruTurService>().InstancePerLifetimeScope();
             builder.RegisterType<EfBasvuruTurDal>().As<IBasvuruTurDal>().InstancePerLifetimeScope();
 
+            builder.RegisterType<DosyaEvrakManager>().As<IDosyaEvrakService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfDosyaEvrakDal>().As<IDosyaEvrakDal>().InstancePerLifetimeScope();
+
+
+            builder.RegisterType<DosyaDavaliManager>().As<IDosyaDavaliService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfDosyaDavaliDal>().As<IDosyaDavaliDal>().InstancePerLifetimeScope();
+
             builder.RegisterType<Context>().AsSelf().InstancePerLifetimeScope();
 
 
