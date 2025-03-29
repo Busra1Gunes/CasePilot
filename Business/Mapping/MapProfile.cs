@@ -39,6 +39,8 @@ namespace Service.Mapping
 			CreateMap<Dosya,DosyaGuncelleDto>().ReverseMap();
             CreateMap<DosyaEvrak, DosyaEvrakEkleDto>()
 				.ReverseMap();
+
+            CreateMap<DosyaDavali, DosyaDavaliEkleDto>().ReverseMap();
         }
 	}
 }

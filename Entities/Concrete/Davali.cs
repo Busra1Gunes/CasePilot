@@ -10,7 +10,7 @@ namespace Entities.Concrete
     public class Davali:Entity,IEntity
     {
         public int Id { get; set; }
-        public int DavaliAdi { get; set; }
+        public string DavaliAdi { get; set; }
 
         public ICollection<DosyaDavali> DosyaDavalilar { get; set; } // İlişkili evraklar
     }

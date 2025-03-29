@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Entities.Dto.DosyaDto;
 using Entities.Dto.EvrakDto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -19,7 +20,7 @@ namespace WebAPI.Controllers
         }
         [HttpPost("DosyaDavaliEkle")]
 
-        public IActionResult DosyaDavaliEkle( DosyaDavali davali)
+        public IActionResult DosyaDavaliEkle( DosyaDavaliEkleDto davali)
         {
 
             var result = _dosyaDavaliService.Add(davali);

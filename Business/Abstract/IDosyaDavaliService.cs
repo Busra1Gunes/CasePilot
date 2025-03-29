@@ -1,5 +1,6 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
+using Entities.Dto.DosyaDto;
 using Entities.Dto.EvrakDto;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace Business.Abstract
         /// </summary>
         /// <param name="davali"></param>
         /// <returns></returns>
-        IResult Add(DosyaDavali davali);
+        IResult Add(DosyaDavaliEkleDto davali);
         /// <summary>
         /// Dosyanin davalısını günceller
         /// </summary>
