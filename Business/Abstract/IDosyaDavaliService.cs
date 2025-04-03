@@ -1,7 +1,7 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
 using Entities.Dto.DosyaDto;
-using Entities.Dto.EvrakDto;
+using Entities.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;

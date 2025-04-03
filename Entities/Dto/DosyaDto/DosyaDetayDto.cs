@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.DosyaDto
 {
-	public class DosyaDetayDto
+    public class DosyaDetayDto
 	{
         public int Id { get; set; }
         public string DavaTur { get; set; }
@@ -23,5 +24,10 @@ namespace Entities.Dto.DosyaDto
 		public DateTime KazaTarihi { get; set; }
 		public DateTime AcilisTarihi { get; set; }
 		public DateTime KapanisTarihi { get; set; }
+		public List<DosyaPayListDto> DosyaPays { get; set; } = new List<DosyaPayListDto>();
+		//DosyaPays alanını null döndürmemek için new List<DosyaPayListDto>() ile başlatmak mantıklıdır
+		public List<DosyaDavaliListDto> DosyaDavalis { get; set; } = new List<DosyaDavaliListDto>();
+
+
 	}
 }

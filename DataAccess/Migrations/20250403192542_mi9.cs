@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class mig1 : Migration
+    public partial class mi9 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,6 +32,23 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Davalilar",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DavaliAdi = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EklenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    GuncellenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SilinmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Durum = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Davalilar", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DavaTurleri",
                 columns: table => new
                 {
@@ -46,6 +63,24 @@ namespace DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DavaTurleri", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EvrakTurler",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EvrakTurAdi = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Tur = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EklenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    GuncellenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SilinmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Durum = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EvrakTurler", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -115,7 +150,7 @@ namespace DataAccess.Migrations
                         column: x => x.basvuruturId,
                         principalTable: "BasvuruTurleri",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Dosyalar_DavaTurleri_davaturId",
                         column: x => x.davaturId,
@@ -168,15 +203,108 @@ namespace DataAccess.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "DosyaDavalilar",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DosyaId = table.Column<int>(type: "int", nullable: false),
+                    DavaliId = table.Column<int>(type: "int", nullable: false),
+                    EklenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    GuncellenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SilinmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Durum = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DosyaDavalilar", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DosyaDavalilar_Davalilar_DavaliId",
+                        column: x => x.DavaliId,
+                        principalTable: "Davalilar",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DosyaDavalilar_Dosyalar_DosyaId",
+                        column: x => x.DosyaId,
+                        principalTable: "Dosyalar",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DosyaEvraklar",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DosyaId = table.Column<int>(type: "int", nullable: false),
+                    EvrakId = table.Column<int>(type: "int", nullable: false),
+                    EvrakUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EklenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    GuncellenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SilinmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Durum = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DosyaEvraklar", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DosyaEvraklar_Dosyalar_DosyaId",
+                        column: x => x.DosyaId,
+                        principalTable: "Dosyalar",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DosyaEvraklar_EvrakTurler_EvrakId",
+                        column: x => x.EvrakId,
+                        principalTable: "EvrakTurler",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DosyaPaylar",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DosyaId = table.Column<int>(type: "int", nullable: false),
+                    KullaniciId = table.Column<int>(type: "int", nullable: false),
+                    Pay = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DosyaYetki = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EklenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    GuncellenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SilinmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Durum = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DosyaPaylar", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DosyaPaylar_Dosyalar_DosyaId",
+                        column: x => x.DosyaId,
+                        principalTable: "Dosyalar",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DosyaPaylar_Kullanicilar_KullaniciId",
+                        column: x => x.KullaniciId,
+                        principalTable: "Kullanicilar",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "BasvuruTurleri",
                 columns: new[] { "Id", "Adi", "DavaTurId", "Durum", "EklenmeTarihi", "GuncellenmeTarihi", "SilinmeTarihi" },
                 values: new object[,]
                 {
-                    { 1, "Araç Hasarı", 1, false, new DateTime(2024, 10, 6, 18, 26, 44, 980, DateTimeKind.Local).AddTicks(5464), null, null },
-                    { 2, "Manevi", 1, false, new DateTime(2024, 10, 6, 18, 26, 44, 980, DateTimeKind.Local).AddTicks(5466), null, null },
-                    { 3, "İdari Dava", 1, false, new DateTime(2024, 10, 6, 18, 26, 44, 980, DateTimeKind.Local).AddTicks(5466), null, null },
-                    { 4, "Kamulaştırma", 4, false, new DateTime(2024, 10, 6, 18, 26, 44, 980, DateTimeKind.Local).AddTicks(5467), null, null }
+                    { 1, "Araç Hasarı", 1, false, new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9701), null, null },
+                    { 2, "Manevi", 1, false, new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9703), null, null },
+                    { 3, "İdari Dava", 1, false, new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9704), null, null },
+                    { 4, "Kamulaştırma", 4, false, new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9705), null, null }
                 });
 
             migrationBuilder.InsertData(
@@ -184,10 +312,19 @@ namespace DataAccess.Migrations
                 columns: new[] { "Id", "Adi", "Durum", "EklenmeTarihi", "GuncellenmeTarihi", "SilinmeTarihi" },
                 values: new object[,]
                 {
-                    { 1, "Trafik Kazası", false, new DateTime(2024, 10, 6, 18, 26, 44, 980, DateTimeKind.Local).AddTicks(5428), null, null },
-                    { 2, "Arabuluculuk", false, new DateTime(2024, 10, 6, 18, 26, 44, 980, DateTimeKind.Local).AddTicks(5429), null, null },
-                    { 3, "İdari Dava", false, new DateTime(2024, 10, 6, 18, 26, 44, 980, DateTimeKind.Local).AddTicks(5430), null, null },
-                    { 4, "Kamulaştırma", false, new DateTime(2024, 10, 6, 18, 26, 44, 980, DateTimeKind.Local).AddTicks(5431), null, null }
+                    { 1, "Trafik Kazası", false, new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9655), null, null },
+                    { 2, "Arabuluculuk", false, new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9662), null, null },
+                    { 3, "İdari Dava", false, new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9663), null, null },
+                    { 4, "Kamulaştırma", false, new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9664), null, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "EvrakTurler",
+                columns: new[] { "Id", "Durum", "EklenmeTarihi", "EvrakTurAdi", "GuncellenmeTarihi", "SilinmeTarihi", "Tur" },
+                values: new object[,]
+                {
+                    { 1, false, new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9788), "TcKimlik", null, null, "DosyaEvrak" },
+                    { 2, false, new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9791), "Sici Kaydı", null, null, "KullaniciEvrak" }
                 });
 
             migrationBuilder.InsertData(
@@ -1261,12 +1398,32 @@ namespace DataAccess.Migrations
             migrationBuilder.InsertData(
                 table: "Dosyalar",
                 columns: new[] { "Id", "AcilisTarihi", "Adi", "DogumTarihi", "DosyaDurum", "Durum", "EklenmeTarihi", "GuncellenmeTarihi", "HaklilikOrani", "KapanisTarihi", "KazaTarihi", "SakatlikOrani", "SilinmeTarihi", "Soyadi", "Tc", "Telefon", "basvuruturId", "davaturId", "ilId", "ilceId" },
-                values: new object[] { 1, new DateTime(2024, 10, 6, 18, 26, 44, 980, DateTimeKind.Local).AddTicks(4531), "Deneme", new DateTime(2024, 10, 6, 18, 26, 44, 980, DateTimeKind.Local).AddTicks(4528), 1, false, new DateTime(2024, 10, 6, 18, 26, 44, 980, DateTimeKind.Local).AddTicks(4532), null, 10m, new DateTime(2024, 10, 6, 18, 26, 44, 980, DateTimeKind.Local).AddTicks(4531), new DateTime(2024, 10, 6, 18, 26, 44, 980, DateTimeKind.Local).AddTicks(4530), 10m, null, "Dosya", "11111111111", "5555555555", 1, 1, 1, 1 });
+                values: new object[] { 1, new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(8420), "Deneme", new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(8417), 1, false, new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(8422), null, 10m, new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(8421), new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(8420), 10m, null, "Dosya", "11111111111", "5555555555", 1, 1, 1, 1 });
 
             migrationBuilder.InsertData(
                 table: "Kullanicilar",
                 columns: new[] { "Id", "Adi", "Durum", "EklenmeTarihi", "GuncellenmeTarihi", "IlId", "IlceId", "KullaniciAdi", "Sifre", "SilinmeTarihi", "Soyadi" },
-                values: new object[] { 1, "Büşra", false, new DateTime(2024, 10, 6, 18, 26, 44, 980, DateTimeKind.Local).AddTicks(5498), null, 1, 1, "busra", "12345", null, "Güneş" });
+                values: new object[] { 1, "Büşra", false, new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9746), null, 1, 1, "busra", "12345", null, "Güneş" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DosyaDavalilar_DavaliId",
+                table: "DosyaDavalilar",
+                column: "DavaliId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DosyaDavalilar_DosyaId",
+                table: "DosyaDavalilar",
+                column: "DosyaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DosyaEvraklar_DosyaId",
+                table: "DosyaEvraklar",
+                column: "DosyaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DosyaEvraklar_EvrakId",
+                table: "DosyaEvraklar",
+                column: "EvrakId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Dosyalar_basvuruturId",
@@ -1289,6 +1446,16 @@ namespace DataAccess.Migrations
                 column: "ilId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DosyaPaylar_DosyaId",
+                table: "DosyaPaylar",
+                column: "DosyaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DosyaPaylar_KullaniciId",
+                table: "DosyaPaylar",
+                column: "KullaniciId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Ilceler_IlId",
                 table: "Ilceler",
                 column: "IlId");
@@ -1307,6 +1474,21 @@ namespace DataAccess.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "DosyaDavalilar");
+
+            migrationBuilder.DropTable(
+                name: "DosyaEvraklar");
+
+            migrationBuilder.DropTable(
+                name: "DosyaPaylar");
+
+            migrationBuilder.DropTable(
+                name: "Davalilar");
+
+            migrationBuilder.DropTable(
+                name: "EvrakTurler");
+
             migrationBuilder.DropTable(
                 name: "Dosyalar");
 

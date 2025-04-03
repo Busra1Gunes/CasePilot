@@ -69,10 +69,17 @@ namespace Business.Concrete
 				.Include(d => d.DavaTur)
 				.Include(b => b.BasvuruTur)
 				.Include(i => i.Il)
+				.Include(i=>i.DosyaPaylar).ThenInclude(z=>z.Kullanici)
+				.Include(i=>i.DosyaDavalilar).ThenInclude(d=>d.Davali)
 				.Include(c => c.Ilce).SingleOrDefault();
 
+			if (dosya == null)
+			{
+				return new ErrorDataResult<DosyaDetayDto>("Dosya bulunamadı");
+			}
+
 			var liste = _mapper.Map<DosyaDetayDto>(dosya);
-			return new SuccessDataResult<DosyaDetayDto>(liste,"Dosya Listelendi");
+			return new SuccessDataResult<DosyaDetayDto>(liste, "Dosya Listelendi");
 		}
 
 		public IResult Update(DosyaGuncelleDto dosya)

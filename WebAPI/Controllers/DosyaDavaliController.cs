@@ -1,7 +1,7 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
 using Entities.Dto.DosyaDto;
-using Entities.Dto.EvrakDto;
+using Entities.Dto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;

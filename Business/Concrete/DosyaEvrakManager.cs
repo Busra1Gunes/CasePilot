@@ -5,7 +5,6 @@ using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using Entities.Dto.DosyaDto;
-using Entities.Dto.EvrakDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;

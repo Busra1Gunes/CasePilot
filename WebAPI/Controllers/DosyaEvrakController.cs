@@ -1,5 +1,5 @@
 ﻿using Business.Abstract;
-using Entities.Dto.EvrakDto;
+using Entities.Dto.DosyaDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;

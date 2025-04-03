@@ -60,7 +60,7 @@ namespace DataAccess.Migrations
                             Adi = "Araç Hasarı",
                             DavaTurId = 1,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 3, 29, 9, 51, 15, 534, DateTimeKind.Local).AddTicks(4939)
+                            EklenmeTarihi = new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9701)
                         },
                         new
                         {
@@ -68,7 +68,7 @@ namespace DataAccess.Migrations
                             Adi = "Manevi",
                             DavaTurId = 1,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 3, 29, 9, 51, 15, 534, DateTimeKind.Local).AddTicks(4940)
+                            EklenmeTarihi = new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9703)
                         },
                         new
                         {
@@ -76,7 +76,7 @@ namespace DataAccess.Migrations
                             Adi = "İdari Dava",
                             DavaTurId = 1,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 3, 29, 9, 51, 15, 534, DateTimeKind.Local).AddTicks(4941)
+                            EklenmeTarihi = new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9704)
                         },
                         new
                         {
@@ -84,7 +84,7 @@ namespace DataAccess.Migrations
                             Adi = "Kamulaştırma",
                             DavaTurId = 4,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 3, 29, 9, 51, 15, 534, DateTimeKind.Local).AddTicks(4942)
+                            EklenmeTarihi = new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9705)
                         });
                 });
 
@@ -122,28 +122,28 @@ namespace DataAccess.Migrations
                             Id = 1,
                             Adi = "Trafik Kazası",
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 3, 29, 9, 51, 15, 534, DateTimeKind.Local).AddTicks(4875)
+                            EklenmeTarihi = new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9655)
                         },
                         new
                         {
                             Id = 2,
                             Adi = "Arabuluculuk",
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 3, 29, 9, 51, 15, 534, DateTimeKind.Local).AddTicks(4879)
+                            EklenmeTarihi = new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9662)
                         },
                         new
                         {
                             Id = 3,
                             Adi = "İdari Dava",
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 3, 29, 9, 51, 15, 534, DateTimeKind.Local).AddTicks(4880)
+                            EklenmeTarihi = new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9663)
                         },
                         new
                         {
                             Id = 4,
                             Adi = "Kamulaştırma",
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 3, 29, 9, 51, 15, 534, DateTimeKind.Local).AddTicks(4881)
+                            EklenmeTarihi = new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9664)
                         });
                 });
 
@@ -173,7 +173,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Davali");
+                    b.ToTable("Davalilar");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Dosya", b =>
@@ -264,15 +264,15 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            AcilisTarihi = new DateTime(2025, 3, 29, 9, 51, 15, 534, DateTimeKind.Local).AddTicks(3757),
+                            AcilisTarihi = new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(8420),
                             Adi = "Deneme",
-                            DogumTarihi = new DateTime(2025, 3, 29, 9, 51, 15, 534, DateTimeKind.Local).AddTicks(3752),
+                            DogumTarihi = new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(8417),
                             DosyaDurum = 1,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 3, 29, 9, 51, 15, 534, DateTimeKind.Local).AddTicks(3758),
+                            EklenmeTarihi = new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(8422),
                             HaklilikOrani = 10m,
-                            KapanisTarihi = new DateTime(2025, 3, 29, 9, 51, 15, 534, DateTimeKind.Local).AddTicks(3757),
-                            KazaTarihi = new DateTime(2025, 3, 29, 9, 51, 15, 534, DateTimeKind.Local).AddTicks(3756),
+                            KapanisTarihi = new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(8421),
+                            KazaTarihi = new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(8420),
                             SakatlikOrani = 10m,
                             Soyadi = "Dosya",
                             Tc = "11111111111",
@@ -316,7 +316,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("DosyaId");
 
-                    b.ToTable("DosyaDavali");
+                    b.ToTable("DosyaDavalilar");
                 });
 
             modelBuilder.Entity("Entities.Concrete.DosyaEvrak", b =>
@@ -358,6 +358,48 @@ namespace DataAccess.Migrations
                     b.ToTable("DosyaEvraklar");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.DosyaPay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DosyaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DosyaYetki")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Durum")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("EklenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("GuncellenmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("KullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Pay")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("SilinmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DosyaId");
+
+                    b.HasIndex("KullaniciId");
+
+                    b.ToTable("DosyaPaylar");
+                });
+
             modelBuilder.Entity("Entities.Concrete.EvrakTur", b =>
                 {
                     b.Property<int>("Id")
@@ -395,7 +437,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 1,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 3, 29, 9, 51, 15, 534, DateTimeKind.Local).AddTicks(5079),
+                            EklenmeTarihi = new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9788),
                             EvrakTurAdi = "TcKimlik",
                             Tur = "DosyaEvrak"
                         },
@@ -403,7 +445,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 2,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 3, 29, 9, 51, 15, 534, DateTimeKind.Local).AddTicks(5081),
+                            EklenmeTarihi = new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9791),
                             EvrakTurAdi = "Sici Kaydı",
                             Tur = "KullaniciEvrak"
                         });
@@ -6751,7 +6793,7 @@ namespace DataAccess.Migrations
                             Id = 1,
                             Adi = "Büşra",
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 3, 29, 9, 51, 15, 534, DateTimeKind.Local).AddTicks(4989),
+                            EklenmeTarihi = new DateTime(2025, 4, 3, 22, 25, 41, 905, DateTimeKind.Local).AddTicks(9746),
                             IlId = 1,
                             IlceId = 1,
                             KullaniciAdi = "busra",
@@ -6804,7 +6846,7 @@ namespace DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("Entities.Concrete.Dosya", "Dosya")
-                        .WithMany("DosyaDavali")
+                        .WithMany("DosyaDavalilar")
                         .HasForeignKey("DosyaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -6831,6 +6873,25 @@ namespace DataAccess.Migrations
                     b.Navigation("Dosya");
 
                     b.Navigation("Evrak");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.DosyaPay", b =>
+                {
+                    b.HasOne("Entities.Concrete.Dosya", "Dosya")
+                        .WithMany("DosyaPaylar")
+                        .HasForeignKey("DosyaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Concrete.Kullanici", "Kullanici")
+                        .WithMany("DosyaPaylar")
+                        .HasForeignKey("KullaniciId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dosya");
+
+                    b.Navigation("Kullanici");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Ilce", b =>
@@ -6871,9 +6932,11 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concrete.Dosya", b =>
                 {
-                    b.Navigation("DosyaDavali");
+                    b.Navigation("DosyaDavalilar");
 
                     b.Navigation("DosyaEvraklar");
+
+                    b.Navigation("DosyaPaylar");
                 });
 
             modelBuilder.Entity("Entities.Concrete.EvrakTur", b =>
@@ -6895,6 +6958,11 @@ namespace DataAccess.Migrations
                     b.Navigation("Dosyalar");
 
                     b.Navigation("Kullanicilar");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Kullanici", b =>
+                {
+                    b.Navigation("DosyaPaylar");
                 });
 #pragma warning restore 612, 618
         }

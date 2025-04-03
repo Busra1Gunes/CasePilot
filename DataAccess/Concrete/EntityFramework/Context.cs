@@ -12,36 +12,39 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-	public class Context:DbContext
+	public class Context : DbContext
 	{
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-            //optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-IUMMNFO\SQLEXPRESS;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
-            //optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
-            //	optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
-          optionsBuilder.UseSqlServer("Data Source=DESKOP123;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
-          //  optionsBuilder.UseSqlServer("Data Source=AYZASOFT-0000;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
-        }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-		    modelBuilder.ApplyConfiguration(new DosyaConfiguration());
+			//optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-IUMMNFO\SQLEXPRESS;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
+			//optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
+			//	optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
+			//optionsBuilder.UseSqlServer("Data Source=DESKOP123;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
+			optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
+		}
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.ApplyConfiguration(new DosyaConfiguration());
 			modelBuilder.ApplyConfiguration(new DosyaSeed());
 			modelBuilder.ApplyConfiguration(new IlSeed());
-            modelBuilder.ApplyConfiguration(new IlceSeed());
-            modelBuilder.ApplyConfiguration(new DavaTurSeed());
-            modelBuilder.ApplyConfiguration(new BasvuruTurSeed());
-            modelBuilder.ApplyConfiguration(new KullaniciSeed());
-            modelBuilder.ApplyConfiguration(new EvrakTurSeed());
+			modelBuilder.ApplyConfiguration(new IlceSeed());
+			modelBuilder.ApplyConfiguration(new DavaTurSeed());
+			modelBuilder.ApplyConfiguration(new BasvuruTurSeed());
+			modelBuilder.ApplyConfiguration(new KullaniciSeed());
+			modelBuilder.ApplyConfiguration(new EvrakTurSeed());
 
-            base.OnModelCreating(modelBuilder);
-        }
-        DbSet<Il> Iller { get; set; }
+			base.OnModelCreating(modelBuilder);
+		}
+		DbSet<Il> Iller { get; set; }
 		DbSet<Ilce> Ilceler { get; set; }
 		DbSet<DavaTur> DavaTurleri { get; set; }
 		DbSet<BasvuruTur> BasvuruTurleri { get; set; }
 		DbSet<Kullanici> Kullanicilar { get; set; }
 		DbSet<Dosya> Dosyalar { get; set; }
-        DbSet<EvrakTur> EvrakTurler { get; set; }
-        DbSet<DosyaEvrak> DosyaEvraklar { get; set; }
-    }
+		DbSet<EvrakTur> EvrakTurler { get; set; }
+		DbSet<DosyaEvrak> DosyaEvraklar { get; set; }
+		DbSet<Davali> Davalilar { get; set; }
+		DbSet<DosyaPay> DosyaPaylar { get; set; }
+		DbSet<DosyaDavali> DosyaDavalilar { get; set; }
+	}
 }
