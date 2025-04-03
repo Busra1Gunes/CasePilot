@@ -20,7 +20,7 @@ namespace Entities.Concrete
         public Il? Il { get; set; }
         public Ilce? Ilce { get; set; }
 
-
+        public ICollection<DosyaPay>? DosyaPaylar { get; set; }
 
 
     }

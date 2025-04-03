@@ -30,6 +30,8 @@ namespace Entities.Concrete
 		public DavaTur DavaTur { get; set; }
 		public BasvuruTur BasvuruTur { get; set; }
         public ICollection<DosyaEvrak> DosyaEvraklar { get; set; } // İlişkili evraklar
-        public ICollection<DosyaDavali> DosyaDavali { get; set; } // İlişkili evraklar
+        public ICollection<DosyaDavali> DosyaDavalilar { get; set; } // İlişkili evraklar
+
+        public ICollection<DosyaPay> DosyaPaylar { get; set; } // İlişkili evraklar
     }
 }
