@@ -1,6 +1,5 @@
 ﻿using DataAccess.Configuration;
 using Entities.Concrete;
-using Entities.Seeds;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Buffers.Text;
@@ -17,9 +16,7 @@ namespace DataAccess.Concrete.EntityFramework
 	{
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			//optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-IUMMNFO\SQLEXPRESS;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
-			//optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
-			//	optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
+			
 			optionsBuilder.UseSqlServer("Data Source=DESKOP123;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
 			//optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
 		}
@@ -27,13 +24,13 @@ namespace DataAccess.Concrete.EntityFramework
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());//Bütün Configurationları tek seferde bulup uygular
            // modelBuilder.ApplyConfiguration(new DosyaConfiguration()); üsteki koddan dolayi gerek kalmadı
-			modelBuilder.ApplyConfiguration(new DosyaSeed());
-			modelBuilder.ApplyConfiguration(new IlSeed());
-			modelBuilder.ApplyConfiguration(new IlceSeed());
-			modelBuilder.ApplyConfiguration(new DavaTurSeed());
-			modelBuilder.ApplyConfiguration(new BasvuruTurSeed());
-			modelBuilder.ApplyConfiguration(new KullaniciSeed());
-			modelBuilder.ApplyConfiguration(new EvrakTurSeed());
+			//modelBuilder.ApplyConfiguration(new DosyaSeed());
+			//modelBuilder.ApplyConfiguration(new IlSeed());
+			//modelBuilder.ApplyConfiguration(new IlceSeed());
+			//modelBuilder.ApplyConfiguration(new DavaTurSeed());
+			//modelBuilder.ApplyConfiguration(new BasvuruTurSeed());
+			//modelBuilder.ApplyConfiguration(new KullaniciSeed());
+			//modelBuilder.ApplyConfiguration(new EvrakTurSeed());
            // modelBuilder.ApplyConfiguration(new HesapHareketConfiguration());
             base.OnModelCreating(modelBuilder);
 		}

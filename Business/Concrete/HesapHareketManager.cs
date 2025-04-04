@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Business.Abstract;
+using Business.ValidationRules;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -25,23 +27,22 @@ namespace Business.Concrete
             _hesapHareketDal = hesapHareketDal;
             _mapper = mapper;
         }
+        [ValidationAspect(typeof(HesapHareketEkleDtoValidator))]
         public IResult Add(HesapHareketEkleDto hareket)
-        {
-           
-
+        {         
             var hesapHareket = _mapper.Map<HesapHareketEkleDto, HesapHareket>(hareket);
             if (hesapHareket.HareketTuru == HareketTuru.DosyaMasrafi)
-            {
-                if (hesapHareket.DosyaId != null) return new ErrorResult("DosyaId alanı hareket türü dosyaMasrafı ise null gönderilemez");
+            {              
                 hesapHareket.HareketDurumu = HareketDurumu.Alacak;
             }
-            if (hesapHareket.HareketTuru == HareketTuru.Kira || hareket.HareketTuru == HareketTuru.Fatura || hareket.HareketTuru == HareketTuru.Maas ||
-                hesapHareket.HareketTuru == HareketTuru.Transfer)
+            if (hesapHareket.HareketTuru == HareketTuru.Kira
+                || hareket.HareketTuru == HareketTuru.Fatura
+                || hareket.HareketTuru == HareketTuru.Maas
+                || hesapHareket.HareketTuru == HareketTuru.Transfer)
             {
                 hesapHareket.DosyaId = null;
                 hesapHareket.HareketDurumu = HareketDurumu.Borc;
             }
-
             var sonuc = _hesapHareketDal.AddAsync(hesapHareket);
             return new SuccessResult("Hareket Kaydedildi");
         }
