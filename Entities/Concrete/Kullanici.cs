@@ -22,6 +22,10 @@ namespace Entities.Concrete
 
         public ICollection<DosyaPay>? DosyaPaylar { get; set; }
 
+        public ICollection<HesapHareket> HesapHareket1 { get; set; } = new List<HesapHareket>();
+        public ICollection<HesapHareket> HesapHareket2 { get; set; } = new List<HesapHareket>();
+
+
 
     }
 }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Entities.Enums
 {
-    public enum HareketDurumu
+    public enum HareketDurumu:byte
     {
-        Borc,   // Borç (Ödeyen Taraf)
-        Alacak  // Alacak (Alan Taraf)
+        Borc=1,   // Borç (Ödeyen Taraf)
+        Alacak =2 // Alacak (Alan Taraf)
     }
 }

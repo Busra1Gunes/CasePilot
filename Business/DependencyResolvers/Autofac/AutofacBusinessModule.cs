@@ -38,6 +38,9 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<DosyaDavaliManager>().As<IDosyaDavaliService>().InstancePerLifetimeScope();
             builder.RegisterType<EfDosyaDavaliDal>().As<IDosyaDavaliDal>().InstancePerLifetimeScope();
 
+            builder.RegisterType<HesapHareketManager>().As<IHesapHareketService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfHesapHareketDal>().As<IHesapHareketDal>().InstancePerLifetimeScope();
+
             builder.RegisterType<Context>().AsSelf().InstancePerLifetimeScope();
 
 

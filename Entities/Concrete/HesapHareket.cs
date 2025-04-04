@@ -14,14 +14,14 @@ namespace Entities.Concrete
        
         public int GonderenId { get; set; } // Parayı ödeyen kişi veya hesap ID
         public int AliciId { get; set; } // Parayı alan kişi veya hesap ID
-        public int DosyaId { get; set; } //Eger HareketTuru=DosyaMasrafi ise DosyaId deger alır yoksa null
+        public int? DosyaId { get; set; } //Eger HareketTuru=DosyaMasrafi ise DosyaId deger alır yoksa null
         public decimal Tutar { get; set; } // İşlem Tutarı       
-        public HareketDurumu BorcDurumu { get; set; } // Borç mu Alacak mı?
+        public HareketDurumu HareketDurumu { get; set; } // Borç mu Alacak mı?
         public HareketTuru HareketTuru { get; set; } // Maaş, Masraf, Fatura vb.
         public string Aciklama { get; set; } // Açıklama
        
         public Dosya Dosya { get; set; } 
-        public Kullanici Kullanici { get; set; }
-        public Kullanici Kullanici2 { get; set; } 
+        public Kullanici Kullanici1 { get; set; }
+        public Kullanici Kullanici2 { get; set; }
     }
 }

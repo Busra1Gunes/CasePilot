@@ -19,11 +19,11 @@ namespace Business.Concrete
 	public class DosyaManager : IDosyaService
 	{
 
-		IDosyaDal _dosyaDal;
+		readonly IDosyaDal _dosyaDal;
 		readonly IMapper _mapper;
-        public DosyaManager(IDosyaDal dosyaDal ,IMapper mapper)
+        public DosyaManager(Lazy<IDosyaDal> dosyaDal ,IMapper mapper)
         {
-            _dosyaDal = dosyaDal;
+            _dosyaDal = dosyaDal.Value;
 			_mapper=mapper;
         }
         public IResult Add(DosyaKayitDto dosya)

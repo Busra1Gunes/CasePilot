@@ -8,7 +8,9 @@ namespace Core.Utilities.Messages
 {
     public static class AspectMessages
     {
-        public static string WrongValidationType = "Wrong Validation Type";
-        public static string WrongLoggerType = "Wrong Logger Type";
+        //const derleme zamanında(compile-time) değeri berirlenen ve değiştirilemez değişkenlerdir
+        ///Sadece primitive türler (int , double ,string gibi) ve bellekte sabit olabilen değerler için kullanılır
+        public const string WrongValidationType = "Wrong Validation Type";
+        public const string WrongLoggerType = "Wrong Logger Type";
     }
 }

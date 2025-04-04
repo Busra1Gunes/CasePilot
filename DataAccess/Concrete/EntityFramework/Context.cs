@@ -7,6 +7,7 @@ using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,12 +20,13 @@ namespace DataAccess.Concrete.EntityFramework
 			//optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-IUMMNFO\SQLEXPRESS;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
 			//optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
 			//	optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=StockWise;Integrated Security=True;Trust Server Certificate=True");
-			//optionsBuilder.UseSqlServer("Data Source=DESKOP123;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
-			optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
+			optionsBuilder.UseSqlServer("Data Source=DESKOP123;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
+			//optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
 		}
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			modelBuilder.ApplyConfiguration(new DosyaConfiguration());
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());//Bütün Configurationları tek seferde bulup uygular
+           // modelBuilder.ApplyConfiguration(new DosyaConfiguration()); üsteki koddan dolayi gerek kalmadı
 			modelBuilder.ApplyConfiguration(new DosyaSeed());
 			modelBuilder.ApplyConfiguration(new IlSeed());
 			modelBuilder.ApplyConfiguration(new IlceSeed());
@@ -32,8 +34,8 @@ namespace DataAccess.Concrete.EntityFramework
 			modelBuilder.ApplyConfiguration(new BasvuruTurSeed());
 			modelBuilder.ApplyConfiguration(new KullaniciSeed());
 			modelBuilder.ApplyConfiguration(new EvrakTurSeed());
-
-			base.OnModelCreating(modelBuilder);
+           // modelBuilder.ApplyConfiguration(new HesapHareketConfiguration());
+            base.OnModelCreating(modelBuilder);
 		}
 		DbSet<Il> Iller { get; set; }
 		DbSet<Ilce> Ilceler { get; set; }
@@ -46,5 +48,6 @@ namespace DataAccess.Concrete.EntityFramework
 		DbSet<Davali> Davalilar { get; set; }
 		DbSet<DosyaPay> DosyaPaylar { get; set; }
 		DbSet<DosyaDavali> DosyaDavalilar { get; set; }
-	}
+        DbSet<HesapHareket> HesapHareketler { get; set; }
+    }
 }

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Entities.Enums
 {
-    public enum HareketTuru
+    public enum HareketTuru:byte
     {
-        Maas,        // Maaş Geliri
-        Fatura,      // Fatura Ödemesi
-        Kira,        // Kira Ödemesi veya Geliri
-        DosyaMasrafi, // Dosya Masrafı
-        Transfer,    // Hesaplar Arası Transfer
-        Diger        // Diğer İşlemler
+        Maas=1,        // Maaş Geliri
+        Fatura=2,      // Fatura Ödemesi
+        Kira=3,        // Kira Ödemesi veya Geliri
+        DosyaMasrafi=4, // Dosya Masrafı
+        Transfer=5,    // Hesaplar Arası Transfer
+        Diger=6        // Diğer İşlemler
     }
 }

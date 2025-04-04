@@ -2,6 +2,7 @@
 using Core;
 
 using Entities.Concrete;
+using Entities.Dto;
 using Entities.Dto.DosyaDto;
 using Entities.Dto.KullaniciDto;
 using Entities.Dto.KullaniciDto.KullaniciDto;
@@ -51,6 +52,8 @@ namespace Service.Mapping
 			CreateMap<DosyaDavali, DosyaDavaliListDto>()
 				.ForMember(dest => dest.DavaliAdi, opt => opt.MapFrom(x => x.Davali.DavaliAdi))
 				.ReverseMap();
-		}
+
+            CreateMap<HesapHareket, HesapHareketEkleDto>().ReverseMap();
+        }
 	}
 }
