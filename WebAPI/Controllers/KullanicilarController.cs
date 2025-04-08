@@ -22,7 +22,7 @@ namespace WebAPI.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Get() => Ok(_kullaniciService.GetAll());
+		public IActionResult Get() => Ok(_kullaniciService.GetAll().Result);
 
 
 		[HttpGet("/getbyID")]

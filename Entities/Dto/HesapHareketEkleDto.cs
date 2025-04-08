@@ -29,6 +29,11 @@ namespace Entities.Dto
         ///  Maaş, Masraf, Fatura vb.
         /// </summary>
         public HareketTuru HareketTuru { get; set; } 
-        public string Aciklama { get; set; } 
-    }
+        public string Aciklama { get; set; }
+		public DateTime OdemeTarihi { get; set; }
+
+		public DateTime OdemeYapıldığıTarih { get; set; }
+		public DateTime SonOdemeTarihi { get; set; }
+		public bool OdemeDurumu { get; set; }//Odendi 1 Odenmedi 0
+	}
 }

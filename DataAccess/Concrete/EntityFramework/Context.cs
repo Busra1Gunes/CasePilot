@@ -17,8 +17,8 @@ namespace DataAccess.Concrete.EntityFramework
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			
-			optionsBuilder.UseSqlServer("Data Source=DESKOP123;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
-			//optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
+			//optionsBuilder.UseSqlServer("Data Source=DESKOP123;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
+			optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
 		}
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
