@@ -1,7 +1,7 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
-using Entities.Dto;
 using Entities.Dto.DosyaDto;
+using Entities.Dto.HesapHareketDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace Business.Abstract
     public interface IHesapHareketService
     {
         IDataResult<List<HesapHareket>> GetAll();
-        IDataResult<List<HesapHareket>> GetAllByDosyaId(int dosyaID);
+        IDataResult<List<HesapHareketListDto>> GetAllByDosyaId(int dosyaID);
 
         IDataResult<HesapHareket> GetById(int hareketId);
         IResult Add(HesapHareketEkleDto hareket);

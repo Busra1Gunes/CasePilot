@@ -19,6 +19,11 @@ namespace Business.DependencyResolvers.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             //Birisi senden IStockService isterse ona StockManager registe et
+
+
+            builder.RegisterType<AuthManager>().As<IAuthService>().InstancePerLifetimeScope();
+        
+
             builder.RegisterType<KullaniciManager>().As<IKullaniciService>().InstancePerLifetimeScope();
             builder.RegisterType<EfKullaniciDal>().As<IKullaniciDal>().InstancePerLifetimeScope();
 

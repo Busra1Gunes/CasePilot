@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20250404130127_mig2")]
-    partial class mig2
+    [Migration("20250409115256_mig1")]
+    partial class mig1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,7 +63,7 @@ namespace DataAccess.Migrations
                             Adi = "Araç Hasarı",
                             DavaTurId = 1,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 4, 4, 16, 1, 26, 888, DateTimeKind.Local).AddTicks(2943)
+                            EklenmeTarihi = new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5270)
                         },
                         new
                         {
@@ -71,7 +71,7 @@ namespace DataAccess.Migrations
                             Adi = "Manevi",
                             DavaTurId = 1,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 4, 4, 16, 1, 26, 888, DateTimeKind.Local).AddTicks(2959)
+                            EklenmeTarihi = new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5282)
                         },
                         new
                         {
@@ -79,7 +79,7 @@ namespace DataAccess.Migrations
                             Adi = "İdari Dava",
                             DavaTurId = 1,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 4, 4, 16, 1, 26, 888, DateTimeKind.Local).AddTicks(2959)
+                            EklenmeTarihi = new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5283)
                         },
                         new
                         {
@@ -87,7 +87,7 @@ namespace DataAccess.Migrations
                             Adi = "Kamulaştırma",
                             DavaTurId = 4,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 4, 4, 16, 1, 26, 888, DateTimeKind.Local).AddTicks(2961)
+                            EklenmeTarihi = new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5283)
                         });
                 });
 
@@ -126,28 +126,28 @@ namespace DataAccess.Migrations
                             Id = 1,
                             Adi = "Trafik Kazası",
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 4, 4, 16, 1, 26, 888, DateTimeKind.Local).AddTicks(3146)
+                            EklenmeTarihi = new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5469)
                         },
                         new
                         {
                             Id = 2,
                             Adi = "Arabuluculuk",
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 4, 4, 16, 1, 26, 888, DateTimeKind.Local).AddTicks(3148)
+                            EklenmeTarihi = new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5471)
                         },
                         new
                         {
                             Id = 3,
                             Adi = "İdari Dava",
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 4, 4, 16, 1, 26, 888, DateTimeKind.Local).AddTicks(3149)
+                            EklenmeTarihi = new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5472)
                         },
                         new
                         {
                             Id = 4,
                             Adi = "Kamulaştırma",
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 4, 4, 16, 1, 26, 888, DateTimeKind.Local).AddTicks(3149)
+                            EklenmeTarihi = new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5473)
                         });
                 });
 
@@ -268,15 +268,15 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 1,
-                            AcilisTarihi = new DateTime(2025, 4, 4, 16, 1, 26, 888, DateTimeKind.Local).AddTicks(3255),
+                            AcilisTarihi = new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5575),
                             Adi = "Deneme",
-                            DogumTarihi = new DateTime(2025, 4, 4, 16, 1, 26, 888, DateTimeKind.Local).AddTicks(3252),
+                            DogumTarihi = new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5573),
                             DosyaDurum = 1,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 4, 4, 16, 1, 26, 888, DateTimeKind.Local).AddTicks(3256),
+                            EklenmeTarihi = new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5576),
                             HaklilikOrani = 10m,
-                            KapanisTarihi = new DateTime(2025, 4, 4, 16, 1, 26, 888, DateTimeKind.Local).AddTicks(3255),
-                            KazaTarihi = new DateTime(2025, 4, 4, 16, 1, 26, 888, DateTimeKind.Local).AddTicks(3254),
+                            KapanisTarihi = new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5576),
+                            KazaTarihi = new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5575),
                             SakatlikOrani = 10m,
                             Soyadi = "Dosya",
                             Tc = "11111111111",
@@ -452,7 +452,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 1,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 4, 4, 16, 1, 26, 888, DateTimeKind.Local).AddTicks(3350),
+                            EklenmeTarihi = new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5675),
                             EvrakTurAdi = "TcKimlik",
                             Tur = "DosyaEvrak"
                         },
@@ -460,7 +460,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 2,
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 4, 4, 16, 1, 26, 888, DateTimeKind.Local).AddTicks(3352),
+                            EklenmeTarihi = new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5677),
                             EvrakTurAdi = "Sici Kaydı",
                             Tur = "KullaniciEvrak"
                         });
@@ -505,7 +505,19 @@ namespace DataAccess.Migrations
                     b.Property<byte>("HareketTuru")
                         .HasColumnType("tinyint");
 
+                    b.Property<bool>("OdemeDurumu")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("OdemeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("OdemeYapıldığıTarih")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("SilinmeTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("SonOdemeTarihi")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Tutar")
@@ -6841,6 +6853,10 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Mail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Sifre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -6866,10 +6882,11 @@ namespace DataAccess.Migrations
                             Id = 1,
                             Adi = "Büşra",
                             Durum = false,
-                            EklenmeTarihi = new DateTime(2025, 4, 4, 16, 1, 26, 888, DateTimeKind.Local).AddTicks(4857),
+                            EklenmeTarihi = new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(6935),
                             IlId = 1,
                             IlceId = 1,
                             KullaniciAdi = "busra",
+                            Mail = "",
                             Sifre = "12345",
                             Soyadi = "Güneş"
                         });

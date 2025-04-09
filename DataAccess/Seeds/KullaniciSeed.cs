@@ -13,7 +13,7 @@ namespace Entities.Seeds
     {
         public void Configure(EntityTypeBuilder<Kullanici> builder)
         {
-            builder.HasData(new Kullanici { Id=1, IlId=1,IlceId=1, Adi="Büşra",Soyadi="Güneş", KullaniciAdi="busra",Sifre="12345", EklenmeTarihi=DateTime.Now});
+            builder.HasData(new Kullanici { Id=1, IlId=1,IlceId=1, Adi="Büşra",Soyadi="Güneş",Mail="", KullaniciAdi="busra",Sifre="12345", EklenmeTarihi=DateTime.Now});
         }
     }
 }

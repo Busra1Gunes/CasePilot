@@ -8,14 +8,14 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.ValidationRules
+namespace Business.DependencyResolvers.ValidationRules.FluentValidation
 {
     public class HesapHareketEkleDtoValidator : AbstractValidator<HesapHareketEkleDto>
     {
         public HesapHareketEkleDtoValidator()
         {
             RuleFor(x => x.GonderenId)
-                .Cascade(CascadeMode.Stop) 
+                .Cascade(CascadeMode.Stop)
                 .GreaterThan(0)
                 .WithMessage("Gönderen ID geçerli bir değer olmalıdır.");
 
@@ -29,13 +29,13 @@ namespace Business.ValidationRules
                 .GreaterThan(0)
                 .WithMessage("Tutar sıfırdan büyük olmalıdır.");
 
-           
+
             RuleFor(x => x.HareketTuru)
                 .Cascade(CascadeMode.Stop)
                 .IsInEnum()
                 .WithMessage("Geçersiz Hareket Türü.");
 
-            
+
             RuleFor(x => x.Aciklama)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
@@ -65,7 +65,7 @@ namespace Business.ValidationRules
         //FluentValidation, C# projelerinde veri doğrulama (validation) işlemlerini daha sade,
         //okunabilir ve etkili şekilde yapmanı sağlayan bir kütüphanedir.
 
-       // RuleFor() metodu, hangi özelliği doğrulamak istediğini belirtir.
+        // RuleFor() metodu, hangi özelliği doğrulamak istediğini belirtir.
 
         //Cascade() ile bir alanda birden fazla kural varsa, ilk hata sonrası diğer kuralların çalışmasını durdurabilirsin.
 

@@ -15,10 +15,11 @@ namespace WebAPI.Controllers
 	public class KullanicilarController : ControllerBase
 	{
 		readonly IKullaniciService _kullaniciService;
-
-		public KullanicilarController(IKullaniciService kullaniciService)
+        readonly IAuthService _authService;
+        public KullanicilarController(IKullaniciService kullaniciService,IAuthService authService)
 		{
             _kullaniciService = kullaniciService;
+			_authService = authService;
 		}
 
 		[HttpGet]
@@ -38,5 +39,11 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result);
         }
-	}
+
+
+        [HttpPost("/Login")]
+        public IActionResult Login(KullaniciLoginDto kullaniciLoginDto) => Ok(_authService.Login(kullaniciLoginDto));
+
+
+    }
 }

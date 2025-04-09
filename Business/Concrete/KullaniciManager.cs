@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Business.Abstract;
 using Business.DependencyResolvers.ValidationRules.FluentValidation;
+using Business.Utilities.Security;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Messages;
 using Core.Utilities.Results;
+using Core.Utilities.Security;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dto.KullaniciDto;
@@ -18,14 +20,19 @@ using System.Transactions;
 
 namespace Business.Concrete
 {
-	public class KullaniciManager : IKullaniciService
+	public class KullaniciManager :Manager<Kullanici>, IKullaniciService
 	{
+		
 		IKullaniciDal _kullaniciDal;
+		ITokenHelper _tokenHelper;
 		readonly IMapper _mapper;
-		public KullaniciManager(IKullaniciDal kullaniciDal, IMapper mapper)
+
+		public KullaniciManager(IKullaniciDal kullaniciDal, IMapper mapper,ITokenHelper tokenHelper):base(kullaniciDal)
 		{
+
 			_kullaniciDal = kullaniciDal;
 			_mapper = mapper;
+			_tokenHelper = tokenHelper;
 		}
 		// [LogAspect] --> AOP, Autofac ,AOP imkanı sunar
 		[ValidationAspect(typeof(KullaniciValidator))]
@@ -54,5 +61,17 @@ namespace Business.Concrete
 			//_kullaniciDal.de(kullanici);
 			return new SuccessResult("Kullanıcı Silindi");
 		}
-	}
+
+        public IResult UserExists(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDataResult<AccessToken> CreateAccessToken(Kullanici kullanici)
+        {
+         
+            var accessToken = _tokenHelper.CreateToken(kullanici);
+            return new SuccessDataResult<AccessToken>(accessToken);
+        }
+    }
 }

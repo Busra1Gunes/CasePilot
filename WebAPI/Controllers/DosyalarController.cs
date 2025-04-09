@@ -5,6 +5,7 @@ using Entities.Dto.DosyaDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebAPI.Controllers
 {
@@ -21,12 +22,6 @@ namespace WebAPI.Controllers
         {
             _dosyaService = dosyaService;
         }
-
-        /// <summary>
-        /// Yeni bir dosya kaydı oluşturur.
-        /// </summary>
-        /// <param name="dosya">Kaydedilecek dosya bilgileri</param>
-        /// <returns>İşlem sonucu</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)] // Başarılı dönüş tipi
         [ProducesResponseType(StatusCodes.Status400BadRequest)] // Hatalı istek tipi
@@ -35,12 +30,6 @@ namespace WebAPI.Controllers
             var result = _dosyaService.Add(dosya);
             return result.Success ? Ok(result) : BadRequest(result);
         }
-
-        /// <summary>
-        /// Dosya numarasına göre detay bilgisi getirir.
-        /// </summary>
-        /// <param name="dosyaNo">Dosya numarası</param>
-        /// <returns>Dosya detay bilgisi</returns>
         [HttpGet("{dosyaNo:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -50,24 +39,18 @@ namespace WebAPI.Controllers
             return result.Success ? Ok(result) : NotFound(result);
         }
 
-        /// <summary>
-        /// Tüm dosyaların listesini döner.
-        /// </summary>
-        /// <returns>Dosya listesi</returns>
+           [Authorize]
         [HttpGet("list")]
-        [AllowAnonymous] // Bu endpoint herkese açık olabilir (örnek)
+       // [AllowAnonymous] // Bu endpoint herkese açık olabilir (örnek)
         [ProducesResponseType(StatusCodes.Status200OK)]
+     
         public IActionResult DosyaListesi()
         {
             var result = _dosyaService.GetAll();
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        /// <summary>
-        /// Belirli bir dava türüne ait dosyaları listeler.
-        /// </summary>
-        /// <param name="davaTurId">Dava türü ID</param>
-        /// <returns>Filtrelenmiş dosya listesi</returns>
+        
         [HttpGet("by-davatur/{davaTurId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -77,11 +60,7 @@ namespace WebAPI.Controllers
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        /// <summary>
-        /// Mevcut bir dosyayı günceller.
-        /// </summary>
-        /// <param name="dosya">Güncellenmek istenen dosya bilgileri</param>
-        /// <returns>İşlem sonucu</returns>
+         [SwaggerOperation(Summary = "Dosyaları Günceller")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -89,20 +68,6 @@ namespace WebAPI.Controllers
         {
             var result = _dosyaService.Update(dosya);
             return result.Success ? Ok(result) : BadRequest(result);
-        }
-
-        /// <summary>
-        /// Belirli bir dosyayı siler. (opsiyonel olarak eklendi)
-        /// </summary>
-        /// <param name="id">Silinecek dosya ID</param>
-        /// <returns>İşlem sonucu</returns>
-        //[HttpDelete("{id:int}")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //public IActionResult DosyaSil(int id)
-        //{
-        //    var result = _dosyaService.(id);
-        //    return result.Success ? Ok(result) : NotFound(result);
-        //}
+        }       
     }
 }

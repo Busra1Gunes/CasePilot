@@ -4,10 +4,12 @@ using Business.ValidationRules;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
-using Entities.Dto;
 using Entities.Dto.DosyaDto;
+using Entities.Dto.HesapHareketDto;
 using Entities.Enums;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,9 +54,22 @@ namespace Business.Concrete
             throw new NotImplementedException();
         }
 
-        public IDataResult<List<HesapHareket>> GetAllByDosyaId(int dosyaID)
+        public IDataResult<List<HesapHareketListDto>> GetAllByDosyaId(int dosyaID)
         {
-            throw new NotImplementedException();
+            var harekets = _hesapHareketDal.Where(k => k.DosyaId == dosyaID)
+            .Include(d => d.Kullanici1)
+            .Include(b => b.Kullanici2)
+            .Include(i => i.Dosya)
+            .Include(i => i.Dosya).ToList();
+          
+
+            if (harekets == null)
+            {
+                return new ErrorDataResult<List<HesapHareketListDto>>("Hareket bulunamadı");
+            }
+
+            var liste = _mapper.Map<List<HesapHareketListDto>>(harekets);
+            return new SuccessDataResult<List<HesapHareketListDto>>(liste, "Hareket Listelendi");
         }
 
         public IDataResult<HesapHareket> GetById(int hareketId)

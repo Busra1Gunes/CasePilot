@@ -15,6 +15,7 @@ namespace Entities.Concrete
         public int? IlceId { get; set; }
         public string Adi { get; set; }
         public string Soyadi { get; set; }
+        public string Mail { get; set; }
         public string KullaniciAdi { get; set; }
         public string Sifre { get; set; }
         public Il? Il { get; set; }

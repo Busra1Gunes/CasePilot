@@ -1,6 +1,6 @@
 ﻿using Business.Abstract;
-using Entities.Dto;
 using Entities.Dto.DosyaDto;
+using Entities.Dto.HesapHareketDto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +18,10 @@ namespace WebAPI.Controllers
         [HttpPost("/hareketEkle")]
         public IActionResult HesapHareketEkle(HesapHareketEkleDto hareket) => Ok(_hareketService.Add(hareket));
 
+        [HttpPost("/dosyaHareketListesi")]
+        public IActionResult HesapHareketListesi(int dosyaId) => Ok(_hareketService.GetAllByDosyaId(dosyaId));
+
 
     }
 }
+    
