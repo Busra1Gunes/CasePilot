@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +10,14 @@ namespace WebAPI.Controllers
 	public class DavaTurleriController : ControllerBase
 	{
 		readonly IDavaTurService _davaTurService;
-		public DavaTurleriController(IDavaTurService davaTurService)
+
+        public DavaTurleriController(IDavaTurService davaTurService)
 		{
 			_davaTurService = davaTurService;
 		}
-		[HttpGet("/davaturleri")]
+
+        [Authorize]
+        [HttpGet("/davaturleri")]
 		public IActionResult Get()=>Ok(_davaTurService.GetAll());
 	}
 }

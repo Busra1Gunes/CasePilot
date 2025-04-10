@@ -9,10 +9,10 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebAPI.Controllers
 {
-    // Bu attribute, controller'ın route adresini belirler. [controller] yerine sınıf adı (Dosyalar) otomatik geçer.
+   
     [Route("api/[controller]")]
-    [ApiController] // Bu attribute ile model binding, validation, otomatik 400 dönüşü gibi özellikler aktif olur.
-    //[Authorize] // Tüm işlemler için yetkilendirme zorunlu. (İsteğe bağlı kaldırılabilir)
+    [ApiController]
+  
     public class DosyalarController : ControllerBase
     {
         private readonly IDosyaService _dosyaService;
@@ -22,6 +22,8 @@ namespace WebAPI.Controllers
         {
             _dosyaService = dosyaService;
         }
+
+      
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)] // Başarılı dönüş tipi
         [ProducesResponseType(StatusCodes.Status400BadRequest)] // Hatalı istek tipi
@@ -30,6 +32,7 @@ namespace WebAPI.Controllers
             var result = _dosyaService.Add(dosya);
             return result.Success ? Ok(result) : BadRequest(result);
         }
+        
         [HttpGet("{dosyaNo:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -39,9 +42,8 @@ namespace WebAPI.Controllers
             return result.Success ? Ok(result) : NotFound(result);
         }
 
-           [Authorize]
-        [HttpGet("list")]
-       // [AllowAnonymous] // Bu endpoint herkese açık olabilir (örnek)
+        
+        [HttpGet("list")]     
         [ProducesResponseType(StatusCodes.Status200OK)]
      
         public IActionResult DosyaListesi()
@@ -50,7 +52,7 @@ namespace WebAPI.Controllers
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        
+       
         [HttpGet("by-davatur/{davaTurId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -60,7 +62,7 @@ namespace WebAPI.Controllers
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-         [SwaggerOperation(Summary = "Dosyaları Günceller")]
+        [SwaggerOperation(Summary = "Dosyaları Günceller")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

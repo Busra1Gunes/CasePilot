@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
@@ -14,12 +15,14 @@ namespace WebAPI.Controllers
     public class DosyaDavaliController : ControllerBase
     {
         IDosyaDavaliService _dosyaDavaliService;
+
         public DosyaDavaliController(IDosyaDavaliService dosyaDavali)
         {
             _dosyaDavaliService = dosyaDavali;
         }
-        [HttpPost("DosyaDavaliEkle")]
 
+        [Authorize]
+        [HttpPost("DosyaDavaliEkle")]
         public IActionResult DosyaDavaliEkle( DosyaDavaliEkleDto davali)
         {
 

@@ -5,6 +5,7 @@ using AutoMapper;
 using Business.Abstract;
 using Business.Concrete;
 using Business.DependencyResolvers.Autofac;
+using Core.Aspects;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -69,6 +70,7 @@ builder.Services.AddSwaggerGen(opt =>
         }
     });
 });
+
 
 
 

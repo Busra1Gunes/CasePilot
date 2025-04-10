@@ -21,16 +21,16 @@ namespace WebAPI.Controllers
             _kullaniciService = kullaniciService;
 			_authService = authService;
 		}
-
-		[HttpGet]
+        
+        [HttpGet]
 		public IActionResult Get() => Ok(_kullaniciService.GetAll().Result);
 
-
-		[HttpGet("/getbyID")]
+        [Authorize]
+        [HttpGet("/getbyID")]
 		public IActionResult GetById(int kullaniciId) => Ok(_kullaniciService.GetById(kullaniciId));
 
 		[HttpPost]
-		public IActionResult Post(KullaniciKayitDto kullanici)
+		public IActionResult Add(KullaniciKayitDto kullanici)
 		{
             var result = _kullaniciService.Add(kullanici);
             if (result.Success)
@@ -40,7 +40,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-
+        [AllowAnonymous]
         [HttpPost("/Login")]
         public IActionResult Login(KullaniciLoginDto kullaniciLoginDto) => Ok(_authService.Login(kullaniciLoginDto));
 

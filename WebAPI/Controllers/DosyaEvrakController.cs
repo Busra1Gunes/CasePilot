@@ -17,8 +17,9 @@ namespace WebAPI.Controllers
         {
             _evrakService = evrakService;
         }
-        [HttpPost("DosyaEvrakEkle")]
 
+        [Authorize]
+        [HttpPost("DosyaEvrakEkle")]
         public IActionResult DosyaEvrakEkle([FromForm] DosyaEvrakEkleDto evrakAdd)
         {
             var baseUri = new Uri(this.Request.GetEncodedUrl());
