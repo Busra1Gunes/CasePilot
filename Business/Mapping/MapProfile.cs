@@ -6,6 +6,7 @@ using Entities.Dto.DosyaDto;
 using Entities.Dto.HesapHareketDto;
 using Entities.Dto.KullaniciDto;
 using Entities.Dto.KullaniciDto.KullaniciDto;
+using Entities.Enums;
 using Microsoft.AspNetCore.Http;
 
 namespace Service.Mapping
@@ -55,14 +56,28 @@ namespace Service.Mapping
 
             CreateMap<HesapHareket, HesapHareketEkleDto>().ReverseMap();
 
-            CreateMap<HesapHareket, HesapHareketListDto>()
-        .ForMember(dest => dest.Gonderen, opt => opt.MapFrom(x => x.Kullanici1.Adi))
-        .ForMember(dest => dest.Alici, opt => opt.MapFrom(x => x.Kullanici2.Adi))
-        .ForMember(dest => dest.Dosya, opt => opt.MapFrom(x => x.Dosya.Adi))
-        .ReverseMap();
+
 
             CreateMap<Kullanici, KullaniciKayitDto>().ReverseMap();
             CreateMap<Kullanici, KullaniciLoginDto>().ReverseMap();
+
+
+            CreateMap<HesapHareket, HesapHareketDto>()
+        .ForMember(dest => dest.Borclu, opt => opt.MapFrom(x => x.Kullanici1.Adi))
+        .ForMember(dest => dest.Alacak, opt => opt.MapFrom(x => x.Kullanici2.Adi))
+        .ForMember(dest => dest.Dosya, opt => opt.MapFrom(x => x.Dosya.Adi))
+        .ForMember(dest => dest.HareketDurumu, opt => opt.MapFrom(x => x.HareketDurumu == HareketDurumu.Borc ? "Borç" : x.HareketDurumu == HareketDurumu.Alacak ? "Alacak" : "-"))
+        .ForMember(dest => dest.OdemeDurumu, opt => opt.MapFrom(x => x.OdemeDurumu == true ? "Ödendi" : x.OdemeDurumu == false ? "Ödenmedi" : "-"))
+        .ForMember(dest => dest.HareketTuru, opt => opt.MapFrom(x => x.HareketTuru == HareketTuru.Fatura ? "Fatura" :
+                                                                 x.HareketTuru == HareketTuru.Kira ? "Kira" :
+                                                                 x.HareketTuru == HareketTuru.Maas ? "Maaş" :
+                                                                 x.HareketTuru == HareketTuru.DosyaMasrafi ? "Dosya Masrafı" :
+                                                                 x.HareketTuru == HareketTuru.Diger ? "Diğer" :
+                                                                 x.HareketTuru == HareketTuru.Transfer ? "Transfer" : "-"))
+                                                                   .ReverseMap();
+
+
+         
         }
     }
 }

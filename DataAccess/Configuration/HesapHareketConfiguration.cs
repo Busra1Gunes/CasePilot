@@ -28,12 +28,12 @@ namespace DataAccess.Configuration
 
             builder.HasOne(x => x.Kullanici1)
       .WithMany(x => x.HesapHareket1)
-      .HasForeignKey(x => x.GonderenId)
+      .HasForeignKey(x => x.BorcluID)
       .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.Kullanici2)
                 .WithMany(x => x.HesapHareket2)
-                .HasForeignKey(x => x.AliciId)
+                .HasForeignKey(x => x.AlacakId)
                 .OnDelete(DeleteBehavior.Restrict);
 
         }

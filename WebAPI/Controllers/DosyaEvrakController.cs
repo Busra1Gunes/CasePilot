@@ -18,7 +18,7 @@ namespace WebAPI.Controllers
             _evrakService = evrakService;
         }
 
-        [Authorize]
+        
         [HttpPost("DosyaEvrakEkle")]
         public IActionResult DosyaEvrakEkle([FromForm] DosyaEvrakEkleDto evrakAdd)
         {

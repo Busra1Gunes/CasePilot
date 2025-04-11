@@ -4,12 +4,13 @@ using Entities.Dto.HesapHareketDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+
     public class HesapHareketController : ControllerBase
     {
         readonly IHesapHareketService _hareketService;
@@ -17,13 +18,14 @@ namespace WebAPI.Controllers
         {
             _hareketService = hareketService;
         }
-        [Authorize]
+        [SwaggerOperation(Summary = "Maaş 1,Fatura 2, Kira 3, DosyaMasrafı 4, transfer 5, Diğer 6")]
         [HttpPost("/hareketEkle")]
         public IActionResult HesapHareketEkle(HesapHareketEkleDto hareket) => Ok(_hareketService.Add(hareket));
-        
-        [Authorize]
-        [HttpPost("/dosyaHareketListesi")]
-        public IActionResult HesapHareketListesi(int dosyaId) => Ok(_hareketService.GetAllByDosyaId(dosyaId));
+      
+
+
+        [HttpPost("/kullaniciHareketListesi")]
+        public IActionResult KullaniciHesapHareketListesi(int userID) => Ok(_hareketService.GetAllByUserID(userID));
 
 
     }

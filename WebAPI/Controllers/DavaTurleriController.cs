@@ -16,7 +16,7 @@ namespace WebAPI.Controllers
 			_davaTurService = davaTurService;
 		}
 
-        [Authorize]
+    
         [HttpGet("/davaturleri")]
 		public IActionResult Get()=>Ok(_davaTurService.GetAll());
 	}

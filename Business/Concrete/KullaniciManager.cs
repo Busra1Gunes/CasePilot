@@ -50,7 +50,9 @@ namespace Business.Concrete
 		}
 		public async Task<object> GetAll()
 		{
-			var list = _kullaniciDal.GetAll();
+			var list = _kullaniciDal.GetAll()
+				.Include(i=>i.Il)
+				.Include(i => i.Ilce);
 			return _mapper.Map<List<KullaniciListeDto>>(list);
 		}
 

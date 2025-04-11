@@ -7,18 +7,22 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.HesapHareketDto
 {
-    public class HesapHareketEkleDto
+    public class HesapHareketDto
     {
         public int Id { get; set; }
-        public int BorcluID { get; set; }
 
-        public int AlacakId { get; set; }
+        public string Borclu { get; set; }
 
-        public int? DosyaId { get; set; } //Eger HareketTuru=DosyaMasrafi ise DosyaId deger alır yoksa null
+        public string Alacak { get; set; }
+
+        public string Dosya { get; set; }
 
         public decimal Tutar { get; set; }
 
-        public HareketTuru HareketTuru { get; set; }
+
+        public string HareketDurumu { get; set; }
+
+        public string HareketTuru { get; set; }
 
         public string Aciklama { get; set; }
 
@@ -28,6 +32,8 @@ namespace Entities.Dto.HesapHareketDto
 
         public DateTime SonOdemeTarihi { get; set; }
 
-        public bool OdemeDurumu { get; set; }
+        public string OdemeDurumu { get; set; }
+
+
     }
 }
