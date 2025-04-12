@@ -15,15 +15,15 @@ namespace WebAPI.Controllers
         {
             _basvuruTurService = basvuruTurService;
         }
-        [Authorize]
+       
         [HttpGet("/basvuruturleri")]
         public IActionResult Get() => Ok(_basvuruTurService.GetAll());
 
-        [Authorize]
+       
         [HttpGet("/basvuruturleri/getbyID")]
         public IActionResult GetById(int basvuruTurId) => Ok(_basvuruTurService.GetById(basvuruTurId));
 
-        [Authorize]
+      
         [HttpPost("/basvuruturleri/add")]
         public IActionResult Add(BasvuruTur basvuruTur) => Ok(_basvuruTurService.Add(basvuruTur));
     }

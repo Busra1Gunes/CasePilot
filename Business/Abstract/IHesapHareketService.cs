@@ -13,7 +13,7 @@ namespace Business.Abstract
     public interface IHesapHareketService
     {
         IDataResult<List<HesapHareket>> GetAll();
-        IDataResult<List<HesapHareketListDto>> GetAllByDosyaId(int dosyaID);
+        IDataResult<HesapHareketListDto> GetAllByUserID(int userID);
 
         IDataResult<HesapHareket> GetById(int hareketId);
         IResult Add(HesapHareketEkleDto hareket);

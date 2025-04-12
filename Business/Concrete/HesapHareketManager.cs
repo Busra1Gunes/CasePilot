@@ -31,20 +31,21 @@ namespace Business.Concrete
         }
         [ValidationAspect(typeof(HesapHareketEkleDtoValidator))]
         public IResult Add(HesapHareketEkleDto hareket)
-        {         
+        {
             var hesapHareket = _mapper.Map<HesapHareketEkleDto, HesapHareket>(hareket);
             if (hesapHareket.HareketTuru == HareketTuru.DosyaMasrafi)
-            {              
+            {
+
                 hesapHareket.HareketDurumu = HareketDurumu.Alacak;
             }
-            if (hesapHareket.HareketTuru == HareketTuru.Kira
-                || hareket.HareketTuru == HareketTuru.Fatura
-                || hareket.HareketTuru == HareketTuru.Maas
-                || hesapHareket.HareketTuru == HareketTuru.Transfer)
-            {
-                hesapHareket.DosyaId = null;
-                hesapHareket.HareketDurumu = HareketDurumu.Borc;
-            }
+            //if (hesapHareket.HareketTuru == HareketTuru.Kira
+            //    || hareket.HareketTuru == HareketTuru.Fatura
+            //    || hareket.HareketTuru == HareketTuru.Maas
+            //    || hesapHareket.HareketTuru == HareketTuru.Transfer)
+            //{
+            //    hesapHareket.DosyaId = null;
+            //    hesapHareket.HareketDurumu = HareketDurumu.Borc;
+            //}
             var sonuc = _hesapHareketDal.AddAsync(hesapHareket);
             return new SuccessResult("Hareket Kaydedildi");
         }
@@ -54,22 +55,70 @@ namespace Business.Concrete
             throw new NotImplementedException();
         }
 
-        public IDataResult<List<HesapHareketListDto>> GetAllByDosyaId(int dosyaID)
+        public IDataResult<HesapHareketListDto> GetAllByUserID(int userID)
         {
-            var harekets = _hesapHareketDal.Where(k => k.DosyaId == dosyaID)
-            .Include(d => d.Kullanici1)
-            .Include(b => b.Kullanici2)
-            .Include(i => i.Dosya)
-            .Include(i => i.Dosya).ToList();
-          
+            
+                var hareketler = _hesapHareketDal
+                    .Where(x => x.BorcluID == userID || x.AlacakId == userID)
+                    .Include(a=>a.Kullanici1)
+                    .Include(a=>a.Kullanici2)
+                    .Include(a=>a.Dosya);
+                var hareketDtos = _mapper.Map<List<HesapHareketDto>>(hareketler);
 
-            if (harekets == null)
-            {
-                return new ErrorDataResult<List<HesapHareketListDto>>("Hareket bulunamadı");
-            }
+                var bakiyeDto = new HesapBakiyeDto();
 
-            var liste = _mapper.Map<List<HesapHareketListDto>>(harekets);
-            return new SuccessDataResult<List<HesapHareketListDto>>(liste, "Hareket Listelendi");
+                foreach (var h in hareketler)
+                {
+                    // Ödeme yapılmış mı kontrolü
+                    bool odendi = h.OdemeDurumu == true;
+
+                    // Kullanıcı borçlu taraf mı?
+                    if (h.BorcluID == userID)
+                    {
+                        if (odendi)
+                            bakiyeDto.ToplamBorc += h.Tutar;
+                        else
+                            bakiyeDto.BekleyenBorc += h.Tutar;
+                    }
+
+                    // Kullanıcı alacaklı taraf mı?
+                    if (h.AlacakId == userID)
+                    {
+                        if (odendi)
+                            bakiyeDto.ToplamAlacak += h.Tutar;
+                        else
+                            bakiyeDto.BekleyenAlacak += h.Tutar;
+                    }
+                }
+
+                // Net bakiye: alınan - gönderilen
+                bakiyeDto.NetBakiye = (bakiyeDto.ToplamAlacak  -
+                                      bakiyeDto.ToplamBorc );
+                HesapHareketListDto hesapHareketListDto = new HesapHareketListDto
+                {
+                    Bakiye = bakiyeDto,
+                    Hareketler = hareketDtos
+                };
+
+
+                return new SuccessDataResult<HesapHareketListDto>(hesapHareketListDto);
+
+
+            
+            //var harekets = _hesapHareketDal.Where()
+            //.Include(d => d.Kullanici1)
+            //.Include(b => b.Kullanici2)
+            //.Include(i => i.Dosya)
+            //.Include(i => i.Dosya).ToList();
+
+
+            //if (harekets == null)
+            //{
+            //    return new ErrorDataResult<HesapHareketListDto>("Hareket bulunamadı");
+            //}
+
+            //var liste = _mapper.Map<HesapHareketListDto>(harekets);
+            //return new SuccessDataResult<HesapHareketListDto>(liste, "Hareket Listelendi");
         }
 
         public IDataResult<HesapHareket> GetById(int hareketId)

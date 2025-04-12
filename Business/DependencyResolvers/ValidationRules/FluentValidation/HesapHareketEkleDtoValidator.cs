@@ -14,12 +14,12 @@ namespace Business.DependencyResolvers.ValidationRules.FluentValidation
     {
         public HesapHareketEkleDtoValidator()
         {
-            RuleFor(x => x.GonderenId)
+            RuleFor(x => x.BorcluID)
                 .Cascade(CascadeMode.Stop)
                 .GreaterThan(0)
                 .WithMessage("Gönderen ID geçerli bir değer olmalıdır.");
 
-            RuleFor(x => x.AliciId)
+            RuleFor(x => x.AlacakId)
                 .Cascade(CascadeMode.Stop)
                 .GreaterThan(0)
                 .WithMessage("Alıcı ID geçerli bir değer olmalıdır.");

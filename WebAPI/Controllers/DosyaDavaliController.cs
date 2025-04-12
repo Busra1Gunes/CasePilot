@@ -21,7 +21,7 @@ namespace WebAPI.Controllers
             _dosyaDavaliService = dosyaDavali;
         }
 
-        [Authorize]
+      
         [HttpPost("DosyaDavaliEkle")]
         public IActionResult DosyaDavaliEkle( DosyaDavaliEkleDto davali)
         {

@@ -14,12 +14,12 @@ namespace Business.ValidationRules
     {
         public HesapHareketEkleDtoValidator()
         {
-            RuleFor(x => x.GonderenId)
+            RuleFor(x => x.BorcluID)
                 .Cascade(CascadeMode.Stop) 
                 .GreaterThan(0)
                 .WithMessage("Gönderen ID geçerli bir değer olmalıdır.");
 
-            RuleFor(x => x.AliciId)
+            RuleFor(x => x.AlacakId)
                 .Cascade(CascadeMode.Stop)
                 .GreaterThan(0)
                 .WithMessage("Alıcı ID geçerli bir değer olmalıdır.");
@@ -59,7 +59,9 @@ namespace Business.ValidationRules
                 RuleFor(x => x.DosyaId)
                     .Cascade(CascadeMode.Stop)
                     .Must(x => x == null)
+                    .Must(x=>x==0)
                     .WithMessage("DosyaId sadece DosyaMasrafı türünde dolu olabilir.");
+
             });
         }
         //FluentValidation, C# projelerinde veri doğrulama (validation) işlemlerini daha sade,
