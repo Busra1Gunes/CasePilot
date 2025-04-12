@@ -15,21 +15,21 @@ namespace Business.Concrete
 {
     public class AuthManager : IAuthService
     {
-        IKullaniciService _kullanicService;
+        IUserService _userService;
         readonly IMapper _mapper;
-        public AuthManager(IKullaniciService kullaniciService, IMapper mapper)
+        public AuthManager(IUserService kullaniciService, IMapper mapper)
         {
-            _kullanicService = kullaniciService;
+            _userService = kullaniciService;
             _mapper = mapper;
         }
-        public IDataResult<AccessToken> Login(KullaniciLoginDto kullaniciLogin)
+        public IDataResult<AccessToken> Login(UserLoginDto userLoginDto)
         {
-            Kullanici? kullanici = _kullanicService
-                .Where(k => k.KullaniciAdi.Equals(kullaniciLogin.KullaniciAdi) && k.Sifre.Equals(kullaniciLogin.Sifre)).FirstOrDefault();
+            User? kullanici = _userService
+                .Where(k => k.UserName.Equals(userLoginDto.UserName) && k.Password.Equals(userLoginDto.Password)).FirstOrDefault();
             
             if (kullanici!=null)
             {
-              AccessToken token=  _kullanicService.CreateAccessToken(kullanici).Data;
+              AccessToken token= _userService.CreateAccessToken(kullanici).Data;
                 return new SuccessDataResult<AccessToken>(token);
             }
            return new ErrorDataResult<AccessToken>();
@@ -37,16 +37,16 @@ namespace Business.Concrete
           
         }
 
-        public IDataResult<Kullanici> Register(KullaniciKayitDto kullaniciKayitDto)
+        public IDataResult<User> Register(UserAddDto userAddDto)
         {
-            var kullanici = _kullanicService.Where(k => k.KullaniciAdi.Equals(kullaniciKayitDto.KullaniciAdi)).Any();
+            var kullanici = _userService.Where(k => k.UserName.Equals(userAddDto.UserName)).Any();
             if (kullanici)
             {
-                return new ErrorDataResult<Kullanici>("");
+                return new ErrorDataResult<User>("");
             }
-            Kullanici kullanici1 = _mapper.Map<Kullanici>(kullaniciKayitDto);
-            _kullanicService.AddAsync(kullanici1);
-            return new SuccessDataResult<Kullanici>(kullanici1);
+            User user1 = _mapper.Map<User>(userAddDto);
+            _userService.AddAsync(user1);
+            return new SuccessDataResult<User>(user1);
 
         }
     }

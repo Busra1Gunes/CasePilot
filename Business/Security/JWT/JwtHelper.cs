@@ -28,7 +28,7 @@ namespace Business.Utilities.Security.JWT
 
         }
 
-        public AccessToken CreateToken(Kullanici user)
+        public AccessToken CreateToken(User user)
         {
             _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
             var securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey);
@@ -45,7 +45,7 @@ namespace Business.Utilities.Security.JWT
 
         }
 
-        public JwtSecurityToken CreateJwtSecurityToken(TokenOptions tokenOptions, Kullanici kullanici,
+        public JwtSecurityToken CreateJwtSecurityToken(TokenOptions tokenOptions, User kullanici,
             SigningCredentials signingCredentials)
         {
             var jwt = new JwtSecurityToken(
@@ -59,12 +59,12 @@ namespace Business.Utilities.Security.JWT
             return jwt;
         }
 
-        private IEnumerable<Claim> SetClaims(Kullanici kullanici )
+        private IEnumerable<Claim> SetClaims(User user )
         {
             var claims = new List<Claim>();
-            claims.AddNameIdentifier(kullanici.Id.ToString());
-            claims.AddEmail(kullanici.Mail);
-            claims.AddName($"{kullanici.Adi} {kullanici.Soyadi}");
+            claims.AddNameIdentifier(user.ID.ToString());
+            claims.AddEmail(user.Mail);
+            claims.AddName($"{user.Name} {user.Surname}");
        
 
             return claims;

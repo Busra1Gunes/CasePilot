@@ -19,15 +19,15 @@ namespace Business.Tokens
             tokenSettings = options.Value;
         }
 
-        public JwtSecurityToken CreateToken(Kullanici user, IList<string> roles)
+        public JwtSecurityToken CreateToken(User user, IList<string> roles)
         {
             List<Claim> claims = new()
             {
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                
-                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new(ClaimTypes.NameIdentifier, user.ID.ToString()),
                 new(ClaimTypes.Email, user.Mail),
-                new(ClaimTypes.Name, user.Adi+ " "+user.Soyadi)
+                new(ClaimTypes.Name, user.Name+ " "+user.Surname)
             };
 
             foreach (var role in roles)

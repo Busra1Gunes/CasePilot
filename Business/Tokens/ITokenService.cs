@@ -5,6 +5,6 @@ namespace Business.Tokens
 {
     public interface ITokenService
     {
-        JwtSecurityToken CreateToken(Kullanici user,  IList<string> roles);
+        JwtSecurityToken CreateToken(User user,  IList<string> roles);
     }
 }
