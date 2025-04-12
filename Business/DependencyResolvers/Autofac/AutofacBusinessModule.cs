@@ -24,27 +24,27 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<AuthManager>().As<IAuthService>().InstancePerLifetimeScope();
         
 
-            builder.RegisterType<KullaniciManager>().As<IKullaniciService>().InstancePerLifetimeScope();
-            builder.RegisterType<EfKullaniciDal>().As<IKullaniciDal>().InstancePerLifetimeScope();
+            builder.RegisterType<UserManager>().As<IUserService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfUserDal>().As<IUserDal>().InstancePerLifetimeScope();
 
-            builder.RegisterType<DosyaManager>().As<IDosyaService>().InstancePerLifetimeScope();
-            builder.RegisterType<EfDosyaDal>().As<IDosyaDal>().InstancePerLifetimeScope();
+            builder.RegisterType<CaseFileManager>().As<ICaseFileService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfCaseFileDal>().As<ICaseFileDal>().InstancePerLifetimeScope();
 
-			builder.RegisterType<DavaTurManager>().As<IDavaTurService>().InstancePerLifetimeScope();
-			builder.RegisterType<EfDavaTurDal>().As<IDavaTurDal>().InstancePerLifetimeScope();
+			builder.RegisterType<CaseTypeManager>().As<ICaseTypeService>().InstancePerLifetimeScope();
+			builder.RegisterType<EfCaseTypeDal>().As<ICaseTypeDal>().InstancePerLifetimeScope();
 
-            builder.RegisterType<BasvuruTurManager>().As<IBasvuruTurService>().InstancePerLifetimeScope();
-            builder.RegisterType<EfBasvuruTurDal>().As<IBasvuruTurDal>().InstancePerLifetimeScope();
+            builder.RegisterType<ApplicationTypeManager>().As<IApplicationTypeService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfApplicationTypeDal>().As<IApplicationTypeDal>().InstancePerLifetimeScope();
 
-            builder.RegisterType<DosyaEvrakManager>().As<IDosyaEvrakService>().InstancePerLifetimeScope();
-            builder.RegisterType<EfDosyaEvrakDal>().As<IDosyaEvrakDal>().InstancePerLifetimeScope();
+            builder.RegisterType<CaseFileDocumentManager>().As<ICaseFileDocumentService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfCaseFileDocumentDal>().As<ICaseFileDocumentDal>().InstancePerLifetimeScope();
 
 
-            builder.RegisterType<DosyaDavaliManager>().As<IDosyaDavaliService>().InstancePerLifetimeScope();
-            builder.RegisterType<EfDosyaDavaliDal>().As<IDosyaDavaliDal>().InstancePerLifetimeScope();
+            builder.RegisterType<CaseFileDefendantManager>().As<ICaseFileDefendantService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfCaseFileDefendantDal>().As<ICaseFileDefendantDal>().InstancePerLifetimeScope();
 
-            builder.RegisterType<HesapHareketManager>().As<IHesapHareketService>().InstancePerLifetimeScope();
-            builder.RegisterType<EfHesapHareketDal>().As<IHesapHareketDal>().InstancePerLifetimeScope();
+            builder.RegisterType<AccountTransactionManager>().As<IAccountTransactionService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfAccountTransactionDal>().As<IAccountTransactionDal>().InstancePerLifetimeScope();
 
             builder.RegisterType<Context>().AsSelf().InstancePerLifetimeScope();
 

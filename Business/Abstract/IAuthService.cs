@@ -12,7 +12,7 @@ namespace Business.Abstract
 {
     public interface IAuthService
     {
-        IDataResult<Kullanici> Register(KullaniciKayitDto kullaniciKayitDto);
-        IDataResult<AccessToken> Login(KullaniciLoginDto kullaniciLogin);
+        IDataResult<User> Register(UserAddDto kullaniciKayitDto);
+        IDataResult<AccessToken> Login(UserLoginDto kullaniciLogin);
     }
 }

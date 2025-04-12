@@ -16,64 +16,62 @@ namespace Service.Mapping
 
         public MapProfile(IHttpContextAccessor httpContextAccessor)
         {
-            CreateMap<Kullanici, KullaniciKayitDto>()
-                //.ForMember(dest=>dest.Il,opt=>opt.MapFrom(k=>k.Il.Adi))
-                //.ForMember(dest=>dest.Ilce,opt=>opt.MapFrom(k=>k.Ilce.IlceAdi))
+            CreateMap<User, UserAddDto>()               
                 .ReverseMap();
 
-            CreateMap<Kullanici, KullaniciListeDto>()
-                .ForMember(dest => dest.Il, opt => opt.MapFrom(x => x.Il.Adi))
-                .ForMember(dest => dest.Ilce, opt => opt.MapFrom(x => x.Ilce.IlceAdi))
+            CreateMap<User, KullaniciListeDto>()
+                .ForMember(dest => dest.City, opt => opt.MapFrom(x => x.City.Name))
+                .ForMember(dest => dest.District, opt => opt.MapFrom(x => x.District.Name))
                 .ReverseMap();
 
-            CreateMap<Dosya, DosyaKayitDto>().ReverseMap();
+            CreateMap<CaseFile, CaseFileAddDto>().ReverseMap();
 
 
-            CreateMap<Dosya, DosyaDetayDto>()
-        .ForMember(dest => dest.Il, opt => opt.MapFrom(x => x.Il.Adi))
-        .ForMember(dest => dest.Ilce, opt => opt.MapFrom(x => x.Ilce.IlceAdi))
-        .ForMember(dest => dest.DavaTur, opt => opt.MapFrom(x => x.DavaTur.Adi))
-        .ForMember(dest => dest.DosyaPays, opt => opt.MapFrom(x => x.DosyaPaylar)) // Güncellendi
-        .ForMember(dest => dest.DosyaDavalis, opt => opt.MapFrom(x => x.DosyaDavalilar))
-        .ForMember(dest => dest.BasvuruTur, opt => opt.MapFrom(x => x.BasvuruTur.Adi))
+            CreateMap<CaseFile, CaseFileDetailDto>()
+        .ForMember(dest => dest.City, opt => opt.MapFrom(x => x.City.Name))
+        .ForMember(dest => dest.District, opt => opt.MapFrom(x => x.District.Name))
+        .ForMember(dest => dest.caseType, opt => opt.MapFrom(x => x.CaseType.Name))
+        .ForMember(dest => dest.CaseFileShares, opt => opt.MapFrom(x => x.CaseFileShares)) // Güncellendi
+        .ForMember(dest => dest.caseFileDefendantListDtos, opt => opt.MapFrom(x => x.CaseFileDefendant))
+        .ForMember(dest => dest.applicationType, opt => opt.MapFrom(x => x.ApplicationType.Name))
         .ReverseMap();
 
 
-            CreateMap<Dosya, DosyaGuncelleDto>().ReverseMap();
-            CreateMap<DosyaEvrak, DosyaEvrakEkleDto>()
+            CreateMap<CaseFile, CaseFileUpdateDto>().ReverseMap();
+            CreateMap<CaseFileDocument, CaseFileDocumentAddDto>()
                 .ReverseMap();
 
-            CreateMap<DosyaDavali, DosyaDavaliEkleDto>().ReverseMap();
+            CreateMap<CaseFileDefendant, CaseFileDefendantAddDto>().ReverseMap();
 
-            CreateMap<DosyaPay, DosyaPayListDto>()
-                .ForMember(dest => dest.PaySahibi, opt => opt.MapFrom(x => x.Kullanici.Adi + " " + x.Kullanici.Soyadi))
+            CreateMap<CaseFileShare, CaseFileShareListDto>()
+                .ForMember(dest => dest.ShareUserName, opt => opt.MapFrom(x => x.User.Name + " " + x.User.Surname))
                 .ReverseMap();
 
 
-            CreateMap<DosyaDavali, DosyaDavaliListDto>()
-                .ForMember(dest => dest.DavaliAdi, opt => opt.MapFrom(x => x.Davali.DavaliAdi))
+            CreateMap<CaseFileDefendant, CaseFileDefendantListDto>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(x => x.Defendant.Name))
                 .ReverseMap();
 
-            CreateMap<HesapHareket, HesapHareketEkleDto>().ReverseMap();
+            CreateMap<AccountTransaction, AccountTransactionAddDto>().ReverseMap();
 
 
 
-            CreateMap<Kullanici, KullaniciKayitDto>().ReverseMap();
-            CreateMap<Kullanici, KullaniciLoginDto>().ReverseMap();
+            CreateMap<User, UserAddDto>().ReverseMap();
+            CreateMap<User, UserLoginDto>().ReverseMap();
 
 
-            CreateMap<HesapHareket, HesapHareketDto>()
-        .ForMember(dest => dest.Borclu, opt => opt.MapFrom(x => x.Kullanici1.Adi))
-        .ForMember(dest => dest.Alacak, opt => opt.MapFrom(x => x.Kullanici2.Adi))
-        .ForMember(dest => dest.Dosya, opt => opt.MapFrom(x => x.Dosya.Adi))
-        .ForMember(dest => dest.HareketDurumu, opt => opt.MapFrom(x => x.HareketDurumu == HareketDurumu.Borc ? "Borç" : x.HareketDurumu == HareketDurumu.Alacak ? "Alacak" : "-"))
-        .ForMember(dest => dest.OdemeDurumu, opt => opt.MapFrom(x => x.OdemeDurumu == true ? "Ödendi" : x.OdemeDurumu == false ? "Ödenmedi" : "-"))
-        .ForMember(dest => dest.HareketTuru, opt => opt.MapFrom(x => x.HareketTuru == HareketTuru.Fatura ? "Fatura" :
-                                                                 x.HareketTuru == HareketTuru.Kira ? "Kira" :
-                                                                 x.HareketTuru == HareketTuru.Maas ? "Maaş" :
-                                                                 x.HareketTuru == HareketTuru.DosyaMasrafi ? "Dosya Masrafı" :
-                                                                 x.HareketTuru == HareketTuru.Diger ? "Diğer" :
-                                                                 x.HareketTuru == HareketTuru.Transfer ? "Transfer" : "-"))
+            CreateMap<AccountTransaction, AccountTransactionDto>()
+        .ForMember(dest => dest.Debtor, opt => opt.MapFrom(x => x.User1.Name+" "+x.User1.Surname))
+        .ForMember(dest => dest.Credit, opt => opt.MapFrom(x => x.User2.Name + " " + x.User2.Surname))
+        .ForMember(dest => dest.CaseFile, opt => opt.MapFrom(x => x.CaseFile.Name+" "+x.CaseFile.Surname))
+        .ForMember(dest => dest.TransactionStatus, opt => opt.MapFrom(x => x.TransactionStatus == TransactionStatus.Borc ? "Borç" : x.TransactionStatus == TransactionStatus.Alacak ? "Alacak" : "-"))
+        .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(x => x.PaymentStatus == true ? "Ödendi" : x.PaymentStatus == false ? "Ödenmedi" : "-"))
+        .ForMember(dest => dest.Type, opt => opt.MapFrom(x => x.Type == TransactionType.Fatura ? "Fatura" :
+                                                                 x.Type == TransactionType.Kira ? "Kira" :
+                                                                 x.Type == TransactionType.Maas ? "Maaş" :
+                                                                 x.Type == TransactionType.DosyaMasrafi ? "Dosya Masrafı" :
+                                                                 x.Type == TransactionType.Diger ? "Diğer" :
+                                                                 x.Type == TransactionType.Transfer ? "Transfer" : "-"))
                                                                    .ReverseMap();
 
 

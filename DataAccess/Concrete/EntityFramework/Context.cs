@@ -25,28 +25,19 @@ namespace DataAccess.Concrete.EntityFramework
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());//Bütün Configurationları tek seferde bulup uygular
-           // modelBuilder.ApplyConfiguration(new DosyaConfiguration()); üsteki koddan dolayi gerek kalmadı
-			//modelBuilder.ApplyConfiguration(new DosyaSeed());
-			//modelBuilder.ApplyConfiguration(new IlSeed());
-			//modelBuilder.ApplyConfiguration(new IlceSeed());
-			//modelBuilder.ApplyConfiguration(new DavaTurSeed());
-			//modelBuilder.ApplyConfiguration(new BasvuruTurSeed());
-			//modelBuilder.ApplyConfiguration(new KullaniciSeed());
-			//modelBuilder.ApplyConfiguration(new EvrakTurSeed());
-           // modelBuilder.ApplyConfiguration(new HesapHareketConfiguration());
             base.OnModelCreating(modelBuilder);
 		}
-		DbSet<Il> Iller { get; set; }
-		DbSet<Ilce> Ilceler { get; set; }
-		DbSet<DavaTur> DavaTurleri { get; set; }
-		DbSet<BasvuruTur> BasvuruTurleri { get; set; }
-		DbSet<Kullanici> Kullanicilar { get; set; }
-		DbSet<Dosya> Dosyalar { get; set; }
-		DbSet<EvrakTur> EvrakTurler { get; set; }
-		DbSet<DosyaEvrak> DosyaEvraklar { get; set; }
-		DbSet<Davali> Davalilar { get; set; }
-		DbSet<DosyaPay> DosyaPaylar { get; set; }
-		DbSet<DosyaDavali> DosyaDavalilar { get; set; }
-        DbSet<HesapHareket> HesapHareketler { get; set; }
+		DbSet<City> Cities { get; set; }
+		DbSet<District> Districts { get; set; }
+		DbSet<CaseType> CaseTypes { get; set; }
+		DbSet<ApplicationType> ApplicationTypes { get; set; }
+		DbSet<User> Kullanicilar { get; set; }
+		DbSet<CaseFile> Dosyalar { get; set; }
+		DbSet<DocumentType> DocumentTypes { get; set; }
+		DbSet<CaseFileDocument> CaseFileDocuments { get; set; }
+		DbSet<Defendant> Defendants { get; set; }
+		DbSet<CaseFileShare> CaseFileShares { get; set; }
+		DbSet<CaseFileDefendant> CaseFileDefendant { get; set; }
+        DbSet<AccountTransaction> HesapHareketler { get; set; }
     }
 }
