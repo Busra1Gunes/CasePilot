@@ -15,8 +15,8 @@ namespace DataAccess.Configuration
         {
             builder.HasKey(x => x.ID);
             builder.Property(x => x.ID).UseIdentityColumn();
-            builder.HasOne(x => x.City).WithMany(x => x.Users).HasForeignKey(x => x.cityID);
-            builder.HasOne(x => x.District).WithMany(x => x.Users).HasForeignKey(x => x.districtID);
+            builder.HasOne(x => x.City).WithMany(x => x.Users).HasForeignKey(x => x.CityID);
+            builder.HasOne(x => x.District).WithMany(x => x.Users).HasForeignKey(x => x.DistrictID);
 
             builder.ToTable("Users");
         }

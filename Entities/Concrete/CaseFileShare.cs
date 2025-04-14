@@ -10,8 +10,8 @@ namespace Entities.Concrete
     public class CaseFileShare : Entity, IEntity
     {
         public int ID { get; set; }
-        public int caseFileID { get; set; }
-        public int userID { get; set; }
+        public int CaseFileID { get; set; }
+        public int UserID { get; set; }
         public decimal ShareRate { get; set; } //Pay
         public string FilePermission { get; set; }
         public CaseFile CaseFile { get; set; } // İlişkili evraklar

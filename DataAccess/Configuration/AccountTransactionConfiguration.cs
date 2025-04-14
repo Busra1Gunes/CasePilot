@@ -20,8 +20,8 @@ namespace DataAccess.Configuration
             builder.Property(x => x.ID).UseIdentityColumn();
 
             builder.Property(x => x.Description).HasMaxLength(500);
-            builder.Property(x => x.Durum).HasDefaultValue(false);
-            builder.Property(x => x.caseFileID).HasDefaultValue(null);
+            builder.Property(x => x.Status).HasDefaultValue(false);
+            builder.Property(x => x.CaseFileID).HasDefaultValue(null);
            
             //builder.Property(x => x.HareketDurumu).HasDefaultValue((byte)HareketDurumu.Borc);
             //builder.Property(x => x.HareketTuru).HasDefaultValue((byte)HareketTuru.Transfer);

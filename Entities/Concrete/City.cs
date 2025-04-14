@@ -13,6 +13,6 @@ namespace Entities.Concrete
         public string Name { get; set; }
         public ICollection<District> Districts { get; set; }
         public ICollection<User> Users { get; set; }
-		public ICollection<CaseFile> Dosyalar { get; set; }
+		public ICollection<CaseFile> CaseFiles { get; set; }
 	}
 }

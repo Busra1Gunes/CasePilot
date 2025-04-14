@@ -9,12 +9,12 @@ namespace Entities.Concrete
 {
     public class District : IEntity
     {
-        public int Id { get; set; }
-        public int cityID { get; set; }
+        public int ID { get; set; }
+        public int CityID { get; set; }
         public string Name { get; set; }
         public City City { get; set; }
         public ICollection<User> Users { get; set; }
-		public ICollection<CaseFile> Dosyalar { get; set; }
+		public ICollection<CaseFile> CaseFiles { get; set; }
 
 	}
 }

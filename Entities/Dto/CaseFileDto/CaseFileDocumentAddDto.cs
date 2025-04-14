@@ -9,9 +9,9 @@ namespace Entities.Dto.DosyaDto
 {
     public class CaseFileDocumentAddDto
     {
-        public int caseFileID { get; set; }
+        public int CaseFileID { get; set; }
 
-        public int documentId { get; set; }
-        public IFormFile? documentUrl { get; set; }
+        public int DocumentTypeID { get; set; }
+        public IFormFile? DocumentUrl { get; set; }
     }
 }

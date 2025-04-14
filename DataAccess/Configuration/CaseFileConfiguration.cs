@@ -22,12 +22,12 @@ namespace DataAccess.Configuration
             builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
 
             // Tablo Adı
-            builder.ToTable("Dosyalar");
+            builder.ToTable("CaseFiles");
 
             // Foreign Key Tanımları ve OnDelete Restrict ile Cascade Path Problemini Çözme
             builder.HasOne(x => x.CaseType)
-                   .WithMany(d => d.Dosyalar)
-                   .HasForeignKey(x => x.caseTypeID)
+                   .WithMany(d => d.CaseFiles)
+                   .HasForeignKey(x => x.CaseTypeID)
                    .OnDelete(DeleteBehavior.Restrict); // Cascade Delete'i engellemek için 'Restrict'
 
             //builder.HasOne(x => x.BasvuruTur)
@@ -36,13 +36,13 @@ namespace DataAccess.Configuration
             //       .OnDelete(DeleteBehavior.Restrict); // Cascade Delete'i engelle
 
             builder.HasOne(x => x.City)
-                   .WithMany(i => i.Dosyalar)
-                   .HasForeignKey(x => x.cityID)
+                   .WithMany(i => i.CaseFiles)
+                   .HasForeignKey(x => x.CityID)
                    .OnDelete(DeleteBehavior.Restrict); // Cascade Delete'i engelle
 
             builder.HasOne(x => x.District)
-                   .WithMany(ilce => ilce.Dosyalar)
-                   .HasForeignKey(x => x.districtID)
+                   .WithMany(ilce => ilce.CaseFiles)
+                   .HasForeignKey(x => x.DistrictID)
                    .OnDelete(DeleteBehavior.Restrict); // Cascade Delete'i engelle
 
             // Diğer alanlar

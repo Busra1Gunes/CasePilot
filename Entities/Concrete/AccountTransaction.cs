@@ -14,7 +14,7 @@ namespace Entities.Concrete
         public int DebtorID { get; set; }               // BorcluID → DebtorId
         public int CreditID { get; set; }               // AlacakId → CreditId
 
-        public int? caseFileID { get; set; } //Eger HareketTuru=DosyaMasrafi ise DosyaId deger alır dosyamasrafı değilse   null
+        public int? CaseFileID { get; set; } //Eger HareketTuru=DosyaMasrafi ise DosyaId deger alır dosyamasrafı değilse   null
 
         public decimal Amount { get; set; }             // Tutar → Amount
         public TransactionStatus TransactionStatus { get; set; }   // HareketDurumu → TransactionStatus

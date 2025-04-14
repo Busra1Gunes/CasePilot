@@ -57,7 +57,7 @@ namespace Business.Concrete
 				.Include(d => d.CaseType)
 				.Include(b => b.ApplicationType)
 				.Include(i => i.City)
-				.Include(c => c.District).Where(s=>s.caseTypeID.Equals(id)).ToList();
+				.Include(c => c.District).Where(s=>s.CaseTypeID.Equals(id)).ToList();
 			
 			return new SuccessDataResult<List<CaseFileDetailDto>>(_mapper.Map<List<CaseFileDetailDto>>(liste));
 		}
@@ -92,7 +92,7 @@ namespace Business.Concrete
             if (_caseFileDal.Where(k => k.IdentityNumber == caseFileUpdate.IdentityNumber).Any())
                 return new ErrorResult("");
             _mapper.Map(caseFileUpdate, caseFiles);
-            caseFiles.GuncellenmeTarihi = DateTime.Now;
+            caseFiles.UpdatedDate = DateTime.Now;
             _caseFileDal.Update(caseFiles);
 
 			return new SuccessResult("Update");	
