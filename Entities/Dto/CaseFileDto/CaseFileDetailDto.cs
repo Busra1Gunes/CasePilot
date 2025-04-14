@@ -10,7 +10,7 @@ namespace Entities.Dto.DosyaDto
     public class CaseFileDetailDto
 	{
         public int ID { get; set; }
-        public string caseType { get; set; }
+        public string CaseType { get; set; }
 		public string applicationType { get; set; }
 		public string City { get; set; }
 		public string District { get; set; }

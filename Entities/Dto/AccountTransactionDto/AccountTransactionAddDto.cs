@@ -9,7 +9,7 @@ namespace Entities.Dto.HesapHareketDto
 {
     public class AccountTransactionAddDto
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
         public int DebtorID { get; set; }
 
         public int CreditID { get; set; }

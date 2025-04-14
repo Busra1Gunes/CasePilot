@@ -13,8 +13,8 @@ namespace Entities.Seeds
     {
         public void Configure(EntityTypeBuilder<DocumentType> builder)
         {
-            builder.HasData(new DocumentType { ID = 1, Name = "TcKimlik", Type = "DosyaEvrak", Durum = false },
-          new DocumentType { ID = 2, Name = "Sici Kaydı", Type = "KullaniciEvrak", Durum = false });
+            builder.HasData(new DocumentType { ID = 1, Name = "TcKimlik", Type = "DosyaEvrak", Status = false },
+          new DocumentType { ID = 2, Name = "Sici Kaydı", Type = "KullaniciEvrak", Status = false });
         }
     }
 }

@@ -13,27 +13,27 @@ namespace Entities.Seeds
 	{
 		public void Configure(EntityTypeBuilder<CaseFile> builder)
 		{
-			builder.HasData(new CaseFile
-            {
-				ID = 1,
-				caseTypeID = 1,
-				applicationTypeID = 1,
-				cityID = 1,
-				districtID = 1,
-				Name = "Deneme",
-				Surname = "Dosya",
-				IdentityNumber = "11111111111",
-				PhoneNumber = "5555555555",
-				DateOfBirth = DateTime.Now,
-				EntitlementRate = 10,
-				DisabilityRate = 10,
-				AccidentDate = DateTime.Now,
-				OpeningDate = DateTime.Now,
-				ClosingDate = DateTime.Now,
-				CaseStatus = 1,
-				EklenmeTarihi = DateTime.Now,
-				Durum = false
-			});
+			//builder.HasData(new CaseFile
+   //         {
+			//	ID = 1,
+			//	caseTypeID = 1,
+			//	applicationTypeID = 1,
+			//	CityID = 1,
+			//	districtID = 1,
+			//	Name = "Deneme",
+			//	Surname = "Dosya",
+			//	IdentityNumber = "11111111111",
+			//	PhoneNumber = "5555555555",
+			//	DateOfBirth = DateTime.Now,
+			//	EntitlementRate = 10,
+			//	DisabilityRate = 10,
+			//	AccidentDate = DateTime.Now,
+			//	OpeningDate = DateTime.Now,
+			//	ClosingDate = DateTime.Now,
+			//	CaseStatus = 1,
+			//	CreatedDate = DateTime.Now,
+			//	Status = false
+			//});
 		
 		}
 	}

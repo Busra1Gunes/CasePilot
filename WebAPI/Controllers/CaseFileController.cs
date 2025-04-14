@@ -62,7 +62,7 @@ namespace WebAPI.Controllers
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        [SwaggerOperation(Summary = "Dosyaları Günceller")]
+        [SwaggerOperation(Summary = "Update CaseFiles")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

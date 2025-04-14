@@ -18,9 +18,7 @@ namespace DataAccess.Configuration
             builder.Property(x => x.ID).UseIdentityColumn();
             builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
             builder.ToTable("CaseTypes"); 
-            builder.HasMany(x => x.Dosyalar).WithOne().OnDelete(DeleteBehavior.Restrict); 
-
-
+            builder.HasMany(x => x.CaseFiles).WithOne().OnDelete(DeleteBehavior.Restrict); 
 
         }
     }

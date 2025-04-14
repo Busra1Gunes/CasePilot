@@ -14,11 +14,11 @@ namespace Repository.Configurations
         public void Configure(EntityTypeBuilder<District> builder)
         {
           
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).UseIdentityColumn();
+            builder.HasKey(x => x.ID);
+            builder.Property(x => x.ID).UseIdentityColumn();
             builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
             builder.ToTable("Districts");
-            builder.HasOne(x => x.City).WithMany(x => x.Districts).HasForeignKey(x => x.cityID);
+            builder.HasOne(x => x.City).WithMany(x => x.Districts).HasForeignKey(x => x.CityID);
 
         }
     }

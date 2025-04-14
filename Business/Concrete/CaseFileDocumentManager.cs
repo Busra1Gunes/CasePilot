@@ -27,10 +27,10 @@ namespace Business.Concrete
             // Fotoğraf yolu kaydetme işlemi
             string? sqlImagePath = null;
 
-            if (resume.documentUrl != null)
+            if (resume.DocumentUrl != null)
             {
                 // Fotoğraf uzantısını kontrol ediyoruz
-                var uzanti = Path.GetExtension(resume.documentUrl.FileName).ToLower();
+                var uzanti = Path.GetExtension(resume.DocumentUrl.FileName).ToLower();
                 var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".docx", ".pdf", ".xlsx" };
 
                 if (!allowedExtensions.Contains(uzanti))
@@ -54,7 +54,7 @@ namespace Business.Concrete
                 {
                     using (var stream = new FileStream(resimYolu, FileMode.Create))
                     {
-                        resume.documentUrl.CopyTo(stream);
+                        resume.DocumentUrl.CopyTo(stream);
                     }
                 }
                 catch (Exception ex)
@@ -63,7 +63,7 @@ namespace Business.Concrete
                 }
             }
             CaseFileDocument document = _mapper.Map<CaseFileDocument>(resume);
-            document.documentUrl = sqlImagePath;
+            document.DocumentUrl = sqlImagePath;
 
 
             _caseFileDocumentDal.AddAsync(document);
@@ -79,7 +79,7 @@ namespace Business.Concrete
 
         public IDataResult<List<CaseFileDocument>> GetAllBycaseFileID(int caseFileID)
         {
-            List<CaseFileDocument> caseFileDocuments = _caseFileDocumentDal.GetAll().Where(e=>e.caseFileID.Equals(caseFileID)).ToList();
+            List<CaseFileDocument> caseFileDocuments = _caseFileDocumentDal.GetAll().Where(e=>e.CaseFileID.Equals(caseFileID)).ToList();
             return new SuccessDataResult<List<CaseFileDocument>>(caseFileDocuments);
         }
 

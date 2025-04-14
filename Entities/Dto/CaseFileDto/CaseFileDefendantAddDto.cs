@@ -8,9 +8,9 @@ namespace Entities.Dto.DosyaDto
 {
     public class CaseFileDefendantAddDto
     {
-        public int caseFileID { get; set; }
+        public int CaseFileID { get; set; }
 
-        public int defendantID { get; set; }
+        public int DefendantID { get; set; }
 
     }
 }

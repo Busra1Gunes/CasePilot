@@ -14,7 +14,7 @@ namespace Entities.Concrete
 
         public int defendantID { get; set; }
 
-        public CaseFile Dosya { get; set; }
+        public CaseFile CaseFile { get; set; }
 
         public Defendant Defendant { get; set; }
     }

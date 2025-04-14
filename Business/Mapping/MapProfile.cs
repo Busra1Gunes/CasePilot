@@ -30,7 +30,7 @@ namespace Service.Mapping
             CreateMap<CaseFile, CaseFileDetailDto>()
         .ForMember(dest => dest.City, opt => opt.MapFrom(x => x.City.Name))
         .ForMember(dest => dest.District, opt => opt.MapFrom(x => x.District.Name))
-        .ForMember(dest => dest.caseType, opt => opt.MapFrom(x => x.CaseType.Name))
+        .ForMember(dest => dest.CaseType, opt => opt.MapFrom(x => x.CaseType.Name))
         .ForMember(dest => dest.CaseFileShares, opt => opt.MapFrom(x => x.CaseFileShares)) // Güncellendi
         .ForMember(dest => dest.caseFileDefendantListDtos, opt => opt.MapFrom(x => x.CaseFileDefendant))
         .ForMember(dest => dest.applicationType, opt => opt.MapFrom(x => x.ApplicationType.Name))

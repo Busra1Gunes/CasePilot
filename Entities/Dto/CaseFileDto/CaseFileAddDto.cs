@@ -8,10 +8,10 @@ namespace Entities.Dto.DosyaDto
 {
 	public class CaseFileAddDto
     {
-		public int caseTypeID { get; set; }
-		public int applicationTypeID { get; set; }
-		public int cityID { get; set; }
-		public int districtID { get; set; }
+		public int CaseTypeID { get; set; }
+		public int ApplicationTypeID { get; set; }
+		public int CityID { get; set; }
+		public int DistrictID { get; set; }
 		public string Name { get; set; }
 		public string Surname { get; set; }
 		public string IdentityNumber { get; set; }

@@ -12,8 +12,7 @@ namespace Entities.Concrete
         public int ID { get; set; }
         public string Name { get; set; }
 
-        public ICollection<CaseFile> Dosyalar { get; set; }
-        //public BasvuruTur BasvuruTur { get; set; }
+        public ICollection<CaseFile> CaseFiles { get; set; }
 
     }
 }

@@ -18,14 +18,14 @@ namespace WebAPI.Controllers
         {
             _hareketService = hareketService;
         }
-        [SwaggerOperation(Summary = "Maaş 1,Fatura 2, Kira 3, DosyaMasrafı 4, transfer 5, Diğer 6")]
-        [HttpPost("/hareketEkle")]
-        public IActionResult HesapHareketEkle(AccountTransactionAddDto hareket) => Ok(_hareketService.Add(hareket));
+        [SwaggerOperation(Summary = "Maaş 1,Fatura 2, Kira 3, DosyaMasrafı 4, Transfer 5, Diğer 6")]
+        [HttpPost("/AccountTransactionAdd")]
+        public IActionResult AccountTransactionAdd(AccountTransactionAddDto hareket) => Ok(_hareketService.Add(hareket));
       
 
 
-        [HttpPost("/kullaniciHareketListesi")]
-        public IActionResult KullaniciHesapHareketListesi(int userID) => Ok(_hareketService.GetAllByUserID(userID));
+        [HttpPost("/UserAccountTransactionList")]
+        public IActionResult UserAccountTransactionList(int userID) => Ok(_hareketService.GetAllByUserID(userID));
 
 
     }

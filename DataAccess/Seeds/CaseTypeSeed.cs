@@ -13,10 +13,10 @@ namespace Entities.Seeds
 	{
 		public void Configure(EntityTypeBuilder<CaseType> builder)
 		{
-			builder.HasData(new CaseType { ID = 1, Name = "Trafik Kazası", Durum = false },
-			new CaseType { ID = 2, Name = "Arabuluculuk", Durum = false },
-			new CaseType { ID = 3, Name= "İdari Dava", Durum = false },
-			new CaseType { ID = 4, Name = "Kamulaştırma", Durum = false });
+			builder.HasData(new CaseType { ID = 1, Name = "Trafik Kazası", Status = false },
+			new CaseType { ID = 2, Name = "Arabuluculuk", Status = false },
+			new CaseType { ID = 3, Name= "İdari Dava", Status = false },
+			new CaseType { ID = 4, Name = "Kamulaştırma", Status = false });
 		}
 	}
 }

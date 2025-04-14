@@ -19,10 +19,10 @@ namespace DataAccess.Concrete.EntityFramework
 		{
 
              //optionsBuilder.UseSqlServer("workstation id=HukukAsistani.mssql.somee.com;packet size=4096;user id=busra_SQLLogin_1;pwd=rbqtkxnu4h;data source=HukukAsistani.mssql.somee.com;persist security info=False;initial catalog=HukukAsistani;TrustServerCertificate=True");
-            optionsBuilder.UseSqlServer("Data Source=DESKOP123;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
-            //optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=HukukAsistani;Integrated Security=True;Trust Server Certificate=True");
+            optionsBuilder.UseSqlServer("Data Source=DESKOP123;Initial Catalog=CasePilot;Integrated Security=True;Trust Server Certificate=True");
+            //optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=CasePilot;Integrated Security=True;Trust Server Certificate=True");
         }
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());//Bütün Configurationları tek seferde bulup uygular
             base.OnModelCreating(modelBuilder);
@@ -32,7 +32,7 @@ namespace DataAccess.Concrete.EntityFramework
 		DbSet<CaseType> CaseTypes { get; set; }
 		DbSet<ApplicationType> ApplicationTypes { get; set; }
 		DbSet<User> Kullanicilar { get; set; }
-		DbSet<CaseFile> Dosyalar { get; set; }
+		DbSet<CaseFile> CaseFiles { get; set; }
 		DbSet<DocumentType> DocumentTypes { get; set; }
 		DbSet<CaseFileDocument> CaseFileDocuments { get; set; }
 		DbSet<Defendant> Defendants { get; set; }

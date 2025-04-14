@@ -18,21 +18,21 @@ namespace DataAccess.Configuration
             builder.Property(de => de.ID).UseIdentityColumn();
 
             // Zorunlu alanlar
-            builder.Property(de => de.caseFileID).IsRequired();
-            builder.Property(de => de.documentId).IsRequired();
-            builder.Property(de => de.documentUrl)
+            builder.Property(de => de.CaseFileID).IsRequired();
+            builder.Property(de => de.DocumentTypeID).IsRequired();
+            builder.Property(de => de.DocumentUrl)
                    .IsRequired()
                    .HasMaxLength(500); // URL için uzunluk sınırı koyduk
 
             // İlişkiler
             builder.HasOne(de => de.CaseFile)
                    .WithMany() // Eğer Dosya'nın birden çok DosyaEvrak kaydı olabilir ise
-                   .HasForeignKey(de => de.caseFileID)
+                   .HasForeignKey(de => de.CaseFileID)
                    .OnDelete(DeleteBehavior.Restrict); // Silme kısıtlaması
 
             builder.HasOne(de => de.DocumentType)
                    .WithMany() // Eğer EvrakTur'un birden çok DosyaEvrak kaydı olabilir ise
-                   .HasForeignKey(de => de.documentId)
+                   .HasForeignKey(de => de.DocumentTypeID)
                    .OnDelete(DeleteBehavior.Restrict); // Silme kısıtlaması
 
             // Tablo adını belirleme

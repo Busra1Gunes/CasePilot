@@ -14,298 +14,305 @@ namespace DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "BasvuruTurleri",
+                name: "ApplicationTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DavaTurId = table.Column<int>(type: "int", nullable: false),
-                    Adi = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EklenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    GuncellenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SilinmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Durum = table.Column<bool>(type: "bit", nullable: false)
+                    CaseTypeID = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BasvuruTurleri", x => x.Id);
+                    table.PrimaryKey("PK_ApplicationTypes", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Davalilar",
+                name: "CaseTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DavaliAdi = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EklenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    GuncellenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SilinmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Durum = table.Column<bool>(type: "bit", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Davalilar", x => x.Id);
+                    table.PrimaryKey("PK_CaseTypes", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "DavaTurleri",
+                name: "Cities",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Adi = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    EklenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    GuncellenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SilinmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Durum = table.Column<bool>(type: "bit", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DavaTurleri", x => x.Id);
+                    table.PrimaryKey("PK_Cities", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "EvrakTurler",
+                name: "Defendants",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EvrakTurAdi = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Tur = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EklenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    GuncellenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SilinmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Durum = table.Column<bool>(type: "bit", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EvrakTurler", x => x.Id);
+                    table.PrimaryKey("PK_Defendants", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Iller",
+                name: "DocumentTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Adi = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Iller", x => x.Id);
+                    table.PrimaryKey("PK_DocumentTypes", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ilceler",
+                name: "Districts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IlId = table.Column<int>(type: "int", nullable: false),
-                    IlceAdi = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                    CityID = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ilceler", x => x.Id);
+                    table.PrimaryKey("PK_Districts", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_ilceler_Iller_IlId",
-                        column: x => x.IlId,
-                        principalTable: "Iller",
-                        principalColumn: "Id",
+                        name: "FK_Districts_Cities_CityID",
+                        column: x => x.CityID,
+                        principalTable: "Cities",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Dosyalar",
+                name: "CaseFiles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    davaturId = table.Column<int>(type: "int", nullable: false),
-                    basvuruturId = table.Column<int>(type: "int", nullable: false),
-                    ilId = table.Column<int>(type: "int", nullable: false),
-                    ilceId = table.Column<int>(type: "int", nullable: false),
-                    Adi = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Soyadi = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Tc = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Telefon = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DogumTarihi = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    HaklilikOrani = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    SakatlikOrani = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    KazaTarihi = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AcilisTarihi = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    KapanisTarihi = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DosyaDurum = table.Column<int>(type: "int", nullable: false),
-                    EklenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    GuncellenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SilinmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Durum = table.Column<bool>(type: "bit", nullable: false)
+                    CaseTypeID = table.Column<int>(type: "int", nullable: false),
+                    ApplicationTypeID = table.Column<int>(type: "int", nullable: false),
+                    CityID = table.Column<int>(type: "int", nullable: false),
+                    DistrictID = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdentityNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EntitlementRate = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    DisabilityRate = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    AccidentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OpeningDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ClosingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CaseStatus = table.Column<int>(type: "int", nullable: false),
+                    CaseTypeID1 = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Dosyalar", x => x.Id);
+                    table.PrimaryKey("PK_CaseFiles", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Dosyalar_BasvuruTurleri_basvuruturId",
-                        column: x => x.basvuruturId,
-                        principalTable: "BasvuruTurleri",
-                        principalColumn: "Id",
+                        name: "FK_CaseFiles_ApplicationTypes_ApplicationTypeID",
+                        column: x => x.ApplicationTypeID,
+                        principalTable: "ApplicationTypes",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Dosyalar_DavaTurleri_davaturId",
-                        column: x => x.davaturId,
-                        principalTable: "DavaTurleri",
-                        principalColumn: "Id",
+                        name: "FK_CaseFiles_CaseTypes_CaseTypeID",
+                        column: x => x.CaseTypeID,
+                        principalTable: "CaseTypes",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Dosyalar_Iller_ilId",
-                        column: x => x.ilId,
-                        principalTable: "Iller",
-                        principalColumn: "Id",
+                        name: "FK_CaseFiles_CaseTypes_CaseTypeID1",
+                        column: x => x.CaseTypeID1,
+                        principalTable: "CaseTypes",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CaseFiles_Cities_CityID",
+                        column: x => x.CityID,
+                        principalTable: "Cities",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Dosyalar_ilceler_ilceId",
-                        column: x => x.ilceId,
-                        principalTable: "ilceler",
-                        principalColumn: "Id",
+                        name: "FK_CaseFiles_Districts_DistrictID",
+                        column: x => x.DistrictID,
+                        principalTable: "Districts",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "kullanicilar",
+                name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IlId = table.Column<int>(type: "int", nullable: true),
-                    IlceId = table.Column<int>(type: "int", nullable: true),
-                    Adi = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Soyadi = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CityID = table.Column<int>(type: "int", nullable: true),
+                    DistrictID = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Mail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    KullaniciAdi = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Sifre = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EklenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    GuncellenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SilinmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Durum = table.Column<bool>(type: "bit", nullable: false)
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_kullanicilar", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_kullanicilar_Iller_IlId",
-                        column: x => x.IlId,
-                        principalTable: "Iller",
-                        principalColumn: "Id");
+                        name: "FK_Users_Cities_CityID",
+                        column: x => x.CityID,
+                        principalTable: "Cities",
+                        principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_kullanicilar_ilceler_IlceId",
-                        column: x => x.IlceId,
-                        principalTable: "ilceler",
-                        principalColumn: "Id");
+                        name: "FK_Users_Districts_DistrictID",
+                        column: x => x.DistrictID,
+                        principalTable: "Districts",
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
-                name: "dosya_evraklar",
+                name: "CaseFileDefendant",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DosyaId = table.Column<int>(type: "int", nullable: false),
-                    EvrakId = table.Column<int>(type: "int", nullable: false),
-                    EvrakUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    DosyaId1 = table.Column<int>(type: "int", nullable: true),
-                    EvrakTurId = table.Column<int>(type: "int", nullable: true),
-                    EklenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    GuncellenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SilinmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Durum = table.Column<bool>(type: "bit", nullable: false)
+                    caseFileID = table.Column<int>(type: "int", nullable: false),
+                    defendantID = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dosya_evraklar", x => x.Id);
+                    table.PrimaryKey("PK_CaseFileDefendant", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_dosya_evraklar_Dosyalar_DosyaId",
-                        column: x => x.DosyaId,
-                        principalTable: "Dosyalar",
-                        principalColumn: "Id",
+                        name: "FK_CaseFileDefendant_CaseFiles_caseFileID",
+                        column: x => x.caseFileID,
+                        principalTable: "CaseFiles",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CaseFileDefendant_Defendants_defendantID",
+                        column: x => x.defendantID,
+                        principalTable: "Defendants",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CaseFileDocument",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CaseFileID = table.Column<int>(type: "int", nullable: false),
+                    DocumentTypeID = table.Column<int>(type: "int", nullable: false),
+                    DocumentUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    CaseFileID1 = table.Column<int>(type: "int", nullable: true),
+                    DocumentTypeID1 = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CaseFileDocument", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_CaseFileDocument_CaseFiles_CaseFileID",
+                        column: x => x.CaseFileID,
+                        principalTable: "CaseFiles",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_dosya_evraklar_Dosyalar_DosyaId1",
-                        column: x => x.DosyaId1,
-                        principalTable: "Dosyalar",
-                        principalColumn: "Id");
+                        name: "FK_CaseFileDocument_CaseFiles_CaseFileID1",
+                        column: x => x.CaseFileID1,
+                        principalTable: "CaseFiles",
+                        principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_dosya_evraklar_EvrakTurler_EvrakId",
-                        column: x => x.EvrakId,
-                        principalTable: "EvrakTurler",
-                        principalColumn: "Id",
+                        name: "FK_CaseFileDocument_DocumentTypes_DocumentTypeID",
+                        column: x => x.DocumentTypeID,
+                        principalTable: "DocumentTypes",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_dosya_evraklar_EvrakTurler_EvrakTurId",
-                        column: x => x.EvrakTurId,
-                        principalTable: "EvrakTurler",
-                        principalColumn: "Id");
+                        name: "FK_CaseFileDocument_DocumentTypes_DocumentTypeID1",
+                        column: x => x.DocumentTypeID1,
+                        principalTable: "DocumentTypes",
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
-                name: "DosyaDavalilar",
+                name: "CaseFileShares",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DosyaId = table.Column<int>(type: "int", nullable: false),
-                    DavaliId = table.Column<int>(type: "int", nullable: false),
-                    EklenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    GuncellenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SilinmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Durum = table.Column<bool>(type: "bit", nullable: false)
+                    CaseFileID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    ShareRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    FilePermission = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DosyaDavalilar", x => x.Id);
+                    table.PrimaryKey("PK_CaseFileShares", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_DosyaDavalilar_Davalilar_DavaliId",
-                        column: x => x.DavaliId,
-                        principalTable: "Davalilar",
-                        principalColumn: "Id",
+                        name: "FK_CaseFileShares_CaseFiles_CaseFileID",
+                        column: x => x.CaseFileID,
+                        principalTable: "CaseFiles",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DosyaDavalilar_Dosyalar_DosyaId",
-                        column: x => x.DosyaId,
-                        principalTable: "Dosyalar",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DosyaPaylar",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DosyaId = table.Column<int>(type: "int", nullable: false),
-                    KullaniciId = table.Column<int>(type: "int", nullable: false),
-                    Pay = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    DosyaYetki = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EklenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    GuncellenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SilinmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Durum = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DosyaPaylar", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DosyaPaylar_Dosyalar_DosyaId",
-                        column: x => x.DosyaId,
-                        principalTable: "Dosyalar",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DosyaPaylar_kullanicilar_KullaniciId",
-                        column: x => x.KullaniciId,
-                        principalTable: "kullanicilar",
-                        principalColumn: "Id",
+                        name: "FK_CaseFileShares_Users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -313,80 +320,71 @@ namespace DataAccess.Migrations
                 name: "HesapHareketler",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    GonderenId = table.Column<int>(type: "int", nullable: false),
-                    AliciId = table.Column<int>(type: "int", nullable: false),
-                    DosyaId = table.Column<int>(type: "int", nullable: true),
-                    Tutar = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    HareketDurumu = table.Column<byte>(type: "tinyint", nullable: false),
-                    HareketTuru = table.Column<byte>(type: "tinyint", nullable: false),
-                    Aciklama = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    OdemeTarihi = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OdemeYapıldığıTarih = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SonOdemeTarihi = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OdemeDurumu = table.Column<bool>(type: "bit", nullable: false),
-                    EklenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    GuncellenmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SilinmeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Durum = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    DebtorID = table.Column<int>(type: "int", nullable: false),
+                    CreditID = table.Column<int>(type: "int", nullable: false),
+                    CaseFileID = table.Column<int>(type: "int", nullable: true),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TransactionStatus = table.Column<byte>(type: "tinyint", nullable: false),
+                    Type = table.Column<byte>(type: "tinyint", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaymentReceivedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FinalPaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaymentStatus = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HesapHareketler", x => x.Id);
+                    table.PrimaryKey("PK_HesapHareketler", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_HesapHareketler_Dosyalar_DosyaId",
-                        column: x => x.DosyaId,
-                        principalTable: "Dosyalar",
-                        principalColumn: "Id");
+                        name: "FK_HesapHareketler_CaseFiles_CaseFileID",
+                        column: x => x.CaseFileID,
+                        principalTable: "CaseFiles",
+                        principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_HesapHareketler_kullanicilar_AliciId",
-                        column: x => x.AliciId,
-                        principalTable: "kullanicilar",
-                        principalColumn: "Id",
+                        name: "FK_HesapHareketler_Users_CreditID",
+                        column: x => x.CreditID,
+                        principalTable: "Users",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_HesapHareketler_kullanicilar_GonderenId",
-                        column: x => x.GonderenId,
-                        principalTable: "kullanicilar",
-                        principalColumn: "Id",
+                        name: "FK_HesapHareketler_Users_DebtorID",
+                        column: x => x.DebtorID,
+                        principalTable: "Users",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
-                table: "BasvuruTurleri",
-                columns: new[] { "Id", "Adi", "DavaTurId", "Durum", "EklenmeTarihi", "GuncellenmeTarihi", "SilinmeTarihi" },
+                table: "ApplicationTypes",
+                columns: new[] { "ID", "CaseTypeID", "CreatedDate", "DeletedDate", "Name", "Status", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { 1, "Araç Hasarı", 1, false, new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5270), null, null },
-                    { 2, "Manevi", 1, false, new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5282), null, null },
-                    { 3, "İdari Dava", 1, false, new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5283), null, null },
-                    { 4, "Kamulaştırma", 4, false, new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5283), null, null }
+                    { 1, 1, new DateTime(2025, 4, 14, 10, 39, 2, 727, DateTimeKind.Local).AddTicks(9350), null, "Araç Hasarı", false, null },
+                    { 2, 1, new DateTime(2025, 4, 14, 10, 39, 2, 727, DateTimeKind.Local).AddTicks(9366), null, "Manevi", false, null },
+                    { 3, 1, new DateTime(2025, 4, 14, 10, 39, 2, 727, DateTimeKind.Local).AddTicks(9366), null, "İdari Dava", false, null },
+                    { 4, 4, new DateTime(2025, 4, 14, 10, 39, 2, 727, DateTimeKind.Local).AddTicks(9367), null, "Kamulaştırma", false, null }
                 });
 
             migrationBuilder.InsertData(
-                table: "DavaTurleri",
-                columns: new[] { "Id", "Adi", "Durum", "EklenmeTarihi", "GuncellenmeTarihi", "SilinmeTarihi" },
+                table: "CaseTypes",
+                columns: new[] { "ID", "CreatedDate", "DeletedDate", "Name", "Status", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { 1, "Trafik Kazası", false, new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5469), null, null },
-                    { 2, "Arabuluculuk", false, new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5471), null, null },
-                    { 3, "İdari Dava", false, new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5472), null, null },
-                    { 4, "Kamulaştırma", false, new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5473), null, null }
+                    { 1, new DateTime(2025, 4, 14, 10, 39, 2, 727, DateTimeKind.Local).AddTicks(9705), null, "Trafik Kazası", false, null },
+                    { 2, new DateTime(2025, 4, 14, 10, 39, 2, 727, DateTimeKind.Local).AddTicks(9708), null, "Arabuluculuk", false, null },
+                    { 3, new DateTime(2025, 4, 14, 10, 39, 2, 727, DateTimeKind.Local).AddTicks(9709), null, "İdari Dava", false, null },
+                    { 4, new DateTime(2025, 4, 14, 10, 39, 2, 727, DateTimeKind.Local).AddTicks(9710), null, "Kamulaştırma", false, null }
                 });
 
             migrationBuilder.InsertData(
-                table: "EvrakTurler",
-                columns: new[] { "Id", "Durum", "EklenmeTarihi", "EvrakTurAdi", "GuncellenmeTarihi", "SilinmeTarihi", "Tur" },
-                values: new object[,]
-                {
-                    { 1, false, new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5675), "TcKimlik", null, null, "DosyaEvrak" },
-                    { 2, false, new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5677), "Sici Kaydı", null, null, "KullaniciEvrak" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Iller",
-                columns: new[] { "Id", "Adi" },
+                table: "Cities",
+                columns: new[] { "ID", "Name" },
                 values: new object[,]
                 {
                     { 1, "Adana" },
@@ -473,8 +471,17 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "ilceler",
-                columns: new[] { "Id", "IlId", "IlceAdi" },
+                table: "DocumentTypes",
+                columns: new[] { "ID", "CreatedDate", "DeletedDate", "Name", "Status", "Type", "UpdatedDate" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 4, 14, 10, 39, 2, 728, DateTimeKind.Local).AddTicks(915), null, "TcKimlik", false, "DosyaEvrak", null },
+                    { 2, new DateTime(2025, 4, 14, 10, 39, 2, 728, DateTimeKind.Local).AddTicks(919), null, "Sici Kaydı", false, "KullaniciEvrak", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Districts",
+                columns: new[] { "ID", "CityID", "Name" },
                 values: new object[,]
                 {
                     { 1, 1, "ALADAĞ" },
@@ -1453,144 +1460,144 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Dosyalar",
-                columns: new[] { "Id", "AcilisTarihi", "Adi", "DogumTarihi", "DosyaDurum", "Durum", "EklenmeTarihi", "GuncellenmeTarihi", "HaklilikOrani", "KapanisTarihi", "KazaTarihi", "SakatlikOrani", "SilinmeTarihi", "Soyadi", "Tc", "Telefon", "basvuruturId", "davaturId", "ilId", "ilceId" },
-                values: new object[] { 1, new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5575), "Deneme", new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5573), 1, false, new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5576), null, 10m, new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5576), new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(5575), 10m, null, "Dosya", "11111111111", "5555555555", 1, 1, 1, 1 });
-
-            migrationBuilder.InsertData(
-                table: "kullanicilar",
-                columns: new[] { "Id", "Adi", "Durum", "EklenmeTarihi", "GuncellenmeTarihi", "IlId", "IlceId", "KullaniciAdi", "Mail", "Sifre", "SilinmeTarihi", "Soyadi" },
-                values: new object[] { 1, "Büşra", false, new DateTime(2025, 4, 9, 14, 52, 55, 882, DateTimeKind.Local).AddTicks(6935), null, 1, 1, "busra", "", "12345", null, "Güneş" });
+                table: "Users",
+                columns: new[] { "ID", "CityID", "CreatedDate", "DeletedDate", "DistrictID", "Mail", "Name", "Password", "Status", "Surname", "UpdatedDate", "UserName" },
+                values: new object[] { 1, 1, new DateTime(2025, 4, 14, 10, 39, 2, 728, DateTimeKind.Local).AddTicks(1028), null, 1, "", "Büşra", "12345", false, "Güneş", null, "busra" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_dosya_evraklar_DosyaId",
-                table: "dosya_evraklar",
-                column: "DosyaId");
+                name: "IX_CaseFileDefendant_caseFileID",
+                table: "CaseFileDefendant",
+                column: "caseFileID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_dosya_evraklar_DosyaId1",
-                table: "dosya_evraklar",
-                column: "DosyaId1");
+                name: "IX_CaseFileDefendant_defendantID",
+                table: "CaseFileDefendant",
+                column: "defendantID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_dosya_evraklar_EvrakId",
-                table: "dosya_evraklar",
-                column: "EvrakId");
+                name: "IX_CaseFileDocument_CaseFileID",
+                table: "CaseFileDocument",
+                column: "CaseFileID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_dosya_evraklar_EvrakTurId",
-                table: "dosya_evraklar",
-                column: "EvrakTurId");
+                name: "IX_CaseFileDocument_CaseFileID1",
+                table: "CaseFileDocument",
+                column: "CaseFileID1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DosyaDavalilar_DavaliId",
-                table: "DosyaDavalilar",
-                column: "DavaliId");
+                name: "IX_CaseFileDocument_DocumentTypeID",
+                table: "CaseFileDocument",
+                column: "DocumentTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DosyaDavalilar_DosyaId",
-                table: "DosyaDavalilar",
-                column: "DosyaId");
+                name: "IX_CaseFileDocument_DocumentTypeID1",
+                table: "CaseFileDocument",
+                column: "DocumentTypeID1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Dosyalar_basvuruturId",
-                table: "Dosyalar",
-                column: "basvuruturId");
+                name: "IX_CaseFiles_ApplicationTypeID",
+                table: "CaseFiles",
+                column: "ApplicationTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Dosyalar_davaturId",
-                table: "Dosyalar",
-                column: "davaturId");
+                name: "IX_CaseFiles_CaseTypeID",
+                table: "CaseFiles",
+                column: "CaseTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Dosyalar_ilceId",
-                table: "Dosyalar",
-                column: "ilceId");
+                name: "IX_CaseFiles_CaseTypeID1",
+                table: "CaseFiles",
+                column: "CaseTypeID1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Dosyalar_ilId",
-                table: "Dosyalar",
-                column: "ilId");
+                name: "IX_CaseFiles_CityID",
+                table: "CaseFiles",
+                column: "CityID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DosyaPaylar_DosyaId",
-                table: "DosyaPaylar",
-                column: "DosyaId");
+                name: "IX_CaseFiles_DistrictID",
+                table: "CaseFiles",
+                column: "DistrictID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DosyaPaylar_KullaniciId",
-                table: "DosyaPaylar",
-                column: "KullaniciId");
+                name: "IX_CaseFileShares_CaseFileID",
+                table: "CaseFileShares",
+                column: "CaseFileID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HesapHareketler_AliciId",
+                name: "IX_CaseFileShares_UserID",
+                table: "CaseFileShares",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Districts_CityID",
+                table: "Districts",
+                column: "CityID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HesapHareketler_CaseFileID",
                 table: "HesapHareketler",
-                column: "AliciId");
+                column: "CaseFileID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HesapHareketler_DosyaId",
+                name: "IX_HesapHareketler_CreditID",
                 table: "HesapHareketler",
-                column: "DosyaId");
+                column: "CreditID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HesapHareketler_GonderenId",
+                name: "IX_HesapHareketler_DebtorID",
                 table: "HesapHareketler",
-                column: "GonderenId");
+                column: "DebtorID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ilceler_IlId",
-                table: "ilceler",
-                column: "IlId");
+                name: "IX_Users_CityID",
+                table: "Users",
+                column: "CityID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_kullanicilar_IlceId",
-                table: "kullanicilar",
-                column: "IlceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_kullanicilar_IlId",
-                table: "kullanicilar",
-                column: "IlId");
+                name: "IX_Users_DistrictID",
+                table: "Users",
+                column: "DistrictID");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "dosya_evraklar");
+                name: "CaseFileDefendant");
 
             migrationBuilder.DropTable(
-                name: "DosyaDavalilar");
+                name: "CaseFileDocument");
 
             migrationBuilder.DropTable(
-                name: "DosyaPaylar");
+                name: "CaseFileShares");
 
             migrationBuilder.DropTable(
                 name: "HesapHareketler");
 
             migrationBuilder.DropTable(
-                name: "EvrakTurler");
+                name: "Defendants");
 
             migrationBuilder.DropTable(
-                name: "Davalilar");
+                name: "DocumentTypes");
 
             migrationBuilder.DropTable(
-                name: "Dosyalar");
+                name: "CaseFiles");
 
             migrationBuilder.DropTable(
-                name: "kullanicilar");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "BasvuruTurleri");
+                name: "ApplicationTypes");
 
             migrationBuilder.DropTable(
-                name: "DavaTurleri");
+                name: "CaseTypes");
 
             migrationBuilder.DropTable(
-                name: "ilceler");
+                name: "Districts");
 
             migrationBuilder.DropTable(
-                name: "Iller");
+                name: "Cities");
         }
     }
 }
