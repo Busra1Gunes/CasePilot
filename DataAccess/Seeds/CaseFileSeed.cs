@@ -14,12 +14,12 @@ namespace Entities.Seeds
 		public void Configure(EntityTypeBuilder<CaseFile> builder)
 		{
 			//builder.HasData(new CaseFile
-   //         {
+			//{
 			//	ID = 1,
-			//	caseTypeID = 1,
-			//	applicationTypeID = 1,
+			//	CaseTypeID = 1,
+			//	ApplicationTypeID = 1,
 			//	CityID = 1,
-			//	districtID = 1,
+			//	DistrictID = 1,
 			//	Name = "Deneme",
 			//	Surname = "Dosya",
 			//	IdentityNumber = "11111111111",
@@ -34,7 +34,7 @@ namespace Entities.Seeds
 			//	CreatedDate = DateTime.Now,
 			//	Status = false
 			//});
-		
+
 		}
 	}
 }

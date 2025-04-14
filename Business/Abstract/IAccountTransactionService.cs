@@ -15,8 +15,8 @@ namespace Business.Abstract
         IDataResult<List<AccountTransaction>> GetAll();
         IDataResult<AccountTransactionListDto> GetAllByUserID(int userID);
 
-        IDataResult<AccountTransaction> GetById(int hareketId);
-        IResult Add(AccountTransactionAddDto hareket);
-        IResult Update(AccountTransaction hareket);
+        IDataResult<AccountTransaction> GetById(int transactionID);
+        IResult Add(AccountTransactionAddDto accountTransactionAddDto);
+        IResult Update(AccountTransaction transaction);
     }
 }

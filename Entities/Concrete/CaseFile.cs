@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,11 +28,11 @@ namespace Entities.Concrete
         public int CaseStatus { get; set; }           // DosyaDurum → CaseStatus
         public City City { get; set; }
 		public District District { get; set; }
-		public CaseType CaseType { get; set; }
+
+        public CaseType CaseType { get; set; }
 		public ApplicationType ApplicationType { get; set; }
         public ICollection<CaseFileDocument> CaseFileDocuments { get; set; } // İlişkili evraklar
         public ICollection<CaseFileDefendant> CaseFileDefendant { get; set; } // İlişkili evraklar
-
         public ICollection<CaseFileShare> CaseFileShares { get; set; } // İlişkili evraklar
     }
 }

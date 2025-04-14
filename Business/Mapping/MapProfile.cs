@@ -2,6 +2,7 @@
 using Core;
 
 using Entities.Concrete;
+using Entities.Dto.CaseFileDto;
 using Entities.Dto.DosyaDto;
 using Entities.Dto.HesapHareketDto;
 using Entities.Dto.KullaniciDto;
@@ -43,9 +44,11 @@ namespace Service.Mapping
 
             CreateMap<CaseFileDefendant, CaseFileDefendantAddDto>().ReverseMap();
 
-            CreateMap<CaseFileShare, CaseFileShareListDto>()
+            CreateMap<CaseFileShare, CaseFileShareDto>()
                 .ForMember(dest => dest.ShareUserName, opt => opt.MapFrom(x => x.User.Name + " " + x.User.Surname))
                 .ReverseMap();
+
+            CreateMap<CaseFileShare, CaseFileShareAddDto>().ReverseMap();
 
 
             CreateMap<CaseFileDefendant, CaseFileDefendantListDto>()

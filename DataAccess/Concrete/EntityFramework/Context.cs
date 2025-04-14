@@ -31,13 +31,13 @@ namespace DataAccess.Concrete.EntityFramework
 		DbSet<District> Districts { get; set; }
 		DbSet<CaseType> CaseTypes { get; set; }
 		DbSet<ApplicationType> ApplicationTypes { get; set; }
-		DbSet<User> Kullanicilar { get; set; }
+		DbSet<User> Users { get; set; }
 		DbSet<CaseFile> CaseFiles { get; set; }
 		DbSet<DocumentType> DocumentTypes { get; set; }
 		DbSet<CaseFileDocument> CaseFileDocuments { get; set; }
 		DbSet<Defendant> Defendants { get; set; }
 		DbSet<CaseFileShare> CaseFileShares { get; set; }
 		DbSet<CaseFileDefendant> CaseFileDefendant { get; set; }
-        DbSet<AccountTransaction> HesapHareketler { get; set; }
+        DbSet<AccountTransaction> AccountTransactions { get; set; }
     }
 }

@@ -37,7 +37,7 @@ namespace Business.Concrete
             caseFileAdd.CaseStatus = 0;
 
 			var sonuc= _caseFileDal.AddAsync(caseFileAdd);
-			return new SuccessResult("");
+			return new SuccessResult(sonuc.Result.ToString());
 		}
 
 		public IDataResult<List<CaseFileDetailDto>> GetAll()
