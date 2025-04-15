@@ -3,6 +3,8 @@ using Autofac.Extras.DynamicProxy;
 using Business.Abstract;
 using Business.Concrete;
 using Castle.DynamicProxy;
+using Core.CrossCuttingConcerns.Caching;
+using Core.CrossCuttingConcerns.Caching.Microsoft;
 using Core.Utilities.Interceptors;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
@@ -45,6 +47,11 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<AccountTransactionManager>().As<IAccountTransactionService>().InstancePerLifetimeScope();
             builder.RegisterType<EfAccountTransactionDal>().As<IAccountTransactionDal>().InstancePerLifetimeScope();
+
+            builder.RegisterType<CaseFileShareManager>().As<ICaseFileShareService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfCaseFileShareDal>().As<ICaseFileShareDal>().InstancePerLifetimeScope();
+
+            builder.RegisterType<MemoryCacheManager>().As<ICacheService>().InstancePerLifetimeScope();
 
             builder.RegisterType<Context>().AsSelf().InstancePerLifetimeScope();
 

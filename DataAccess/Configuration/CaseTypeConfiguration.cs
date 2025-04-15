@@ -13,12 +13,14 @@ namespace DataAccess.Configuration
     {
         public void Configure(EntityTypeBuilder<CaseType> builder)
         {
-
             builder.HasKey(x => x.ID);
             builder.Property(x => x.ID).UseIdentityColumn();
             builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
-            builder.ToTable("CaseTypes"); 
-            builder.HasMany(x => x.CaseFiles).WithOne().OnDelete(DeleteBehavior.Restrict); 
+            builder.ToTable("CaseTypes");
+            builder.HasMany(x => x.CaseFiles)
+                   .WithOne(cf => cf.CaseType) 
+                   .HasForeignKey(cf => cf.CaseTypeID) 
+                   .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

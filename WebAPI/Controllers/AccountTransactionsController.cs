@@ -24,7 +24,7 @@ namespace WebAPI.Controllers
       
 
 
-        [HttpPost("/UserAccountTransactionList")]
+        [HttpGet("/UserAccountTransactionList")]
         public IActionResult UserAccountTransactionList(int userID) => Ok(_hareketService.GetAllByUserID(userID));
 
 

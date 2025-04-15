@@ -11,8 +11,9 @@ namespace Entities.Concrete
 	public class CaseFile :Entity, IEntity //Dosya
 	{
 		public int ID { get; set; }
+
+        public int ApplicationTypeID { get; set; }
         public int CaseTypeID { get; set; }
-        public int ApplicationTypeID { get; set; } //property adlar PascalCase
         public int CityID { get; set; }
         public int DistrictID { get; set; }
         public string Name { get; set; }

@@ -87,7 +87,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("DebtorID");
 
-                    b.ToTable("HesapHareketler", (string)null);
+                    b.ToTable("AccountTransactions", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Concrete.ApplicationType", b =>
@@ -126,7 +126,7 @@ namespace DataAccess.Migrations
                         {
                             ID = 1,
                             CaseTypeID = 1,
-                            CreatedDate = new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(8294),
+                            CreatedDate = new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6408),
                             Name = "Araç Hasarı",
                             Status = false
                         },
@@ -134,7 +134,7 @@ namespace DataAccess.Migrations
                         {
                             ID = 2,
                             CaseTypeID = 1,
-                            CreatedDate = new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(8310),
+                            CreatedDate = new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6419),
                             Name = "Manevi",
                             Status = false
                         },
@@ -142,7 +142,7 @@ namespace DataAccess.Migrations
                         {
                             ID = 3,
                             CaseTypeID = 1,
-                            CreatedDate = new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(8312),
+                            CreatedDate = new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6420),
                             Name = "İdari Dava",
                             Status = false
                         },
@@ -150,7 +150,7 @@ namespace DataAccess.Migrations
                         {
                             ID = 4,
                             CaseTypeID = 4,
-                            CreatedDate = new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(8312),
+                            CreatedDate = new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6420),
                             Name = "Kamulaştırma",
                             Status = false
                         });
@@ -174,9 +174,6 @@ namespace DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("CaseTypeID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CaseTypeID1")
                         .HasColumnType("int");
 
                     b.Property<int>("CityID")
@@ -236,8 +233,6 @@ namespace DataAccess.Migrations
                     b.HasIndex("ApplicationTypeID");
 
                     b.HasIndex("CaseTypeID");
-
-                    b.HasIndex("CaseTypeID1");
 
                     b.HasIndex("CityID");
 
@@ -406,28 +401,28 @@ namespace DataAccess.Migrations
                         new
                         {
                             ID = 1,
-                            CreatedDate = new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(8561),
+                            CreatedDate = new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6726),
                             Name = "Trafik Kazası",
                             Status = false
                         },
                         new
                         {
                             ID = 2,
-                            CreatedDate = new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(8563),
+                            CreatedDate = new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6728),
                             Name = "Arabuluculuk",
                             Status = false
                         },
                         new
                         {
                             ID = 3,
-                            CreatedDate = new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(8564),
+                            CreatedDate = new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6729),
                             Name = "İdari Dava",
                             Status = false
                         },
                         new
                         {
                             ID = 4,
-                            CreatedDate = new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(8564),
+                            CreatedDate = new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6729),
                             Name = "Kamulaştırma",
                             Status = false
                         });
@@ -6786,7 +6781,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             ID = 1,
-                            CreatedDate = new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(9777),
+                            CreatedDate = new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(7971),
                             Name = "TcKimlik",
                             Status = false,
                             Type = "DosyaEvrak"
@@ -6794,7 +6789,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             ID = 2,
-                            CreatedDate = new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(9781),
+                            CreatedDate = new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(7975),
                             Name = "Sici Kaydı",
                             Status = false,
                             Type = "KullaniciEvrak"
@@ -6860,7 +6855,7 @@ namespace DataAccess.Migrations
                         {
                             ID = 1,
                             CityID = 1,
-                            CreatedDate = new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(9879),
+                            CreatedDate = new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(8077),
                             DistrictID = 1,
                             Mail = "",
                             Name = "Büşra",
@@ -6904,16 +6899,10 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Concrete.CaseType", null)
+                    b.HasOne("Entities.Concrete.CaseType", "CaseType")
                         .WithMany("CaseFiles")
                         .HasForeignKey("CaseTypeID")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Concrete.CaseType", "CaseType")
-                        .WithMany()
-                        .HasForeignKey("CaseTypeID1")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Entities.Concrete.City", "City")

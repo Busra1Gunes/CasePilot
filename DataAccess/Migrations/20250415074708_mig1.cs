@@ -122,8 +122,8 @@ namespace DataAccess.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CaseTypeID = table.Column<int>(type: "int", nullable: false),
                     ApplicationTypeID = table.Column<int>(type: "int", nullable: false),
+                    CaseTypeID = table.Column<int>(type: "int", nullable: false),
                     CityID = table.Column<int>(type: "int", nullable: false),
                     DistrictID = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
@@ -137,7 +137,6 @@ namespace DataAccess.Migrations
                     OpeningDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ClosingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CaseStatus = table.Column<int>(type: "int", nullable: false),
-                    CaseTypeID1 = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -158,12 +157,6 @@ namespace DataAccess.Migrations
                         principalTable: "CaseTypes",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CaseFiles_CaseTypes_CaseTypeID1",
-                        column: x => x.CaseTypeID1,
-                        principalTable: "CaseTypes",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CaseFiles_Cities_CityID",
                         column: x => x.CityID,
@@ -285,6 +278,50 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AccountTransactions",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DebtorID = table.Column<int>(type: "int", nullable: false),
+                    CreditID = table.Column<int>(type: "int", nullable: false),
+                    CaseFileID = table.Column<int>(type: "int", nullable: true),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TransactionStatus = table.Column<byte>(type: "tinyint", nullable: false),
+                    Type = table.Column<byte>(type: "tinyint", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaymentReceivedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FinalPaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaymentStatus = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccountTransactions", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_AccountTransactions_CaseFiles_CaseFileID",
+                        column: x => x.CaseFileID,
+                        principalTable: "CaseFiles",
+                        principalColumn: "ID");
+                    table.ForeignKey(
+                        name: "FK_AccountTransactions_Users_CreditID",
+                        column: x => x.CreditID,
+                        principalTable: "Users",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AccountTransactions_Users_DebtorID",
+                        column: x => x.DebtorID,
+                        principalTable: "Users",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CaseFileShares",
                 columns: table => new
                 {
@@ -316,59 +353,15 @@ namespace DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "HesapHareketler",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DebtorID = table.Column<int>(type: "int", nullable: false),
-                    CreditID = table.Column<int>(type: "int", nullable: false),
-                    CaseFileID = table.Column<int>(type: "int", nullable: true),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TransactionStatus = table.Column<byte>(type: "tinyint", nullable: false),
-                    Type = table.Column<byte>(type: "tinyint", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PaymentReceivedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FinalPaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PaymentStatus = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Status = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_HesapHareketler", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_HesapHareketler_CaseFiles_CaseFileID",
-                        column: x => x.CaseFileID,
-                        principalTable: "CaseFiles",
-                        principalColumn: "ID");
-                    table.ForeignKey(
-                        name: "FK_HesapHareketler_Users_CreditID",
-                        column: x => x.CreditID,
-                        principalTable: "Users",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_HesapHareketler_Users_DebtorID",
-                        column: x => x.DebtorID,
-                        principalTable: "Users",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.InsertData(
                 table: "ApplicationTypes",
                 columns: new[] { "ID", "CaseTypeID", "CreatedDate", "DeletedDate", "Name", "Status", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(8294), null, "Araç Hasarı", false, null },
-                    { 2, 1, new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(8310), null, "Manevi", false, null },
-                    { 3, 1, new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(8312), null, "İdari Dava", false, null },
-                    { 4, 4, new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(8312), null, "Kamulaştırma", false, null }
+                    { 1, 1, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6408), null, "Araç Hasarı", false, null },
+                    { 2, 1, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6419), null, "Manevi", false, null },
+                    { 3, 1, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6420), null, "İdari Dava", false, null },
+                    { 4, 4, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6420), null, "Kamulaştırma", false, null }
                 });
 
             migrationBuilder.InsertData(
@@ -376,10 +369,10 @@ namespace DataAccess.Migrations
                 columns: new[] { "ID", "CreatedDate", "DeletedDate", "Name", "Status", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(8561), null, "Trafik Kazası", false, null },
-                    { 2, new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(8563), null, "Arabuluculuk", false, null },
-                    { 3, new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(8564), null, "İdari Dava", false, null },
-                    { 4, new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(8564), null, "Kamulaştırma", false, null }
+                    { 1, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6726), null, "Trafik Kazası", false, null },
+                    { 2, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6728), null, "Arabuluculuk", false, null },
+                    { 3, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6729), null, "İdari Dava", false, null },
+                    { 4, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6729), null, "Kamulaştırma", false, null }
                 });
 
             migrationBuilder.InsertData(
@@ -475,8 +468,8 @@ namespace DataAccess.Migrations
                 columns: new[] { "ID", "CreatedDate", "DeletedDate", "Name", "Status", "Type", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(9777), null, "TcKimlik", false, "DosyaEvrak", null },
-                    { 2, new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(9781), null, "Sici Kaydı", false, "KullaniciEvrak", null }
+                    { 1, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(7971), null, "TcKimlik", false, "DosyaEvrak", null },
+                    { 2, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(7975), null, "Sici Kaydı", false, "KullaniciEvrak", null }
                 });
 
             migrationBuilder.InsertData(
@@ -1462,7 +1455,22 @@ namespace DataAccess.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "ID", "CityID", "CreatedDate", "DeletedDate", "DistrictID", "Mail", "Name", "Password", "Status", "Surname", "UpdatedDate", "UserName" },
-                values: new object[] { 1, 1, new DateTime(2025, 4, 14, 17, 52, 25, 672, DateTimeKind.Local).AddTicks(9879), null, 1, "", "Büşra", "12345", false, "Güneş", null, "busra" });
+                values: new object[] { 1, 1, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(8077), null, 1, "", "Büşra", "12345", false, "Güneş", null, "busra" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccountTransactions_CaseFileID",
+                table: "AccountTransactions",
+                column: "CaseFileID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccountTransactions_CreditID",
+                table: "AccountTransactions",
+                column: "CreditID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccountTransactions_DebtorID",
+                table: "AccountTransactions",
+                column: "DebtorID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CaseFileDefendant_caseFileID",
@@ -1505,11 +1513,6 @@ namespace DataAccess.Migrations
                 column: "CaseTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CaseFiles_CaseTypeID1",
-                table: "CaseFiles",
-                column: "CaseTypeID1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CaseFiles_CityID",
                 table: "CaseFiles",
                 column: "CityID");
@@ -1535,21 +1538,6 @@ namespace DataAccess.Migrations
                 column: "CityID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HesapHareketler_CaseFileID",
-                table: "HesapHareketler",
-                column: "CaseFileID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_HesapHareketler_CreditID",
-                table: "HesapHareketler",
-                column: "CreditID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_HesapHareketler_DebtorID",
-                table: "HesapHareketler",
-                column: "DebtorID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Users_CityID",
                 table: "Users",
                 column: "CityID");
@@ -1564,6 +1552,9 @@ namespace DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AccountTransactions");
+
+            migrationBuilder.DropTable(
                 name: "CaseFileDefendant");
 
             migrationBuilder.DropTable(
@@ -1571,9 +1562,6 @@ namespace DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "CaseFileShares");
-
-            migrationBuilder.DropTable(
-                name: "HesapHareketler");
 
             migrationBuilder.DropTable(
                 name: "Defendants");

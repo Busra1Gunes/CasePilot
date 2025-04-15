@@ -20,32 +20,27 @@ namespace DataAccess.Configuration
 
             builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
 
-
-            builder
-     .HasOne(cf => cf.CaseType)
-     .WithMany(ct => ct.CaseFiles)
-     .HasForeignKey(cf => cf.CaseTypeID)
-     .OnDelete(DeleteBehavior.Restrict); // İsteğe göre Cascade de olabilir
-
+            builder.HasOne(cf => cf.CaseType)
+                   .WithMany(ct => ct.CaseFiles)
+                   .HasForeignKey(cf => cf.CaseTypeID)
+                   .OnDelete(DeleteBehavior.Restrict); 
 
             builder.HasOne(x => x.City)
                    .WithMany(i => i.CaseFiles)
                    .HasForeignKey(x => x.CityID)
-                   .OnDelete(DeleteBehavior.Restrict); // Cascade Delete'i engelle
+                   .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.District)
                    .WithMany(ilce => ilce.CaseFiles)
                    .HasForeignKey(x => x.DistrictID)
-                   .OnDelete(DeleteBehavior.Restrict); // Cascade Delete'i engelle
+                   .OnDelete(DeleteBehavior.Restrict); 
 
-            // Diğer alanlar
             builder.Property(x => x.EntitlementRate)
-                   .HasPrecision(18, 2); // decimal alanın precision ve scale'ını belirtiyoruz
+                   .HasPrecision(18, 2);
 
             builder.Property(x => x.DisabilityRate)
-                   .HasPrecision(18, 2); // Aynı şekilde
+                   .HasPrecision(18, 2);
 
-            // Tablo Adı
             builder.ToTable("CaseFiles");
         }
     }
