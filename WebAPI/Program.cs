@@ -6,6 +6,7 @@ using Business.Abstract;
 using Business.Concrete;
 using Business.DependencyResolvers.Autofac;
 using Core.Aspects;
+using Core.Utilities.IoC;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -108,15 +109,34 @@ builder.Host.UseServiceProviderFactory(services => new AutofacServiceProviderFac
     {
         builder.RegisterModule(new AutofacBusinessModule());
     });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
 
+builder.Services.AddControllers();
+builder.Services.AddMemoryCache();
+ServiceTool.Create(builder.Services);
 var app = builder.Build();
 
+app.UseCors("AllowAll");
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// HTTPS yönlendirmesini development ortamında devre dışı bırak
+if (!app.Environment.IsDevelopment())
 {
-
+    app.UseHttpsRedirection();
 }
+//// Configure the HTTP request pipeline.
+//if (app.Environment.IsDevelopment())
+//{
+
+//}
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>

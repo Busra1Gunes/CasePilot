@@ -12,8 +12,6 @@ namespace Entities.Concrete
     {
         public int ID { get; set; }
         public string Name { get; set; }
-
-        [InverseProperty("CaseType")]
         public ICollection<CaseFile> CaseFiles { get; set; }
 
     }

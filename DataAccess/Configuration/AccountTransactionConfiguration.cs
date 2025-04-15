@@ -14,7 +14,7 @@ namespace DataAccess.Configuration
     {
         public void Configure(EntityTypeBuilder<AccountTransaction> builder)
         {
-            builder.ToTable("HesapHareketler");
+            builder.ToTable("AccountTransactions");
 
             builder.HasKey(x => x.ID);
             builder.Property(x => x.ID).UseIdentityColumn();

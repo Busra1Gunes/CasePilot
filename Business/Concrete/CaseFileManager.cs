@@ -13,12 +13,13 @@ using Microsoft.EntityFrameworkCore;
 using Entities.Dto.KullaniciDto.KullaniciDto;
 using System.Security.Cryptography;
 using Entities.Dto;
+using Core.Utilities.Interceptors;
+using Core.Aspects.Autofac.Caching;
 
 namespace Business.Concrete
 {
 	public class CaseFileManager : ICaseFileService
 	{
-
 		readonly ICaseFileDal _caseFileDal;
 		readonly IMapper _mapper;
         public CaseFileManager(Lazy<ICaseFileDal> caseFileDal ,IMapper mapper)
@@ -26,32 +27,32 @@ namespace Business.Concrete
             _caseFileDal = caseFileDal.Value;
 			_mapper=mapper;
         }
+        [CacheAspect(30)]
         public IResult Add(CaseFileAddDto caseFile)
-		{
+        {
 
-			var caseFileAdd=_mapper.Map<CaseFileAddDto, CaseFile>(caseFile); 
+            var caseFileAdd = _mapper.Map<CaseFileAddDto, CaseFile>(caseFile);
 
-			if (_caseFileDal.Where(k => k.IdentityNumber == caseFile.IdentityNumber).Any())
+            if (_caseFileDal.Where(k => k.IdentityNumber == caseFile.IdentityNumber).Any())
                 return new ErrorResult("IdentityNumber!");
-            caseFileAdd.OpeningDate=DateTime.Now;
+            caseFileAdd.OpeningDate = DateTime.Now;
             caseFileAdd.CaseStatus = 0;
 
-			var sonuc= _caseFileDal.AddAsync(caseFileAdd);
-			return new SuccessResult(sonuc.Result.ToString());
-		}
-
-		public IDataResult<List<CaseFileDetailDto>> GetAll()
-        {           
+            var sonuc = _caseFileDal.AddAsync(caseFileAdd);
+            return new SuccessResult(sonuc.Result.ToString());
+        }
+        [CacheAspect(30)]
+        public IDataResult<List<CaseFileDetailDto>> GetAll()
+        {
             var liste = _caseFileDal.GetAll()
-					.Include(d => d.CaseType)
-					.Include(b => b.ApplicationType)
-					.Include(i => i.City)
-					.Include(c => c.District).ToList();
-           var list= _mapper.Map<List< CaseFileDetailDto>>(liste);
+                    .Include(d => d.CaseType)
+                    .Include(b => b.ApplicationType)
+                    .Include(i => i.City)
+                    .Include(c => c.District).ToList();
+            var list = _mapper.Map<List<CaseFileDetailDto>>(liste);
             return new SuccessDataResult<List<CaseFileDetailDto>>(list);
-		}
-
-		public IDataResult<List<CaseFileDetailDto>> GetAllByCaseTypeId(int id)
+        }
+        public IDataResult<List<CaseFileDetailDto>> GetAllByCaseTypeId(int id)
 		{
 			var liste = _caseFileDal.GetAll()
 				.Include(d => d.CaseType)
