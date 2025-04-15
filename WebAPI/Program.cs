@@ -110,22 +110,18 @@ builder.Host.UseServiceProviderFactory(services => new AutofacServiceProviderFac
         builder.RegisterModule(new AutofacBusinessModule());
     });
 builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll",
-        builder =>
-        {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
-});
+    options.AddDefaultPolicy(policy => policy
+    .AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod())
+);
 
 builder.Services.AddControllers();
 builder.Services.AddMemoryCache();
 ServiceTool.Create(builder.Services);
 var app = builder.Build();
 
-app.UseCors("AllowAll");
+app.UseCors();
 
 // HTTPS yönlendirmesini development ortamında devre dışı bırak
 if (!app.Environment.IsDevelopment())
