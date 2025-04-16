@@ -126,7 +126,7 @@ namespace DataAccess.Migrations
                         {
                             ID = 1,
                             CaseTypeID = 1,
-                            CreatedDate = new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(630),
+                            CreatedDate = new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(8126),
                             Name = "Araç Hasarı",
                             Status = false
                         },
@@ -134,7 +134,7 @@ namespace DataAccess.Migrations
                         {
                             ID = 2,
                             CaseTypeID = 1,
-                            CreatedDate = new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(642),
+                            CreatedDate = new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(8136),
                             Name = "Manevi",
                             Status = false
                         },
@@ -142,7 +142,7 @@ namespace DataAccess.Migrations
                         {
                             ID = 3,
                             CaseTypeID = 1,
-                            CreatedDate = new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(643),
+                            CreatedDate = new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(8137),
                             Name = "İdari Dava",
                             Status = false
                         },
@@ -150,7 +150,7 @@ namespace DataAccess.Migrations
                         {
                             ID = 4,
                             CaseTypeID = 4,
-                            CreatedDate = new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(644),
+                            CreatedDate = new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(8137),
                             Name = "Kamulaştırma",
                             Status = false
                         });
@@ -391,28 +391,28 @@ namespace DataAccess.Migrations
                         new
                         {
                             ID = 1,
-                            CreatedDate = new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(891),
+                            CreatedDate = new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(8288),
                             Name = "Trafik Kazası",
                             Status = false
                         },
                         new
                         {
                             ID = 2,
-                            CreatedDate = new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(893),
+                            CreatedDate = new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(8289),
                             Name = "Arabuluculuk",
                             Status = false
                         },
                         new
                         {
                             ID = 3,
-                            CreatedDate = new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(894),
+                            CreatedDate = new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(8290),
                             Name = "İdari Dava",
                             Status = false
                         },
                         new
                         {
                             ID = 4,
-                            CreatedDate = new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(895),
+                            CreatedDate = new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(8290),
                             Name = "Kamulaştırma",
                             Status = false
                         });
@@ -6773,7 +6773,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             ID = 1,
-                            CreatedDate = new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(2234),
+                            CreatedDate = new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(9055),
                             Name = "TcKimlik",
                             Status = false,
                             Type = "DosyaEvrak"
@@ -6781,7 +6781,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             ID = 2,
-                            CreatedDate = new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(2238),
+                            CreatedDate = new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(9058),
                             Name = "Sici Kaydı",
                             Status = false,
                             Type = "KullaniciEvrak"
@@ -6847,7 +6847,7 @@ namespace DataAccess.Migrations
                         {
                             ID = 1,
                             CityID = 1,
-                            CreatedDate = new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(2334),
+                            CreatedDate = new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(9117),
                             DistrictID = 1,
                             Mail = "",
                             Name = "Büşra",

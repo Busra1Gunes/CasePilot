@@ -31,7 +31,7 @@ namespace WebAPI.Controllers
             var baseUri = new Uri(this.Request.GetEncodedUrl());
             var baseUrl = $"{baseUri.GetLeftPart(UriPartial.Authority)}{this.Request.PathBase}/";
             int userID = Convert.ToInt32(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var result = _caseFileDocumentService.Add(documentName, baseUrl);
+            var result = _caseFileDocumentService.AddAsync(documentName, baseUrl).Result;
 
             if (result.Success)
             {

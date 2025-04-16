@@ -18,7 +18,7 @@ namespace Business.Abstract
         IDataResult<List<CaseFileDocument>> GetAllBycaseFileID(int caseFileID);
 
         IDataResult<CaseFileDocument> GetById(int evrakId);
-        IResult Add(CaseFileDocumentAddDto dosya, string url);
+		Task<IResult> AddAsync(CaseFileDocumentAddDto dosya, string url);
         IResult Update(CaseFileDocument evrak);
 
 

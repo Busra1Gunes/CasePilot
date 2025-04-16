@@ -346,10 +346,10 @@ namespace DataAccess.Migrations
                 columns: new[] { "ID", "CaseTypeID", "CreatedDate", "DeletedDate", "Name", "Status", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(630), null, "Araç Hasarı", false, null },
-                    { 2, 1, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(642), null, "Manevi", false, null },
-                    { 3, 1, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(643), null, "İdari Dava", false, null },
-                    { 4, 4, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(644), null, "Kamulaştırma", false, null }
+                    { 1, 1, new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(8126), null, "Araç Hasarı", false, null },
+                    { 2, 1, new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(8136), null, "Manevi", false, null },
+                    { 3, 1, new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(8137), null, "İdari Dava", false, null },
+                    { 4, 4, new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(8137), null, "Kamulaştırma", false, null }
                 });
 
             migrationBuilder.InsertData(
@@ -357,10 +357,10 @@ namespace DataAccess.Migrations
                 columns: new[] { "ID", "CreatedDate", "DeletedDate", "Name", "Status", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(891), null, "Trafik Kazası", false, null },
-                    { 2, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(893), null, "Arabuluculuk", false, null },
-                    { 3, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(894), null, "İdari Dava", false, null },
-                    { 4, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(895), null, "Kamulaştırma", false, null }
+                    { 1, new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(8288), null, "Trafik Kazası", false, null },
+                    { 2, new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(8289), null, "Arabuluculuk", false, null },
+                    { 3, new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(8290), null, "İdari Dava", false, null },
+                    { 4, new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(8290), null, "Kamulaştırma", false, null }
                 });
 
             migrationBuilder.InsertData(
@@ -456,8 +456,8 @@ namespace DataAccess.Migrations
                 columns: new[] { "ID", "CreatedDate", "DeletedDate", "Name", "Status", "Type", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(2234), null, "TcKimlik", false, "DosyaEvrak", null },
-                    { 2, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(2238), null, "Sici Kaydı", false, "KullaniciEvrak", null }
+                    { 1, new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(9055), null, "TcKimlik", false, "DosyaEvrak", null },
+                    { 2, new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(9058), null, "Sici Kaydı", false, "KullaniciEvrak", null }
                 });
 
             migrationBuilder.InsertData(
@@ -1443,7 +1443,7 @@ namespace DataAccess.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "ID", "CityID", "CreatedDate", "DeletedDate", "DistrictID", "Mail", "Name", "Password", "Status", "Surname", "UpdatedDate", "UserName" },
-                values: new object[] { 1, 1, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(2334), null, 1, "", "Büşra", "12345", false, "Güneş", null, "busra" });
+                values: new object[] { 1, 1, new DateTime(2025, 4, 16, 22, 35, 16, 680, DateTimeKind.Local).AddTicks(9117), null, 1, "", "Büşra", "12345", false, "Güneş", null, "busra" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AccountTransactions_CaseFileID",

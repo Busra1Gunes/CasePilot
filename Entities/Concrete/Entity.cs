@@ -9,9 +9,9 @@ namespace Entities.Concrete
     public class Entity
     {
         public DateTime? CreatedDate { get; set; } = DateTime.Now;
-        public DateTime? UpdatedDate { get; set; }
-        public DateTime? DeletedDate { get; set; }
-        public bool Status { get; set; } = false;
+        public DateTime? UpdatedDate { get; set; } = DateTime.Now;
+		public DateTime? DeletedDate { get; set; } = DateTime.Now;
+		public bool Status { get; set; } = false;
 
     }
 }

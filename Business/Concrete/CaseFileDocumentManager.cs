@@ -27,56 +27,52 @@ namespace Business.Concrete
             _mapper = mapper;
             _documentTypeDal = documentTypeDal;
         }
-        public IResult Add(CaseFileDocumentAddDto resume, string url)
-        {
-            // Fotoğraf yolu kaydetme işlemi
-            string? sqlImagePath = null;
+		public async Task<IResult> AddAsync(CaseFileDocumentAddDto resume, string url)
+		{
+			string? sqlImagePath = null;
 
-            if (resume.DocumentUrl != null)
-            {
-                // Fotoğraf uzantısını kontrol ediyoruz
-                var uzanti = Path.GetExtension(resume.DocumentUrl.FileName).ToLower();
-                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".docx", ".pdf", ".xlsx" };
+			if (resume.DocumentUrl != null)
+			{
+				var uzanti = Path.GetExtension(resume.DocumentUrl.FileName).ToLower();
+				var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".docx", ".pdf", ".xlsx" };
 
-                if (!allowedExtensions.Contains(uzanti))
-                {
-                    return new ErrorResult("Geçersiz dosya formatı. Sadece JPG, PNG,PDF,DOCX,XLSX kabul edilmektedir.");
-                }
+				if (!allowedExtensions.Contains(uzanti))
+				{
+					return new ErrorResult("Geçersiz dosya formatı. Sadece JPG, PNG,PDF,DOCX,XLSX kabul edilmektedir.");
+				}
 
-                // Klasör var mı kontrol ediyoruz, yoksa oluşturuyoruz
-                var klasorYolu = "wwwroot/CaseFileDocuments";
-                if (!Directory.Exists(klasorYolu))
-                {
-                    Directory.CreateDirectory(klasorYolu);
-                }
+				var klasorYolu = "wwwroot/CaseFileDocuments";
+				if (!Directory.Exists(klasorYolu))
+				{
+					Directory.CreateDirectory(klasorYolu);
+				}
 
-                // Benzersiz dosya adı oluşturuluyor
-                var tarihSaatDakikaSaniyeSalise = DateTime.Now.ToString("yyyyMMddHHmmssfff");
-                var resimYolu = Path.Combine(klasorYolu, $"{tarihSaatDakikaSaniyeSalise}{uzanti}");
-                sqlImagePath = $"{url}CaseFileDocuments/{tarihSaatDakikaSaniyeSalise}{uzanti}";
+				var tarihSaatDakikaSaniyeSalise = DateTime.Now.ToString("yyyyMMddHHmmssfff");
+				var resimYolu = Path.Combine(klasorYolu, $"{tarihSaatDakikaSaniyeSalise}{uzanti}");
+				sqlImagePath = $"{url}CaseFileDocuments/{tarihSaatDakikaSaniyeSalise}{uzanti}";
 
-                try
-                {
-                    using (var stream = new FileStream(resimYolu, FileMode.Create))
-                    {
-                        resume.DocumentUrl.CopyTo(stream);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return new ErrorResult($"Dosya kaydedilirken bir hata oluştu: {ex.Message}");
-                }
-            }
-            CaseFileDocument document = _mapper.Map<CaseFileDocument>(resume);
-            document.DocumentUrl = sqlImagePath;
+				try
+				{
+					using (var stream = new FileStream(resimYolu, FileMode.Create))
+					{
+						await resume.DocumentUrl.CopyToAsync(stream); // <-- asenkron dosya kopyalama
+					}
+				}
+				catch (Exception ex)
+				{
+					return new ErrorResult($"Dosya kaydedilirken bir hata oluştu: {ex.Message}");
+				}
+			}
 
+			CaseFileDocument document = _mapper.Map<CaseFileDocument>(resume);
+			document.DocumentUrl = sqlImagePath;
 
-            _caseFileDocumentDal.AddAsync(document);
+			await _caseFileDocumentDal.AddAsync(document); // <-- await burada çok önemli
 
-            return new SuccessResult("");
-        }
+			return new SuccessResult("Veri başarıyla kaydedildi.");
+		}
 
-        public IDataResult<List<CaseFileDocument>> GetAll()
+		public IDataResult<List<CaseFileDocument>> GetAll()
         {
             List<CaseFileDocument> dosyaEvraklar = _caseFileDocumentDal.GetAll().ToList();
             return new SuccessDataResult<List<CaseFileDocument>>(dosyaEvraklar);
