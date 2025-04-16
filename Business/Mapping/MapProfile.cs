@@ -2,11 +2,14 @@
 using Core;
 
 using Entities.Concrete;
+using Entities.Dto.AddDto;
 using Entities.Dto.CaseFileDto;
+using Entities.Dto.DocumentDto;
 using Entities.Dto.DosyaDto;
 using Entities.Dto.HesapHareketDto;
 using Entities.Dto.KullaniciDto;
 using Entities.Dto.KullaniciDto.KullaniciDto;
+using Entities.Dto.ListDto;
 using Entities.Enums;
 using Microsoft.AspNetCore.Http;
 
@@ -27,7 +30,7 @@ namespace Service.Mapping
 
             CreateMap<CaseFile, CaseFileAddDto>().ReverseMap();
 
-
+ 
             CreateMap<CaseFile, CaseFileDetailDto>()
         .ForMember(dest => dest.City, opt => opt.MapFrom(x => x.City.Name))
         .ForMember(dest => dest.District, opt => opt.MapFrom(x => x.District.Name))
@@ -77,8 +80,15 @@ namespace Service.Mapping
                                                                  x.Type == TransactionType.Transfer ? "Transfer" : "-"))
                                                                    .ReverseMap();
 
+            CreateMap<Defendant, DefendantListDto>().ReverseMap();
+            CreateMap<Defendant, DefendantAddDto>().ReverseMap();
 
-         
+            CreateMap<DocumentType, DocumentTypeAddDto>().ReverseMap();
+            CreateMap<DocumentType, DocumentTypeListDto>().ReverseMap();
+
+            CreateMap<City, CityListDto>().ReverseMap();
+            CreateMap<District, DistrictListDto>().ReverseMap();
+
         }
     }
 }

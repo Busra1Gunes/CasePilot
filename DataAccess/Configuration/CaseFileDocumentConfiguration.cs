@@ -25,16 +25,15 @@ namespace DataAccess.Configuration
                    .HasMaxLength(500); // URL için uzunluk sınırı koyduk
 
             // İlişkiler
-            builder.HasOne(de => de.CaseFile)
-                   .WithMany() // Eğer Dosya'nın birden çok DosyaEvrak kaydı olabilir ise
-                   .HasForeignKey(de => de.CaseFileID)
-                   .OnDelete(DeleteBehavior.Restrict); // Silme kısıtlaması
+            builder.HasOne(x => x.CaseFile)
+        .WithMany(x => x.CaseFileDocuments) // Eğer CaseFile içinde ICollection varsa
+        .HasForeignKey(x => x.CaseFileID)
+        .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(de => de.DocumentType)
-                   .WithMany() // Eğer EvrakTur'un birden çok DosyaEvrak kaydı olabilir ise
-                   .HasForeignKey(de => de.DocumentTypeID)
-                   .OnDelete(DeleteBehavior.Restrict); // Silme kısıtlaması
-
+            builder.HasOne(x => x.DocumentType)
+                .WithMany() // DocumentType tarafında ICollection yoksa böyle olmalı
+                .HasForeignKey(x => x.DocumentTypeID)
+                .OnDelete(DeleteBehavior.Restrict);
             // Tablo adını belirleme
             builder.ToTable("CaseFileDocument");
             // builder.Ignore(i => i.SilinmeTarihi); Ignore ile belirtilen alan veritabanına kaydedilmez

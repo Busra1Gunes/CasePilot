@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Entities.Dto.AddDto;
+using Entities.Dto.DocumentDto;
 using Entities.Dto.DosyaDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,8 +19,12 @@ namespace WebAPI.Controllers
         {
             _caseFileDocumentService = caseFileDocumentService;
         }
+        [HttpGet("/CaseFileDocumentList")]
+        public IActionResult CaseFileDocumentList(int caseFileID) => Ok(_caseFileDocumentService.GetAllBycaseFileID(caseFileID));
 
-        
+        [HttpGet("/CaseFileDocumentByID")]
+        public IActionResult CaseFileDocumentByID(int documentID) => Ok(_caseFileDocumentService.GetById(documentID));
+
         [HttpPost("CaseFileDocumentAdd")]
         public IActionResult CaseFileDocumentAdd([FromForm] CaseFileDocumentAddDto documentName)
         {
@@ -34,5 +40,20 @@ namespace WebAPI.Controllers
 
             return BadRequest(result);
         }
+        [HttpPost("/documnetTypeAdd")]
+        public IActionResult documnetAdd(DocumentTypeAddDto documentTypeAdd)
+        {
+
+            var result = _caseFileDocumentService.AddDocumentType(documentTypeAdd);
+
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
+        }
+        [HttpGet("/documentTypeList")]
+        public IActionResult documentList() => Ok(_caseFileDocumentService.GetAllDocumentType());
     }
 }

@@ -9,9 +9,9 @@ namespace Entities.Dto.KullaniciDto
 {
     public class UserAddDto
     {
-        
-        public int CityID { get; set; }
-        public int DistrictID { get; set; }
+
+        public int? CityID { get; set; }
+        public int? DistrictID { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Mail { get; set; }

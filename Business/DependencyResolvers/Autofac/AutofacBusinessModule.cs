@@ -51,7 +51,18 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<CaseFileShareManager>().As<ICaseFileShareService>().InstancePerLifetimeScope();
             builder.RegisterType<EfCaseFileShareDal>().As<ICaseFileShareDal>().InstancePerLifetimeScope();
 
+            builder.RegisterType<DefendantManager>().As<IDefendantService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfDefendantDal>().As<IDefendantDal>().InstancePerLifetimeScope();
+
             builder.RegisterType<MemoryCacheManager>().As<ICacheService>().InstancePerLifetimeScope();
+
+
+            builder.RegisterType<EfDocumentTypeDal>().As<IDocumentTypeDal>().InstancePerLifetimeScope();
+
+
+            builder.RegisterType<EfCityDal>().As<ICityDal>().InstancePerLifetimeScope();
+            builder.RegisterType<EfDistrictDal>().As<IDistrictDal>().InstancePerLifetimeScope();
+            builder.RegisterType<CityDistrictManager>().As<ICityDistrictService>().InstancePerLifetimeScope();
 
             builder.RegisterType<Context>().AsSelf().InstancePerLifetimeScope();
 
