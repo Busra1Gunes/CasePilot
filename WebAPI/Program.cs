@@ -141,7 +141,7 @@ app.UseSwaggerUI(c =>
 });
 app.UseCors();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 

@@ -27,7 +27,7 @@ namespace Business.Concrete
             _caseFileDal = caseFileDal.Value;
 			_mapper=mapper;
         }
-        [CacheAspect(30)]
+   
         public IResult Add(CaseFileAddDto caseFile)
         {
 
@@ -41,7 +41,7 @@ namespace Business.Concrete
             var sonuc = _caseFileDal.AddAsync(caseFileAdd);
             return new SuccessResult(sonuc.Result.ToString());
         }
-        [CacheAspect(30)]
+      
         public IDataResult<List<CaseFileDetailDto>> GetAll()
         {
             var liste = _caseFileDal.GetAll()

@@ -11,9 +11,10 @@ namespace Entities.Concrete
     {
         public int ID { get; set; }
         public int CaseFileID { get; set; }
-        public int DocumentTypeID{ get; set; }
+        public int DocumentTypeID { get; set; }
         public string DocumentUrl { get; set; }
-        public CaseFile CaseFile { get; set; } // Navigation property
-        public DocumentType DocumentType { get; set; } // Navigation property
+
+        public CaseFile CaseFile { get; set; } // Tekil
+        public DocumentType DocumentType { get; set; }
     }
 }

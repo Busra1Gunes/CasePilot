@@ -41,6 +41,8 @@ namespace DataAccess.Configuration
             builder.Property(x => x.DisabilityRate)
                    .HasPrecision(18, 2);
 
+
+
             builder.ToTable("CaseFiles");
         }
     }

@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities.Dto.ListDto;
+using Entities.Dto.AddDto;
 
 namespace Business.Abstract
 {
@@ -33,5 +35,8 @@ namespace Business.Abstract
         /// <param name="davali"></param>
         /// <returns></returns>
         IResult Update(CaseFileDefendant caseFileDefendant);
+
+
+
     }
 }

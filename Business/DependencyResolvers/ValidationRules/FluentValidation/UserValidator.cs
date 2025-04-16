@@ -12,9 +12,9 @@ namespace Business.DependencyResolvers.ValidationRules.FluentValidation
     {
         public UserValidator()
         {
-            RuleFor(p => p.Name).MinimumLength(2);
-            RuleFor(p => p.Surname).NotEmpty();
-            RuleFor(p => p.UserName).NotEmpty();
+            //RuleFor(p => p.Name).MinimumLength(2);
+            //RuleFor(p => p.Surname).NotEmpty();
+            //RuleFor(p => p.UserName).NotEmpty();
            // RuleFor(p => p.UnitPrice).GreaterThan(0);
          //   RuleFor(p => p.UnitPrice).GreaterThanOrEqualTo(10).When(p => p.SupplierID == 1);
            // RuleFor(p => p.Password).Must(StartWithA).WithMessage("sifre A harfi ile başlamalı");
@@ -23,9 +23,9 @@ namespace Business.DependencyResolvers.ValidationRules.FluentValidation
 
         }
 
-        private bool StartWithA(string arg)
-        {
-            return arg.StartsWith("A");
-        }
+        //private bool StartWithA(string arg)
+        //{
+        //    return arg.StartsWith("A");
+        //}
     }
 }

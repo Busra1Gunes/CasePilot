@@ -84,8 +84,8 @@ namespace DataAccess.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -243,8 +243,6 @@ namespace DataAccess.Migrations
                     CaseFileID = table.Column<int>(type: "int", nullable: false),
                     DocumentTypeID = table.Column<int>(type: "int", nullable: false),
                     DocumentUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    CaseFileID1 = table.Column<int>(type: "int", nullable: true),
-                    DocumentTypeID1 = table.Column<int>(type: "int", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -260,21 +258,11 @@ namespace DataAccess.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_CaseFileDocument_CaseFiles_CaseFileID1",
-                        column: x => x.CaseFileID1,
-                        principalTable: "CaseFiles",
-                        principalColumn: "ID");
-                    table.ForeignKey(
                         name: "FK_CaseFileDocument_DocumentTypes_DocumentTypeID",
                         column: x => x.DocumentTypeID,
                         principalTable: "DocumentTypes",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CaseFileDocument_DocumentTypes_DocumentTypeID1",
-                        column: x => x.DocumentTypeID1,
-                        principalTable: "DocumentTypes",
-                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -358,10 +346,10 @@ namespace DataAccess.Migrations
                 columns: new[] { "ID", "CaseTypeID", "CreatedDate", "DeletedDate", "Name", "Status", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6408), null, "Araç Hasarı", false, null },
-                    { 2, 1, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6419), null, "Manevi", false, null },
-                    { 3, 1, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6420), null, "İdari Dava", false, null },
-                    { 4, 4, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6420), null, "Kamulaştırma", false, null }
+                    { 1, 1, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(630), null, "Araç Hasarı", false, null },
+                    { 2, 1, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(642), null, "Manevi", false, null },
+                    { 3, 1, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(643), null, "İdari Dava", false, null },
+                    { 4, 4, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(644), null, "Kamulaştırma", false, null }
                 });
 
             migrationBuilder.InsertData(
@@ -369,10 +357,10 @@ namespace DataAccess.Migrations
                 columns: new[] { "ID", "CreatedDate", "DeletedDate", "Name", "Status", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6726), null, "Trafik Kazası", false, null },
-                    { 2, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6728), null, "Arabuluculuk", false, null },
-                    { 3, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6729), null, "İdari Dava", false, null },
-                    { 4, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(6729), null, "Kamulaştırma", false, null }
+                    { 1, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(891), null, "Trafik Kazası", false, null },
+                    { 2, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(893), null, "Arabuluculuk", false, null },
+                    { 3, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(894), null, "İdari Dava", false, null },
+                    { 4, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(895), null, "Kamulaştırma", false, null }
                 });
 
             migrationBuilder.InsertData(
@@ -468,8 +456,8 @@ namespace DataAccess.Migrations
                 columns: new[] { "ID", "CreatedDate", "DeletedDate", "Name", "Status", "Type", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(7971), null, "TcKimlik", false, "DosyaEvrak", null },
-                    { 2, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(7975), null, "Sici Kaydı", false, "KullaniciEvrak", null }
+                    { 1, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(2234), null, "TcKimlik", false, "DosyaEvrak", null },
+                    { 2, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(2238), null, "Sici Kaydı", false, "KullaniciEvrak", null }
                 });
 
             migrationBuilder.InsertData(
@@ -1455,7 +1443,7 @@ namespace DataAccess.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "ID", "CityID", "CreatedDate", "DeletedDate", "DistrictID", "Mail", "Name", "Password", "Status", "Surname", "UpdatedDate", "UserName" },
-                values: new object[] { 1, 1, new DateTime(2025, 4, 15, 10, 47, 7, 748, DateTimeKind.Local).AddTicks(8077), null, 1, "", "Büşra", "12345", false, "Güneş", null, "busra" });
+                values: new object[] { 1, 1, new DateTime(2025, 4, 16, 16, 51, 13, 790, DateTimeKind.Local).AddTicks(2334), null, 1, "", "Büşra", "12345", false, "Güneş", null, "busra" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AccountTransactions_CaseFileID",
@@ -1488,19 +1476,9 @@ namespace DataAccess.Migrations
                 column: "CaseFileID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CaseFileDocument_CaseFileID1",
-                table: "CaseFileDocument",
-                column: "CaseFileID1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CaseFileDocument_DocumentTypeID",
                 table: "CaseFileDocument",
                 column: "DocumentTypeID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CaseFileDocument_DocumentTypeID1",
-                table: "CaseFileDocument",
-                column: "DocumentTypeID1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CaseFiles_ApplicationTypeID",

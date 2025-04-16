@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
         [HttpPost("/CaseFileShareAdd")]
         public IActionResult CaseFileShareAdd(CaseFileShareAddDto share) => Ok(_caseFileShareService.Add(share));
 
-        [HttpPost("/CaseFileShareList")]
+        [HttpGet("/CaseFileShareList")]
         public IActionResult CaseFileShareList(int casFileID) => Ok(_caseFileShareService.GetAllByCaseFileID(casFileID));
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Entities.Dto.AddDto;
 
 namespace WebAPI.Controllers
 {
@@ -35,5 +36,9 @@ namespace WebAPI.Controllers
 
             return BadRequest(result);
         }
+
+
+        [HttpGet("/caseFiledefendantList")]
+        public IActionResult GetAllByCaseFileId(int caseFileID) => Ok(_caseFileDefendantService.GetAllByCaseFileId(caseFileID));
     }
 }

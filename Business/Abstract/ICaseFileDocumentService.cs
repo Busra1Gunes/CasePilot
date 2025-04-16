@@ -1,6 +1,9 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
+using Entities.Dto.AddDto;
+using Entities.Dto.DocumentDto;
 using Entities.Dto.DosyaDto;
+using Entities.Dto.ListDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +20,11 @@ namespace Business.Abstract
         IDataResult<CaseFileDocument> GetById(int evrakId);
         IResult Add(CaseFileDocumentAddDto dosya, string url);
         IResult Update(CaseFileDocument evrak);
-      
+
+
+        IDataResult<List<DocumentTypeListDto>> GetAllDocumentType();
+
+        IResult AddDocumentType(DocumentTypeAddDto documentTypeAddDto);
+
     }
 }

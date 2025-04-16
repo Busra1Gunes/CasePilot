@@ -4,7 +4,10 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
+using Entities.Dto.AddDto;
+using Entities.Dto.DocumentDto;
 using Entities.Dto.DosyaDto;
+using Entities.Dto.ListDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +19,13 @@ namespace Business.Concrete
     public class CaseFileDocumentManager : ICaseFileDocumentService
     {
         ICaseFileDocumentDal _caseFileDocumentDal;
+        IDocumentTypeDal _documentTypeDal;
         readonly IMapper _mapper;
-        public CaseFileDocumentManager(ICaseFileDocumentDal caseFileDocumentDal, IMapper mapper)
+        public CaseFileDocumentManager(ICaseFileDocumentDal caseFileDocumentDal, IMapper mapper, IDocumentTypeDal documentTypeDal)
         {
             _caseFileDocumentDal = caseFileDocumentDal;
             _mapper = mapper;
+            _documentTypeDal = documentTypeDal;
         }
         public IResult Add(CaseFileDocumentAddDto resume, string url)
         {
@@ -92,6 +97,19 @@ namespace Business.Concrete
         public IResult Update(CaseFileDocument document)
         {
             throw new NotImplementedException();
+        }
+
+        public IDataResult<List<DocumentTypeListDto>> GetAllDocumentType()
+        {
+            List<DocumentType> documents = _documentTypeDal.GetAll().ToList();
+            var list = _mapper.Map<List<DocumentTypeListDto>>(documents);
+            return new SuccessDataResult<List<DocumentTypeListDto>>(list);
+        }
+
+        public IResult AddDocumentType(DocumentTypeAddDto documentTypeAddDto)
+        {
+            _documentTypeDal.AddAsync(_mapper.Map<DocumentType>(documentTypeAddDto));
+            return new SuccessResult();
         }
     }
 }
