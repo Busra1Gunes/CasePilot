@@ -19,7 +19,7 @@ namespace DataAccess.Concrete.EntityFramework
 		{
 
           optionsBuilder.UseSqlServer("workstation id=CasePilot.mssql.somee.com;packet size=4096;user id=busra_SQLLogin_1;pwd=rbqtkxnu4h;data source=CasePilot.mssql.somee.com;persist security info=False;initial catalog=CasePilot;TrustServerCertificate=True");
-           //optionsBuilder.UseSqlServer("Data Source=DESKOP123;Initial Catalog=CasePilot;Integrated Security=True;Trust Server Certificate=True");
+        //   optionsBuilder.UseSqlServer("Data Source=DESKOP123;Initial Catalog=CasePilot;Integrated Security=True;Trust Server Certificate=True");
           //  optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=CasePilot;Integrated Security=True;Trust Server Certificate=True");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

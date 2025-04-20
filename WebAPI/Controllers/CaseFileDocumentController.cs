@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
             _caseFileDocumentService = caseFileDocumentService;
         }
         [HttpGet("/CaseFileDocumentList")]
-        public IActionResult CaseFileDocumentList(int caseFileID) => Ok(_caseFileDocumentService.GetAllBycaseFileID(caseFileID));
+        public IActionResult CaseFileDocumentList(int caseFileID) => Ok(_caseFileDocumentService.GetAllByCaseFileID(caseFileID));
 
         [HttpGet("/CaseFileDocumentByID")]
         public IActionResult CaseFileDocumentByID(int documentID) => Ok(_caseFileDocumentService.GetById(documentID));

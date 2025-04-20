@@ -1,6 +1,7 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
 using Entities.Dto.AddDto;
+using Entities.Dto.CaseFileDto;
 using Entities.Dto.DocumentDto;
 using Entities.Dto.DosyaDto;
 using Entities.Dto.ListDto;
@@ -15,9 +16,9 @@ namespace Business.Abstract
     public interface ICaseFileDocumentService
     {
         IDataResult<List<CaseFileDocument>> GetAll();
-        IDataResult<List<CaseFileDocument>> GetAllBycaseFileID(int caseFileID);
+        IDataResult<List<CaseFileDocumentListDto>> GetAllByCaseFileID(int caseFileID);
 
-        IDataResult<CaseFileDocument> GetById(int evrakId);
+        IDataResult<CaseFileDocumentListDto> GetById(int evrakId);
 		Task<IResult> AddAsync(CaseFileDocumentAddDto dosya, string url);
         IResult Update(CaseFileDocument evrak);
 

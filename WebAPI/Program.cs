@@ -6,6 +6,7 @@ using Business.Abstract;
 using Business.Concrete;
 using Business.DependencyResolvers.Autofac;
 using Core.Aspects;
+using Core.FTP;
 using Core.Utilities.IoC;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
@@ -115,7 +116,7 @@ builder.Services.AddCors(options =>
     .AllowAnyHeader()
     .AllowAnyMethod())
 );
-
+builder.Services.Configure<FtpSettings>(builder.Configuration.GetSection("FtpSettings"));
 builder.Services.AddControllers();
 builder.Services.AddMemoryCache();
 ServiceTool.Create(builder.Services);
