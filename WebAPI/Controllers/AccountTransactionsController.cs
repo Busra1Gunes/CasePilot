@@ -10,7 +10,7 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
+    [Authorize]
     public class AccountTransactionsController : ControllerBase
     {
         readonly IAccountTransactionService _hareketService;

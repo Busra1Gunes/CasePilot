@@ -17,7 +17,7 @@ namespace Entities.Concrete
         public int? CaseFileID { get; set; } //Eger HareketTuru=DosyaMasrafi ise DosyaId deger alır dosyamasrafı değilse   null
 
         public decimal Amount { get; set; }             // Tutar → Amount
-        public TransactionStatus TransactionStatus { get; set; }   // HareketDurumu → TransactionStatus
+      //  public TransactionStatus TransactionStatus { get; set; }   // HareketDurumu → TransactionStatus
         public TransactionType Type { get; set; }       // HareketTuru → TransactionType
         public string Description { get; set; }         // Aciklama → Description
         public DateTime PaymentDate { get; set; }       // OdemeTarihi → PaymentDate

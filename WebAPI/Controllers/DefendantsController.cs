@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Entities.Dto.AddDto;
 using Entities.Dto.DosyaDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DefendantsController : ControllerBase
     {
         IDefendantService _defendantService;

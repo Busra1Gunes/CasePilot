@@ -12,7 +12,8 @@ namespace WebAPI.Controllers
    
     [Route("api/[controller]")]
     [ApiController]
-  
+    [Authorize]
+
     public class CaseFileController : ControllerBase
     {
         private readonly ICaseFileService _caseFileService;

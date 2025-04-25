@@ -7,7 +7,8 @@ namespace WebAPI.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class CaseTypesController : ControllerBase
+    [Authorize]
+    public class CaseTypesController : ControllerBase
 	{
 		readonly ICaseTypeService _caseTypeService;
 

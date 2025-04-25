@@ -8,6 +8,7 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ApplicationTypesController : ControllerBase
     {
         readonly IApplicationTypeService _applicationTypeService;

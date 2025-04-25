@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Dto.AddDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CitiesDistrictsController : ControllerBase
     {
         ICityDistrictService _cityDistrictService;

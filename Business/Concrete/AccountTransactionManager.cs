@@ -33,18 +33,10 @@ namespace Business.Concrete
         public IResult Add(AccountTransactionAddDto hareket)
         {
             var hesapHareket = _mapper.Map<AccountTransactionAddDto, AccountTransaction>(hareket);
-            if (hesapHareket.Type == TransactionType.DosyaMasrafi)
-            {
-
-                hesapHareket.TransactionStatus = TransactionStatus.Alacak;
-            }
-            //if (hesapHareket.HareketTuru == HareketTuru.Kira
-            //    || hareket.HareketTuru == HareketTuru.Fatura
-            //    || hareket.HareketTuru == HareketTuru.Maas
-            //    || hesapHareket.HareketTuru == HareketTuru.Transfer)
+            //if (hesapHareket.Type == TransactionType.DosyaMasrafi)
             //{
-            //    hesapHareket.DosyaId = null;
-            //    hesapHareket.HareketDurumu = HareketDurumu.Borc;
+
+            //    hesapHareket.TransactionStatus = TransactionStatus.Alacak;
             //}
             var sonuc = _hesapHareketDal.AddAsync(hesapHareket);
             return new SuccessResult("Hareket Kaydedildi");

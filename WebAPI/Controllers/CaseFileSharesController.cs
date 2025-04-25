@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Entities.Dto.CaseFileDto;
 using Entities.Dto.HesapHareketDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -9,6 +10,7 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CaseFileSharesController : ControllerBase
     {
         ICaseFileShareService _caseFileShareService;

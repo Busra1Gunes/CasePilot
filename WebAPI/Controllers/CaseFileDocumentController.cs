@@ -12,6 +12,7 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CaseFileDocumentController : ControllerBase
     {
         ICaseFileDocumentService _caseFileDocumentService;
