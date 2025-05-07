@@ -47,17 +47,17 @@ namespace Business.Concrete
 					return new ErrorResult("Geçersiz dosya formatı. Sadece JPG, PNG, PDF, DOCX, XLSX kabul edilmektedir.");
 
 				var fileName = $"{DateTime.Now:yyyyMMddHHmmssfff}{uzanti}";
-				var ftpUploadPath = $"{_ftpSettings.Host}/wwwroot/CaseFileDocuments/{fileName}";
+                var ftpUploadPath = $"{_ftpSettings.Host}/CaseFileDocuments/{fileName}";
 
-				try
+                try
 				{
 					using var stream = resume.DocumentUrl.OpenReadStream();
 					var uploadResult = await UploadToFtpAsync(ftpUploadPath, stream, _ftpSettings.Username, _ftpSettings.Password);
 					if (!uploadResult)
 						return new ErrorResult("FTP dosya yükleme başarısız.");
 
-					ftpFileUrl = $"https://www.CasePilot.somee.com/CaseFileDocuments/{fileName}";
-				}
+                    ftpFileUrl = $"http://socialieve.com/CaseFileDocuments/{fileName}";
+                }
 				catch (Exception ex)
 				{
 					return new ErrorResult($"Dosya yüklenirken hata oluştu: {ex.Message}");
