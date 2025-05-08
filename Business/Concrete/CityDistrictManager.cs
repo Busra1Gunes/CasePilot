@@ -33,7 +33,7 @@ namespace Business.Concrete
 
         public IDataResult<List<CityListDto>> GetAllCity()
         {
-            List<City> cities = _cityDal.GetAll().ToList();
+            List<City> cities = _cityDal.GetAllQueryable().ToList();
             var list = _mapper.Map<List<CityListDto>>(cities);
             return new SuccessDataResult<List<CityListDto>>(list);
         }

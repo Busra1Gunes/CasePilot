@@ -64,7 +64,7 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<EfDistrictDal>().As<IDistrictDal>().InstancePerLifetimeScope();
             builder.RegisterType<CityDistrictManager>().As<ICityDistrictService>().InstancePerLifetimeScope();
 
-            builder.RegisterType<Context>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<CaseFileContext>().AsSelf().InstancePerLifetimeScope();
 
 
 

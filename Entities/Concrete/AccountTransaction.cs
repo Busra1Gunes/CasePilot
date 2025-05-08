@@ -9,7 +9,6 @@ namespace Entities.Concrete
 {
     public class AccountTransaction : Entity, IEntity
     {
-        public int ID { get; set; }
 
         public int DebtorID { get; set; }               // BorcluID → DebtorId
         public int CreditID { get; set; }               // AlacakId → CreditId

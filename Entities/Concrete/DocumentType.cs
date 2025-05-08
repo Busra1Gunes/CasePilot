@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class DocumentType : Entity, IEntity
+    public class DocumentType : Entity
     {
-        public int ID { get; set; }
         public string Name { get; set; }
 
         public string Type { get; set; }  //Dosya Evrakları, Kullanıcı Evrakları

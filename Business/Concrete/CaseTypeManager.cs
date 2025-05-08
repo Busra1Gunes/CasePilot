@@ -28,7 +28,7 @@ namespace Business.Concrete
 
 		public IDataResult<List<CaseType>> GetAll()
 		{
-		   List<CaseType> davaTurleri= _caseTypeDal.GetAll().ToList();
+		   List<CaseType> davaTurleri= _caseTypeDal.GetAllQueryable().ToList();
 			return new SuccessDataResult<List<CaseType>>(davaTurleri);
 		}
 

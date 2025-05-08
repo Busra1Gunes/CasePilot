@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class CaseFileDocument : Entity, IEntity
+    public class CaseFileDocument : Entity
     {
-        public int ID { get; set; }
         public int CaseFileID { get; set; }
         public int DocumentTypeID { get; set; }
         public string DocumentUrl { get; set; }

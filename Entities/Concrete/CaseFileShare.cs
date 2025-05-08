@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class CaseFileShare : Entity, IEntity
+    public class CaseFileShare : Entity
     {
-        public int ID { get; set; }
         public int CaseFileID { get; set; }
         public int UserID { get; set; }
         public decimal ShareRate { get; set; } //Pay

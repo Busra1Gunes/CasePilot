@@ -47,13 +47,13 @@ namespace Business.Concrete
 
         public IDataResult<List<CaseFileDefendant>> GetAllByCaseFileId(int caseFileID)
         {
-            List<CaseFileDefendant> caseFileDefendants = _caseFileDefendantDal.GetAll().Where(d => d.caseFileID.Equals(caseFileID)).ToList();
+            List<CaseFileDefendant> caseFileDefendants = _caseFileDefendantDal.GetAllQueryable().Where(d => d.caseFileID.Equals(caseFileID)).ToList();
             return new SuccessDataResult<List<CaseFileDefendant>>(caseFileDefendants);
         }
 
         public IDataResult<List<DefendantListDto>> GetAllDefendant()
         {
-            List<Defendant> Defendants = _defendantDal.GetAll().ToList();
+            List<Defendant> Defendants = _defendantDal.GetAllQueryable().ToList();
             var list = _mapper.Map<List<DefendantListDto>>(Defendants);
             return new SuccessDataResult<List<DefendantListDto>>(list);
 

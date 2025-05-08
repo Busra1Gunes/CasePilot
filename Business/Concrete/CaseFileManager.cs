@@ -15,6 +15,9 @@ using System.Security.Cryptography;
 using Entities.Dto;
 using Core.Utilities.Interceptors;
 using Core.Aspects.Autofac.Caching;
+using Core.Utilities.Messages;
+using Business.Constants.Messages;
+using Business.Constants.Messages.Entity;
 
 namespace Business.Concrete
 {
@@ -22,81 +25,86 @@ namespace Business.Concrete
 	{
 		readonly ICaseFileDal _caseFileDal;
 		readonly IMapper _mapper;
-        public CaseFileManager(Lazy<ICaseFileDal> caseFileDal ,IMapper mapper)
-        {
-            _caseFileDal = caseFileDal.Value;
-			_mapper=mapper;
-        }
-   
-        public IResult Add(CaseFileAddDto caseFile)
-        {
+		readonly IUnitOfWork _unitOfWork;
 
-            var caseFileAdd = _mapper.Map<CaseFileAddDto, CaseFile>(caseFile);
-
-            if (_caseFileDal.Where(k => k.IdentityNumber == caseFile.IdentityNumber).Any())
-                return new ErrorResult("IdentityNumber!");
-            caseFileAdd.OpeningDate = DateTime.Now;
-            caseFileAdd.CaseStatus = 0;
-
-            var sonuc = _caseFileDal.AddAsync(caseFileAdd);
-            return new SuccessResult(sonuc.Result.ToString());
-        }
-      
-        public IDataResult<List<CaseFileDetailDto>> GetAll()
-        {
-            var liste = _caseFileDal.GetAll()
-                    .Include(d => d.CaseType)
-                    .Include(b => b.ApplicationType)
-                    .Include(i => i.City)
-                    .Include(c => c.District).ToList();
-            var list = _mapper.Map<List<CaseFileDetailDto>>(liste);
-            return new SuccessDataResult<List<CaseFileDetailDto>>(list);
-        }
-        public IDataResult<List<CaseFileDetailDto>> GetAllByCaseTypeId(int id)
+		public CaseFileManager(Lazy<ICaseFileDal> caseFileDal, IMapper mapper, IUnitOfWork unitOfWork)
 		{
-			var liste = _caseFileDal.GetAll()
+			_caseFileDal = caseFileDal.Value;
+			_mapper = mapper;
+			_unitOfWork = unitOfWork;
+		}
+		public async Task<IResult> Add(CaseFileAddDto caseFile)
+		{
+			CaseFile caseFileAdd = _mapper.Map<CaseFileAddDto, CaseFile>(caseFile);
+
+			if (_caseFileDal.Where(k => k.IdentityNumber == caseFile.IdentityNumber).Any())
+				return new ErrorResult(CaseFileMessages.IdentityNumberError);
+			caseFileAdd.OpeningDate = DateTime.Now;
+			caseFileAdd.CaseStatus = 0;
+
+			await _caseFileDal.AddAsync(caseFileAdd);
+			await _unitOfWork.SaveChangesAsync();
+			return new SuccessResult(CommonMessages.EntityAdded);
+		}
+
+		public IDataResult<List<CaseFileDetailDto>> GetAll()
+		{
+			List<CaseFile> list = _caseFileDal.GetAllQueryable()
+					.Include(d => d.CaseType)
+					.Include(b => b.ApplicationType)
+					.Include(i => i.City)
+					.Include(c => c.District).ToList();
+			return new SuccessDataResult<List<CaseFileDetailDto>>(_mapper.Map<List<CaseFileDetailDto>>(list));
+		}
+		public IDataResult<List<CaseFileDetailDto>> GetAllByCaseTypeId(int id)
+		{
+			List<CaseFile> list = _caseFileDal.GetAllQueryable()
 				.Include(d => d.CaseType)
 				.Include(b => b.ApplicationType)
 				.Include(i => i.City)
-				.Include(c => c.District).Where(s=>s.CaseTypeID.Equals(id)).ToList();
-			
-			return new SuccessDataResult<List<CaseFileDetailDto>>(_mapper.Map<List<CaseFileDetailDto>>(liste));
+				.Include(c => c.District).Where(s => s.CaseTypeID.Equals(id)).ToList();
+
+			return new SuccessDataResult<List<CaseFileDetailDto>>(_mapper.Map<List<CaseFileDetailDto>>(list));
 		}
 
 		public IDataResult<CaseFileDetailDto> GetById(int caseFileID)
 		{
 
-			var dosya = _caseFileDal.Where(k => k.ID == caseFileID)
+			CaseFile? caseFile = _caseFileDal.Where(k => k.ID == caseFileID)
 				.Include(d => d.CaseType)
 				.Include(b => b.ApplicationType)
 				.Include(i => i.City)
-				.Include(i=>i.CaseFileShares).ThenInclude(z=>z.User)
-				.Include(i=>i.CaseFileDefendant).ThenInclude(d=>d.Defendant)
+				.Include(i => i.CaseFileShares).ThenInclude(z => z.User)
+				.Include(i => i.CaseFileDefendant).ThenInclude(d => d.Defendant)
 				.Include(c => c.District).SingleOrDefault();
 
-			if (dosya == null)
+			if (caseFile == null)
 			{
-				return new ErrorDataResult<CaseFileDetailDto>("");
+				return new ErrorDataResult<CaseFileDetailDto>(CaseFileMessages.CaseFileEmptyError);
 			}
 
-			var liste = _mapper.Map<CaseFileDetailDto>(dosya);
-			return new SuccessDataResult<CaseFileDetailDto>(liste, "");
+			var list = _mapper.Map<CaseFileDetailDto>(caseFile);
+			return new SuccessDataResult<CaseFileDetailDto>(list, CommonMessages.EntityListed);
 		}
 
-		public IResult Update(CaseFileUpdateDto caseFileUpdate)
-        {
-            CaseFile? caseFiles = _caseFileDal.Where(d => d.ID == caseFileUpdate.ID).SingleOrDefault();
+		public async Task<IResult> Update(CaseFileUpdateDto caseFileUpdate)
+		{
+			CaseFile? caseFiles = _caseFileDal.Where(d => d.ID == caseFileUpdate.ID).SingleOrDefault();
 
-            if (caseFiles == null)
-                return new ErrorResult("Case File is empty");
+			if (caseFiles == null)
+				return new ErrorResult(CaseFileMessages.CaseFileEmptyError);
 
-            if (_caseFileDal.Where(k => k.IdentityNumber == caseFileUpdate.IdentityNumber).Any())
-                return new ErrorResult("");
-            _mapper.Map(caseFileUpdate, caseFiles);
-            caseFiles.UpdatedDate = DateTime.Now;
-            _caseFileDal.Update(caseFiles);
+			if (_caseFileDal.Where(k => k.IdentityNumber == caseFileUpdate.IdentityNumber).Any())
+				return new ErrorResult(CaseFileMessages.IdentityNumberError);
 
-			return new SuccessResult("Update");	
+
+			_mapper.Map(caseFileUpdate, caseFiles);
+			caseFiles.UpdatedDate = DateTime.Now;
+
+			 _caseFileDal.Update(caseFiles);
+			await _unitOfWork.SaveChangesAsync();
+
+			return new SuccessResult(CommonMessages.EntityUpdated);
 		}
 	}
 }

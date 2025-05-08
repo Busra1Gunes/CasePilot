@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-	public class EfAccountTransactionDal : EfEntityRepositoryBase<AccountTransaction, Context>, IAccountTransactionDal
+	public class EfAccountTransactionDal : EfEntityRepositoryBase<AccountTransaction, CaseFileContext>, IAccountTransactionDal
 	{
-		public EfAccountTransactionDal(Context context) : base(context)
+		public EfAccountTransactionDal(CaseFileContext context) : base(context)
 		{
 		}
 	}

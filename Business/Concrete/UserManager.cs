@@ -50,7 +50,7 @@ namespace Business.Concrete
 		}
 		public async Task<object> GetAll()
 		{
-			var list = _userDal.GetAll()
+			var list = _userDal.GetAllQueryable()
 				.Include(i=>i.City)
 				.Include(i => i.District);
 			return _mapper.Map<List<KullaniciListeDto>>(list);

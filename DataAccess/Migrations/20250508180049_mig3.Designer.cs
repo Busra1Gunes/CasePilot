@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(CaseFileContext))]
-    [Migration("20250425073039_mig2")]
-    partial class mig2
+    [Migration("20250508180049_mig3")]
+    partial class mig3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,41 +126,41 @@ namespace DataAccess.Migrations
                         {
                             ID = 1,
                             CaseTypeID = 1,
-                            CreatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3047),
-                            DeletedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3056),
+                            CreatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(539),
+                            DeletedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(548),
                             Name = "Araç Hasarı",
                             Status = false,
-                            UpdatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3056)
+                            UpdatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(547)
                         },
                         new
                         {
                             ID = 2,
                             CaseTypeID = 1,
-                            CreatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3059),
-                            DeletedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3060),
+                            CreatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(550),
+                            DeletedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(551),
                             Name = "Manevi",
                             Status = false,
-                            UpdatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3059)
+                            UpdatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(550)
                         },
                         new
                         {
                             ID = 3,
                             CaseTypeID = 1,
-                            CreatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3061),
-                            DeletedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3062),
+                            CreatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(552),
+                            DeletedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(553),
                             Name = "İdari Dava",
                             Status = false,
-                            UpdatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3061)
+                            UpdatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(552)
                         },
                         new
                         {
                             ID = 4,
                             CaseTypeID = 4,
-                            CreatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3062),
-                            DeletedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3063),
+                            CreatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(553),
+                            DeletedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(554),
                             Name = "Kamulaştırma",
                             Status = false,
-                            UpdatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3063)
+                            UpdatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(554)
                         });
                 });
 
@@ -399,38 +399,38 @@ namespace DataAccess.Migrations
                         new
                         {
                             ID = 1,
-                            CreatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3321),
-                            DeletedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3322),
+                            CreatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(765),
+                            DeletedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(766),
                             Name = "Trafik Kazası",
                             Status = false,
-                            UpdatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3322)
+                            UpdatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(765)
                         },
                         new
                         {
                             ID = 2,
-                            CreatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3324),
-                            DeletedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3325),
+                            CreatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(767),
+                            DeletedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(767),
                             Name = "Arabuluculuk",
                             Status = false,
-                            UpdatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3324)
+                            UpdatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(767)
                         },
                         new
                         {
                             ID = 3,
-                            CreatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3326),
-                            DeletedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3326),
+                            CreatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(768),
+                            DeletedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(769),
                             Name = "İdari Dava",
                             Status = false,
-                            UpdatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3326)
+                            UpdatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(769)
                         },
                         new
                         {
                             ID = 4,
-                            CreatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3327),
-                            DeletedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3328),
+                            CreatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(770),
+                            DeletedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(770),
                             Name = "Kamulaştırma",
                             Status = false,
-                            UpdatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(3327)
+                            UpdatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(770)
                         });
                 });
 
@@ -6789,22 +6789,22 @@ namespace DataAccess.Migrations
                         new
                         {
                             ID = 1,
-                            CreatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(5621),
-                            DeletedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(5623),
+                            CreatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(1684),
+                            DeletedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(1685),
                             Name = "TcKimlik",
                             Status = false,
                             Type = "DosyaEvrak",
-                            UpdatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(5623)
+                            UpdatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(1685)
                         },
                         new
                         {
                             ID = 2,
-                            CreatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(5627),
-                            DeletedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(5628),
+                            CreatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(1687),
+                            DeletedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(1688),
                             Name = "Sici Kaydı",
                             Status = false,
                             Type = "KullaniciEvrak",
-                            UpdatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(5627)
+                            UpdatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(1688)
                         });
                 });
 
@@ -6867,15 +6867,15 @@ namespace DataAccess.Migrations
                         {
                             ID = 1,
                             CityID = 1,
-                            CreatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(5737),
-                            DeletedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(5736),
+                            CreatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(1740),
+                            DeletedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(1738),
                             DistrictID = 1,
                             Mail = "",
                             Name = "Büşra",
                             Password = "12345",
                             Status = false,
                             Surname = "Güneş",
-                            UpdatedDate = new DateTime(2025, 4, 25, 10, 30, 38, 683, DateTimeKind.Local).AddTicks(5735),
+                            UpdatedDate = new DateTime(2025, 5, 8, 21, 0, 49, 552, DateTimeKind.Local).AddTicks(1738),
                             UserName = "busra"
                         });
                 });

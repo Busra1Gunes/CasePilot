@@ -99,13 +99,13 @@ namespace Business.Concrete
 
 		public IDataResult<List<CaseFileDocument>> GetAll()
         {
-            List<CaseFileDocument> dosyaEvraklar = _caseFileDocumentDal.GetAll().ToList();
+            List<CaseFileDocument> dosyaEvraklar = _caseFileDocumentDal.GetAllQueryable().ToList();
             return new SuccessDataResult<List<CaseFileDocument>>(dosyaEvraklar);
         }
 
         public IDataResult<List<CaseFileDocumentListDto>> GetAllByCaseFileID(int caseFileID)
         {
-            List<CaseFileDocument> caseFileDocuments = _caseFileDocumentDal.GetAll()
+            List<CaseFileDocument> caseFileDocuments = _caseFileDocumentDal.GetAllQueryable()
 				.Include(d=>d.DocumentType)
 				.Include(d=>d.CaseFile)
 				.Where(e=>e.CaseFileID.Equals(caseFileID)).ToList();
@@ -116,7 +116,7 @@ namespace Business.Concrete
 
         public IDataResult<CaseFileDocumentListDto> GetById(int documentID)
         {
-            CaseFileDocument? evrak = _caseFileDocumentDal.GetAll()
+            CaseFileDocument? evrak = _caseFileDocumentDal.GetAllQueryable()
 				.Include(d => d.DocumentType)
 				.Include(d => d.CaseFile).FirstOrDefaultAsync(d=>d.ID.Equals(documentID)).Result;		
 			if(evrak == null) return new ErrorDataResult<CaseFileDocumentListDto>("");
@@ -131,7 +131,7 @@ namespace Business.Concrete
 
         public IDataResult<List<DocumentTypeListDto>> GetAllDocumentType()
         {
-            List<DocumentType> documents = _documentTypeDal.GetAll().ToList();
+            List<DocumentType> documents = _documentTypeDal.GetAllQueryable().ToList();
             var list = _mapper.Map<List<DocumentTypeListDto>>(documents);
             return new SuccessDataResult<List<DocumentTypeListDto>>(list);
         }

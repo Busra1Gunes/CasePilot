@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-	public class CaseFile :Entity, IEntity //Dosya
+	public class CaseFile :Entity //Dosya
 	{
-		public int ID { get; set; }
 
         public int ApplicationTypeID { get; set; }
         public int CaseTypeID { get; set; }

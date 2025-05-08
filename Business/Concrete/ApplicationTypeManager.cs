@@ -29,7 +29,7 @@ namespace Business.Concrete
 
         public IDataResult<List<ApplicationType>> GetAll()
         {
-            List<ApplicationType> applicationTypes = _applicationTypeDal.GetAll().ToList();
+            List<ApplicationType> applicationTypes = _applicationTypeDal.GetAllQueryable().ToList();
             return new SuccessDataResult<List<ApplicationType>>(applicationTypes);
         }
 
