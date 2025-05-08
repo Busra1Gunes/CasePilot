@@ -30,6 +30,6 @@ namespace Business.Abstract
 
         Task<IResult> RemoveRangeAsync(IEnumerable<TEntity> entities);
 
-        Task<IDataResult<IEnumerable<TEntity>>> UpdateRangeAsync(IEnumerable<TEntity> entities);
+       // Task<IDataResult<IEnumerable<TEntity>>> UpdateRangeAsync(IEnumerable<TEntity> entities);
     }
 }

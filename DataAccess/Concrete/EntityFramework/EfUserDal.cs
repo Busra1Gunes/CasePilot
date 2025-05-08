@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfUserDal : EfEntityRepositoryBase<User, Context>, IUserDal
+    public class EfUserDal : EfEntityRepositoryBase<User, CaseFileContext>, IUserDal
     {
-        public EfUserDal(Context context) : base(context)
+        public EfUserDal(CaseFileContext context) : base(context)
         {
         }
     }

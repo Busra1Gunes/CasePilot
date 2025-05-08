@@ -11,86 +11,107 @@ using System.Transactions;
 
 namespace Core.DataAccess.EntityFramework
 {
-    public class EfEntityRepositoryBase<TEntity, TContext> : IEntityRepository<TEntity>
-        where TEntity : class, IEntity, new()
-        where TContext : DbContext, new()
-    {
-        protected readonly TContext _context;
-        readonly DbSet<TEntity> _dbSet;
+	public class EfEntityRepositoryBase<TEntity, TContext> : IEntityRepository<TEntity>
+	   where TEntity : class, IEntity, new()
+	   where TContext : DbContext
+	{
 
-        public EfEntityRepositoryBase(TContext context)
-        {
-            _context = context;
-            _dbSet = context.Set<TEntity>();
-        }
+		readonly DbSet<TEntity> _dbSet;
+
+		public EfEntityRepositoryBase(TContext context)
+			=> _dbSet = context.Set<TEntity>();
 
 
-        public async Task<TEntity> AddAsync(TEntity entity)
-        {
-            await _dbSet.AddAsync(entity);
-             _context.SaveChanges();
-            return entity;
-        }
 
-        public async Task AddRangeAsync(IEnumerable<TEntity> entities)
-        {
-            await _dbSet.AddRangeAsync(entities);
-            _context.SaveChanges();
-        }
 
-        public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> expression)
-        {
-            return await _dbSet.AnyAsync(expression);
-        }
 
-        public async Task<List<TEntity>> GetAll(Expression<Func<TEntity, bool>> expression = null)
-        {
-            return await _dbSet.Where(expression).ToListAsync();
-        }
+		public async Task AddAsync(TEntity entity)
+			=> await _dbSet.AddAsync(entity);
 
-        public IQueryable<TEntity> GetAll()
-        {
-            return _dbSet.AsNoTracking().AsQueryable();
-        }
 
-        public async Task<TEntity> GetByIdAsync(int id)
-        {
-            return await _dbSet.FindAsync(id);
-        }
 
-        public void Remove(TEntity entity)
-        {
-            _dbSet.Remove(entity);
-            _context.SaveChanges();
-        }
 
-        public void RemoveRange(IEnumerable<TEntity> entities)
-        {
-            _dbSet.RemoveRange(entities);
-             _context.SaveChanges();
-        }
+		public async Task AddRangeAsync(IEnumerable<TEntity> entities)
+			=> await _dbSet.AddRangeAsync(entities);
 
-        public async Task<TEntity> Update(TEntity entity)
-        {
-            _dbSet.Update(entity);
-            _context.SaveChanges();
-            return entity;
-        }
 
-        public async Task UpdateRangeAsync(IEnumerable<TEntity> entities)
-        {
-            _dbSet.UpdateRange(entities);
-            //await _context.SaveChangesAsync();
-        }
 
-        //public async Task<TEntity> Update(TEntity entity)
-        //{
-        //   await _dbSet.Update(entity);
-        //}
 
-        public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> expression)
-        {
-            return _dbSet.Where(expression).AsQueryable();
-        }
-    }
+		public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> expression)
+			=> await _dbSet.AnyAsync(expression);
+
+
+
+
+		public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? expression = null)
+			=> expression == null ? await _dbSet.AsNoTracking().ToListAsync() : await _dbSet.Where(expression).AsNoTracking().ToListAsync();
+
+
+
+
+		public IQueryable<TEntity> GetAllQueryable(Expression<Func<TEntity, bool>>? expression = null)
+			=> expression == null ? _dbSet.AsNoTracking() : _dbSet.Where(expression).AsNoTracking();
+
+
+
+
+		public async Task<List<TEntity>> GetAllList(Expression<Func<TEntity, bool>>? expression = null)
+			=> expression == null ? await _dbSet.ToListAsync() : await _dbSet.Where(expression).ToListAsync();
+
+
+
+
+		public async Task<TEntity?> GetByIdAsync(int id)
+			=> await _dbSet.FindAsync(id);
+
+
+
+
+		public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> filter)
+			=> await _dbSet.SingleOrDefaultAsync(filter);
+
+
+
+
+		public async Task<TEntity?> GetAsNoTrackingAsync(Expression<Func<TEntity, bool>> filter)
+			=> await _dbSet.AsNoTracking().SingleOrDefaultAsync(filter);
+
+
+
+
+		public void Remove(TEntity entity)
+			=> _dbSet.Remove(entity);
+
+
+
+
+		public void RemoveRange(IEnumerable<TEntity> entities)
+			=> _dbSet.RemoveRange(entities);
+
+
+
+
+		public void Update(TEntity entity)
+			=> _dbSet.Update(entity);
+
+
+
+
+		public void UpdateRange(IEnumerable<TEntity> entities)
+			=> _dbSet.UpdateRange(entities);
+
+
+
+
+		public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> expression)
+			=> _dbSet.Where(expression);
+
+
+
+
+		public async Task<int> CountAsync(Expression<Func<TEntity, bool>>? expression = null)
+			=> expression != null ? await _dbSet.CountAsync(expression) : await _dbSet.CountAsync();
+
+
+	}
 }

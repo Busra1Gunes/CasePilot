@@ -15,8 +15,8 @@ namespace Business.Abstract
 		IDataResult<List<CaseFileDetailDto>> GetAllByCaseTypeId(int id);
 
 		IDataResult<CaseFileDetailDto> GetById(int dosyaId);
-		IResult Add(CaseFileAddDto dosya);
-		IResult Update(CaseFileUpdateDto dosya);
+		Task<IResult> Add(CaseFileAddDto dosya);
+		Task<IResult> Update(CaseFileUpdateDto dosya);
 	//	IResult AddTransactional(Dosya dosya);
 
 	}

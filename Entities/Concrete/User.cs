@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class User :Entity, IEntity
+    public class User :Entity
     {
-
-        public int ID { get; set; }
         public int? CityID { get; set; }
         public int? DistrictID { get; set; }
         public string Name { get; set; }

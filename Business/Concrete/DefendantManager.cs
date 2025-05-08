@@ -32,7 +32,7 @@ namespace Business.Concrete
         }
         public IDataResult<List<DefendantListDto>> GetAllDefendant()
         {
-            List<Defendant> Defendants = _defendantDal.GetAll().ToList();
+            List<Defendant> Defendants = _defendantDal.GetAllQueryable().ToList();
             var list = _mapper.Map<List<DefendantListDto>>(Defendants);
             return new SuccessDataResult<List<DefendantListDto>>(list);
 

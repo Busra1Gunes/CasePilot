@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class CaseFileDefendant : Entity, IEntity //dosya davalilar
+    public class CaseFileDefendant : Entity //dosya davalilar
     {
-        public int ID { get; set; }
         public int caseFileID { get; set; }
 
         public int defendantID { get; set; }

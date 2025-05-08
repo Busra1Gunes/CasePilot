@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class ApplicationType:Entity,IEntity //Basvuru Türü
+    public class ApplicationType:Entity //Basvuru Türü
     {
-        public int ID { get; set; }
         public int CaseTypeID { get; set; } 
         public string Name { get; set; } 
 

@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class City:IEntity
+    public class City:Entity
     {
-        public int ID { get; set; }
         public string Name { get; set; }
         public ICollection<District> Districts { get; set; }
         public ICollection<User> Users { get; set; }

@@ -9,30 +9,23 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebAPI.Controllers
 {
-   
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize]
 
+	[Route("api/[controller]/[action]")]
+	[ApiController]
+    [Authorize]
     public class CaseFileController : ControllerBase
     {
         private readonly ICaseFileService _caseFileService;
 
-        // IDosyaService DI (Dependency Injection) ile constructor üzerinden enjekte edilir.
         public CaseFileController(ICaseFileService caseFileService)
         {
             _caseFileService = caseFileService;
         }
 
-      
+
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)] // Başarılı dönüş tipi
-        [ProducesResponseType(StatusCodes.Status400BadRequest)] // Hatalı istek tipi
-        public IActionResult Add([FromBody] CaseFileAddDto caseFile)
-        {
-            var result = _caseFileService.Add(caseFile);
-            return result.Success ? Ok(result) : BadRequest(result);
-        }
+        public async Task<IActionResult> Add(CaseFileAddDto caseFile) => Ok(await _caseFileService.Add(caseFile));
+        
         
         [HttpGet("{caseFileID:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -67,10 +60,8 @@ namespace WebAPI.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Update([FromBody] CaseFileUpdateDto caseFileUpdate)
-        {
-            var result = _caseFileService.Update(caseFileUpdate);
-            return result.Success ? Ok(result) : BadRequest(result);
-        }       
+        public async Task<IActionResult> Update([FromBody] CaseFileUpdateDto caseFileUpdate)     
+            =>Ok(await _caseFileService.Update(caseFileUpdate));
+      
     }
 }

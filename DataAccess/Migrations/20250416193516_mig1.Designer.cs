@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
-    [DbContext(typeof(Context))]
+    [DbContext(typeof(CaseFileContext))]
     [Migration("20250416193516_mig1")]
     partial class mig1
     {

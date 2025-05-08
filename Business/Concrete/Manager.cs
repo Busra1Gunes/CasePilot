@@ -44,7 +44,7 @@ namespace Business.Concrete
 
         public IQueryable<TEntity> GetAll()
         {
-            return _repository.GetAll();
+            return _repository.GetAllQueryable();
         }
 
         public async Task<IDataResult<TEntity>> GetByIdAsync(int id)
@@ -91,18 +91,18 @@ namespace Business.Concrete
         //}
 
 
-        public async Task<IDataResult<IEnumerable<TEntity>>> UpdateRangeAsync(IEnumerable<TEntity> entities)
-        {
-            try
-            {
-                await _repository.UpdateRangeAsync(entities);
-                return new SuccessDataResult<IEnumerable<TEntity>>(entities, typeof(TEntity).Name + " " + "");
-            }
-            catch (Exception ex)
-            {
-                // Hata durumunda gerekli işlemleri burada gerçekleştirebilirsiniz.
-                return new ErrorDataResult<IEnumerable<TEntity>>(ex.Message);
-            }
-        }
+        //public async Task<IDataResult<IEnumerable<TEntity>>> UpdateRangeAsync(IEnumerable<TEntity> entities)
+        //{
+        //    try
+        //    {
+        //        await _repository.UpdateRangeAsync(entities);
+        //        return new SuccessDataResult<IEnumerable<TEntity>>(entities, typeof(TEntity).Name + " " + "");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Hata durumunda gerekli işlemleri burada gerçekleştirebilirsiniz.
+        //        return new ErrorDataResult<IEnumerable<TEntity>>(ex.Message);
+        //    }
+        //}
     }
 }
