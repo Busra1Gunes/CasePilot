@@ -10,7 +10,9 @@ using Core.FTP;
 using Core.Utilities.IoC;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
+using DataAccess.Concrete.EntityFramework;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Service.Mapping;
@@ -28,6 +30,8 @@ builder.Services.AddScoped(provider =>
 
     return mapperConfiguration.CreateMapper();
 });
+builder.Services.AddDbContext<CaseFileContext>();
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

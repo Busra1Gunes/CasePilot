@@ -1,6 +1,7 @@
 ﻿using DataAccess.Configuration;
 using Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Buffers.Text;
 using System.Collections.Generic;
@@ -14,13 +15,21 @@ using System.Threading.Tasks;
 namespace DataAccess.Concrete.EntityFramework
 {
 	public class CaseFileContext : DbContext
-	{
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        private readonly IConfiguration _configuration;
+        public CaseFileContext(DbContextOptions<CaseFileContext> options, IConfiguration configuration)
+        : base(options)
+        {
+            _configuration = configuration;
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 
-         // optionsBuilder.UseSqlServer("workstation id=CasePilot.mssql.somee.com;packet size=4096;user id=busra_SQLLogin_1;pwd=rbqtkxnu4h;data source=CasePilot.mssql.somee.com;persist security info=False;initial catalog=CasePilot;TrustServerCertificate=True");
-      //    optionsBuilder.UseSqlServer("Data Source=DESKOP123;Initial Catalog=CasePilot;Integrated Security=True;Trust Server Certificate=True");
-            optionsBuilder.UseSqlServer("Data Source=DESKTOP-IUMMNFO\\SQLEXPRESS01;Initial Catalog=CasePilot;Integrated Security=True;Trust Server Certificate=True");
+            if (!optionsBuilder.IsConfigured)
+            {
+                var connStr = _configuration.GetConnectionString("DefaultConnection");
+                optionsBuilder.UseSqlServer(connStr);
+            }
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

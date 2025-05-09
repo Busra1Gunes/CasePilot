@@ -17,7 +17,7 @@ namespace Business.Abstract
         IDataResult<CaseFileShareListDto> GetAllByCaseFileID(int caseFileID);
 
         IDataResult<CaseFileShareDto> GetById(int shareID);
-        IResult Add(CaseFileShareAddDto caseFileShareAddDto);
+       Task<IResult> Add(CaseFileShareAddDto caseFileShareAddDto);
         IResult Update(CaseFileShareAddDto caseFileShare);
     }
 }

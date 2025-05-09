@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstract;
+using Business.Constants.Messages;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -19,16 +20,19 @@ namespace Business.Concrete
     {
         IMapper _mapper;
         ICaseFileShareDal _caseFileShareDal;
-        public CaseFileShareManager(IMapper mapper, ICaseFileShareDal caseFileShareDal)
+        IUnitOfWork _unitOfWork;
+        public CaseFileShareManager(IMapper mapper, ICaseFileShareDal caseFileShareDal, IUnitOfWork unitOfWork)
         {
             _caseFileShareDal = caseFileShareDal;
-            _mapper = mapper;   
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
+
         }
-        public IResult Add(CaseFileShareAddDto caseFileShareAddDto)
+        public async Task<IResult> Add(CaseFileShareAddDto caseFileShareAddDto)
         {
-            var caseFileShareAdd = _mapper.Map<CaseFileShareAddDto, CaseFileShare>(caseFileShareAddDto);
-            _caseFileShareDal.AddAsync(caseFileShareAdd);
-            return new SuccessResult();
+            CaseFileShare? caseFileShareAdd = _mapper.Map<CaseFileShareAddDto, CaseFileShare>(caseFileShareAddDto);
+            await _caseFileShareDal.AddAsync(caseFileShareAdd);
+            return new SuccessResult(CommonMessages.EntityAdded);
         }
 
         public IDataResult<CaseFileShareListDto> GetAll()
@@ -37,7 +41,6 @@ namespace Business.Concrete
                  .Where(x => x.Status == false)
                  .Include(a => a.CaseFile)
                  .Include(a => a.User);
-            var sharesList = _mapper.Map<List<CaseFileShareDto>>(shares);
 
             var totalDto = new CaseFileShareTotalDto();
 
@@ -47,15 +50,12 @@ namespace Business.Concrete
                     totalDto.TotalShareRate += h.ShareRate;
             }
 
-
-            CaseFileShareListDto caseFileShareListDto = new CaseFileShareListDto
+            CaseFileShareListDto caseFileShareListDto = new()
             {
-              Total=totalDto,
-              ShareDto = sharesList
+                Total = totalDto,
+                ShareDto = _mapper.Map<List<CaseFileShareDto>>(shares)
             };
-
-
-            return new SuccessDataResult<CaseFileShareListDto>(caseFileShareListDto);
+            return new SuccessDataResult<CaseFileShareListDto>(caseFileShareListDto,CommonMessages.EntityListed);
         }
 
         public IDataResult<CaseFileShareListDto> GetAllByCaseFileID(int caseFileID)
@@ -64,7 +64,6 @@ namespace Business.Concrete
                  .Where(x => x.Status == false && x.CaseFileID == caseFileID)
                  .Include(a => a.CaseFile)
                  .Include(a => a.User);
-            var sharesList = _mapper.Map<List<CaseFileShareDto>>(shares);
 
             var totalDto = new CaseFileShareTotalDto();
 
@@ -75,12 +74,12 @@ namespace Business.Concrete
             }
 
 
-            CaseFileShareListDto caseFileShareListDto = new CaseFileShareListDto
+            CaseFileShareListDto caseFileShareListDto = new()
             {
                 Total = totalDto,
-                ShareDto = sharesList
+                ShareDto = _mapper.Map<List<CaseFileShareDto>>(shares)
             };
-            return new SuccessDataResult<CaseFileShareListDto>(caseFileShareListDto);
+            return new SuccessDataResult<CaseFileShareListDto>(caseFileShareListDto, CommonMessages.EntityListed);
         }
 
         public IDataResult<CaseFileShareDto> GetById(int shareID)

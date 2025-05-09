@@ -18,6 +18,7 @@ using Core.Aspects.Autofac.Caching;
 using Core.Utilities.Messages;
 using Business.Constants.Messages;
 using Business.Constants.Messages.Entity;
+using Business.Exceptions.CaseFile;
 
 namespace Business.Concrete
 {
@@ -38,8 +39,9 @@ namespace Business.Concrete
 			CaseFile caseFileAdd = _mapper.Map<CaseFileAddDto, CaseFile>(caseFile);
 
 			if (_caseFileDal.Where(k => k.IdentityNumber == caseFile.IdentityNumber).Any())
-				return new ErrorResult(CaseFileMessages.IdentityNumberError);
-			caseFileAdd.OpeningDate = DateTime.Now;
+                throw new IdentyNumberAlreadyExistsException();
+    
+                caseFileAdd.OpeningDate = DateTime.Now;
 			caseFileAdd.CaseStatus = 0;
 
 			await _caseFileDal.AddAsync(caseFileAdd);
@@ -80,11 +82,10 @@ namespace Business.Concrete
 
 			if (caseFile == null)
 			{
-				return new ErrorDataResult<CaseFileDetailDto>(CaseFileMessages.CaseFileEmptyError);
+				throw new CaseFileNotFoundException(caseFileID);
 			}
 
-			var list = _mapper.Map<CaseFileDetailDto>(caseFile);
-			return new SuccessDataResult<CaseFileDetailDto>(list, CommonMessages.EntityListed);
+			return new SuccessDataResult<CaseFileDetailDto>(_mapper.Map<CaseFileDetailDto>(caseFile), CommonMessages.EntityListed);
 		}
 
 		public async Task<IResult> Update(CaseFileUpdateDto caseFileUpdate)
@@ -92,16 +93,16 @@ namespace Business.Concrete
 			CaseFile? caseFiles = _caseFileDal.Where(d => d.ID == caseFileUpdate.ID).SingleOrDefault();
 
 			if (caseFiles == null)
-				return new ErrorResult(CaseFileMessages.CaseFileEmptyError);
+				throw new InvalidCaseFileException();
 
 			if (_caseFileDal.Where(k => k.IdentityNumber == caseFileUpdate.IdentityNumber).Any())
-				return new ErrorResult(CaseFileMessages.IdentityNumberError);
+                throw new IdentyNumberAlreadyExistsException();
 
 
-			_mapper.Map(caseFileUpdate, caseFiles);
+            _mapper.Map(caseFileUpdate, caseFiles);
 			caseFiles.UpdatedDate = DateTime.Now;
-
 			 _caseFileDal.Update(caseFiles);
+
 			await _unitOfWork.SaveChangesAsync();
 
 			return new SuccessResult(CommonMessages.EntityUpdated);

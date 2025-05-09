@@ -25,6 +25,11 @@ namespace Entities.Dto.DosyaDto
         public DateTime OpeningDate { get; set; }     // AcilisTarihi → OpeningDate
         public DateTime ClosingDate { get; set; }     // KapanisTarihi → ClosingDate
         public int CaseStatus { get; set; }           // DosyaDurum → CaseStatus
+        public DateTime? CreatedDate { get; set; } = DateTime.Now;
+        public DateTime? UpdatedDate { get; set; } = DateTime.Now;
+        public DateTime? DeletedDate { get; set; } = DateTime.Now;
+        public bool Status { get; set; } = false;
+
         public List<CaseFileShareDto> CaseFileShares { get; set; } = new List<CaseFileShareDto>();
 		//DosyaPays alanını null döndürmemek için new List<DosyaPayListDto>() ile başlatmak mantıklıdır
 		public List<CaseFileDefendantListDto> caseFileDefendantListDtos { get; set; } = new List<CaseFileDefendantListDto>();
