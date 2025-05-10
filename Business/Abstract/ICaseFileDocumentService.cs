@@ -25,7 +25,7 @@ namespace Business.Abstract
 
         IDataResult<List<DocumentTypeListDto>> GetAllDocumentType();
 
-        IResult AddDocumentType(DocumentTypeAddDto documentTypeAddDto);
+        Task<IResult> AddDocumentType(DocumentTypeAddDto documentTypeAddDto);
 
     }
 }

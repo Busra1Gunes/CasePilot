@@ -47,12 +47,9 @@ namespace WebAPI.Controllers
 
             var result = _caseFileDocumentService.AddDocumentType(documentTypeAdd);
 
-            if (result.Success)
-            {
+           
                 return Ok(result);
-            }
-
-            return BadRequest(result);
+           
         }
         [HttpGet("/documentTypeList")]
         public IActionResult documentList() => Ok(_caseFileDocumentService.GetAllDocumentType());

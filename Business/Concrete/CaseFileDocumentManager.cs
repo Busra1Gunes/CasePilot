@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Business.Abstract;
+using Business.Exceptions.CaseFile;
+using Business.Exceptions.CaseFileDocument;
 using Core.FTP;
 using Core.Utilities.Results;
+using Business.Constants.Paths;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
@@ -23,16 +26,20 @@ namespace Business.Concrete
 {
     public class CaseFileDocumentManager : ICaseFileDocumentService
     {
-        ICaseFileDocumentDal _caseFileDocumentDal;
-        IDocumentTypeDal _documentTypeDal;
-		private readonly FtpSettings _ftpSettings;
+        readonly ICaseFileDocumentDal _caseFileDocumentDal;
+        readonly IDocumentTypeDal _documentTypeDal;
+	    readonly FtpSettings _ftpSettings;
 		readonly IMapper _mapper;
-        public CaseFileDocumentManager(ICaseFileDocumentDal caseFileDocumentDal, IMapper mapper, IDocumentTypeDal documentTypeDal, IOptions<FtpSettings> ftpSettings)
+		readonly IUnitOfWork _unitOfWork;
+
+        public CaseFileDocumentManager(ICaseFileDocumentDal caseFileDocumentDal, IMapper mapper, IDocumentTypeDal documentTypeDal,
+			IOptions<FtpSettings> ftpSettings,IUnitOfWork unitOfWork)
         {
             _caseFileDocumentDal = caseFileDocumentDal;
             _mapper = mapper;
             _documentTypeDal = documentTypeDal;
 			_ftpSettings = ftpSettings.Value;
+			_unitOfWork = unitOfWork;
 		}
 		public async Task<IResult> AddAsync(CaseFileDocumentAddDto resume, string url)
 		{
@@ -46,21 +53,21 @@ namespace Business.Concrete
 				if (!allowedExtensions.Contains(uzanti))
 					return new ErrorResult("Geçersiz dosya formatı. Sadece JPG, PNG, PDF, DOCX, XLSX kabul edilmektedir.");
 
-				var fileName = $"{DateTime.Now:yyyyMMddHHmmssfff}{uzanti}";
-                var ftpUploadPath = $"{_ftpSettings.Host}/CaseFileDocuments/{fileName}";
+				string fileName = $"{DateTime.Now:yyyyMMddHHmmssfff}{uzanti}";
+                string ftpUploadPath = $"{_ftpSettings.Host}/{ FtpPaths.ftpUploadPath}/{fileName}";
 
                 try
 				{
 					using var stream = resume.DocumentUrl.OpenReadStream();
-					var uploadResult = await UploadToFtpAsync(ftpUploadPath, stream, _ftpSettings.Username, _ftpSettings.Password);
+					bool uploadResult = await UploadToFtpAsync(ftpUploadPath, stream, _ftpSettings.Username, _ftpSettings.Password);
 					if (!uploadResult)
-						return new ErrorResult("FTP dosya yükleme başarısız.");
+                        throw new FileUploadException();
 
-                    ftpFileUrl = $"http://socialieve.com/CaseFileDocuments/{fileName}";
+                    ftpFileUrl = $"{FtpPaths.FtpFileUrl}/{fileName}";
                 }
 				catch (Exception ex)
 				{
-					return new ErrorResult($"Dosya yüklenirken hata oluştu: {ex.Message}");
+					throw new FileUploadException();
 				}
 			}
 
@@ -68,6 +75,7 @@ namespace Business.Concrete
 			document.DocumentUrl = ftpFileUrl;
 
 			await _caseFileDocumentDal.AddAsync(document);
+			await _unitOfWork.SaveChangesAsync();
 			return new SuccessResult("Veri başarıyla kaydedildi.");
 		}
 
@@ -87,13 +95,13 @@ namespace Business.Concrete
 				using var requestStream = await request.GetRequestStreamAsync();
 				await fileStream.CopyToAsync(requestStream);
 
-				using var response = (FtpWebResponse)await request.GetResponseAsync();
+				using FtpWebResponse? response = (FtpWebResponse)await request.GetResponseAsync();
 				return response.StatusCode != FtpStatusCode.ClosingData;
 			}
 			catch
 			{
-				return false;
-			}
+                throw new FileUploadException();
+            }
 		}
 
 
@@ -118,10 +126,12 @@ namespace Business.Concrete
         {
             CaseFileDocument? evrak = _caseFileDocumentDal.GetAllQueryable()
 				.Include(d => d.DocumentType)
-				.Include(d => d.CaseFile).FirstOrDefaultAsync(d=>d.ID.Equals(documentID)).Result;		
-			if(evrak == null) return new ErrorDataResult<CaseFileDocumentListDto>("");
-			var list = _mapper.Map<CaseFileDocumentListDto>(evrak);
-			return new SuccessDataResult<CaseFileDocumentListDto>(list);
+				.Include(d => d.CaseFile)
+				.FirstOrDefaultAsync(d=>d.ID.Equals(documentID)).Result;
+
+			if (evrak == null)
+				throw new CaseFileDocumentNotFoundException(documentID);
+			return new SuccessDataResult<CaseFileDocumentListDto>(_mapper.Map<CaseFileDocumentListDto>(evrak));
         }
 
         public IResult Update(CaseFileDocument document)
@@ -132,13 +142,13 @@ namespace Business.Concrete
         public IDataResult<List<DocumentTypeListDto>> GetAllDocumentType()
         {
             List<DocumentType> documents = _documentTypeDal.GetAllQueryable().ToList();
-            var list = _mapper.Map<List<DocumentTypeListDto>>(documents);
-            return new SuccessDataResult<List<DocumentTypeListDto>>(list);
+            return new SuccessDataResult<List<DocumentTypeListDto>>(_mapper.Map<List<DocumentTypeListDto>>(documents));
         }
 
-        public IResult AddDocumentType(DocumentTypeAddDto documentTypeAddDto)
+        public async Task<IResult> AddDocumentType(DocumentTypeAddDto documentTypeAddDto)
         {
             _documentTypeDal.AddAsync(_mapper.Map<DocumentType>(documentTypeAddDto));
+            await _unitOfWork.SaveChangesAsync();
             return new SuccessResult();
         }
     }
