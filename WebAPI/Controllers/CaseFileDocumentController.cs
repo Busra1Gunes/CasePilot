@@ -10,8 +10,8 @@ using System.Security.Claims;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+	[Route("api/[controller]/[action]")]
+	[ApiController]
     [Authorize]
     public class CaseFileDocumentController : ControllerBase
     {
@@ -20,38 +20,28 @@ namespace WebAPI.Controllers
         {
             _caseFileDocumentService = caseFileDocumentService;
         }
-        [HttpGet("/CaseFileDocumentList")]
-        public IActionResult CaseFileDocumentList(int caseFileID) => Ok(_caseFileDocumentService.GetAllByCaseFileID(caseFileID));
+        [HttpGet]
+        public IActionResult GetByCaseFileID(int caseFileID) 
+            => Ok(_caseFileDocumentService.GetAllByCaseFileID(caseFileID));
 
-        [HttpGet("/CaseFileDocumentByID")]
-        public IActionResult CaseFileDocumentByID(int documentID) => Ok(_caseFileDocumentService.GetById(documentID));
+        [HttpGet]
+        public IActionResult GetDocumentByID(int documentID) 
+            => Ok(_caseFileDocumentService.GetById(documentID));
 
-        [HttpPost("CaseFileDocumentAdd")]
-        public IActionResult CaseFileDocumentAdd([FromForm] CaseFileDocumentAddDto documentName)
+        [HttpPost]
+        public async Task<IActionResult> AddCaseFileDocument([FromForm] CaseFileDocumentAddDto documentName)
         {
             var baseUri = new Uri(this.Request.GetEncodedUrl());
             var baseUrl = $"{baseUri.GetLeftPart(UriPartial.Authority)}{this.Request.PathBase}/";
             int userID = Convert.ToInt32(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var result = _caseFileDocumentService.AddAsync(documentName, baseUrl).Result;
-
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
+           return Ok(await _caseFileDocumentService.AddAsync(documentName, baseUrl));    
         }
-        [HttpPost("/documnetTypeAdd")]
-        public IActionResult documnetAdd(DocumentTypeAddDto documentTypeAdd)
-        {
-
-            var result = _caseFileDocumentService.AddDocumentType(documentTypeAdd);
-
-           
-                return Ok(result);
-           
-        }
-        [HttpGet("/documentTypeList")]
-        public IActionResult documentList() => Ok(_caseFileDocumentService.GetAllDocumentType());
+        [HttpPost]
+        public async Task<IActionResult> AddDocument(DocumentTypeAddDto documentTypeAdd) 
+            => Ok(await _caseFileDocumentService.AddDocumentType(documentTypeAdd));
+        
+        [HttpGet]
+		public async Task<IActionResult> GetAllDocument()
+            => Ok(await _caseFileDocumentService.GetAllDocumentType());
     }
 }

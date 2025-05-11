@@ -11,8 +11,8 @@ using Entities.Dto.AddDto;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+	[Route("api/[controller]/[action]")]
+	[ApiController]
     [Authorize]
     public class CaseFileDefendantsController : ControllerBase
     {
@@ -23,23 +23,12 @@ namespace WebAPI.Controllers
             _caseFileDefendantService = caseFileDefendantService;
         }
 
-      
-        [HttpPost("")]
-        public IActionResult CaseFileDefendantAdd( CaseFileDefendantAddDto caseFileDefendantAddDto)
-        {
+        [HttpPost]
+        public async Task<IActionResult> Add(CaseFileDefendantAddDto caseFileDefendantAddDto) 
+            => Ok(await _caseFileDefendantService.Add(caseFileDefendantAddDto));
 
-            var result = _caseFileDefendantService.Add(caseFileDefendantAddDto);
-
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
-        }
-
-
-        [HttpGet("/caseFiledefendantList")]
-        public IActionResult GetAllByCaseFileId(int caseFileID) => Ok(_caseFileDefendantService.GetAllByCaseFileId(caseFileID));
+        [HttpGet]
+        public async Task<IActionResult> GetAllByCaseFileId(int caseFileID) 
+            => Ok(await _caseFileDefendantService.GetAllByCaseFileId(caseFileID));
     }
 }

@@ -30,24 +30,20 @@ namespace Business.Concrete
             _mapper = mapper;
         }
         [ValidationAspect(typeof(AccountTransactionAddDtoValidator))]
-        public IResult Add(AccountTransactionAddDto hareket)
+        public  async Task<IResult> Add(AccountTransactionAddDto hareket)
         {
             var hesapHareket = _mapper.Map<AccountTransactionAddDto, AccountTransaction>(hareket);
-            //if (hesapHareket.Type == TransactionType.DosyaMasrafi)
-            //{
-
-            //    hesapHareket.TransactionStatus = TransactionStatus.Alacak;
-            //}
-            var sonuc = _hesapHareketDal.AddAsync(hesapHareket);
+            
+            await _hesapHareketDal.AddAsync(hesapHareket);
             return new SuccessResult("Hareket Kaydedildi");
         }
 
-        public IDataResult<List<AccountTransaction>> GetAll()
+        public Task<IDataResult<List<AccountTransaction>>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public IDataResult<AccountTransactionListDto> GetAllByUserID(int userID)
+        public async Task<IDataResult<AccountTransactionListDto>> GetAllByUserID(int userID)
         {
             
                 var hareketler = _hesapHareketDal
@@ -94,31 +90,14 @@ namespace Business.Concrete
 
 
                 return new SuccessDataResult<AccountTransactionListDto>(hesapHareketListDto);
-
-
-            
-            //var harekets = _hesapHareketDal.Where()
-            //.Include(d => d.Kullanici1)
-            //.Include(b => b.Kullanici2)
-            //.Include(i => i.Dosya)
-            //.Include(i => i.Dosya).ToList();
-
-
-            //if (harekets == null)
-            //{
-            //    return new ErrorDataResult<HesapHareketListDto>("Hareket bulunamadı");
-            //}
-
-            //var liste = _mapper.Map<HesapHareketListDto>(harekets);
-            //return new SuccessDataResult<HesapHareketListDto>(liste, "Hareket Listelendi");
         }
 
-        public IDataResult<AccountTransaction> GetById(int hareketId)
+        public Task<IDataResult<AccountTransaction>> GetById(int hareketId)
         {
             throw new NotImplementedException();
         }
 
-        public IResult Update(AccountTransaction hareket)
+        public Task<IResult> Update(AccountTransaction hareket)
         {
             throw new NotImplementedException();
         }

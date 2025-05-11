@@ -28,47 +28,46 @@ namespace Business.Concrete
             _defendantDal = defendantDal;
 
         }
-        public IResult Add(CaseFileDefendantAddDto caseFileDefendant)
+        public async Task<IResult> Add(CaseFileDefendantAddDto caseFileDefendant)
         {
-            _caseFileDefendantDal.AddAsync(_mapper.Map<CaseFileDefendant>(caseFileDefendant));
+            await _caseFileDefendantDal.AddAsync(_mapper.Map<CaseFileDefendant>(caseFileDefendant));
             return new SuccessResult();
         }
 
-        public IResult AddDefendat(DefendantAddDto defendantAddDto)
+        public async Task<IResult> AddDefendat(DefendantAddDto defendantAddDto)
         {
-            _defendantDal.AddAsync(_mapper.Map<Defendant>(defendantAddDto));
+           await  _defendantDal.AddAsync(_mapper.Map<Defendant>(defendantAddDto));
             return new SuccessResult();
         }
 
-        public IDataResult<List<CaseFileDefendant>> GetAll()
+        public async Task<IDataResult<List<CaseFileDefendant>>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public IDataResult<List<CaseFileDefendant>> GetAllByCaseFileId(int caseFileID)
+        public async Task<IDataResult<List<CaseFileDefendant>>> GetAllByCaseFileId(int caseFileID)
         {
-            List<CaseFileDefendant> caseFileDefendants = _caseFileDefendantDal.GetAllQueryable().Where(d => d.caseFileID.Equals(caseFileID)).ToList();
+			List<CaseFileDefendant> caseFileDefendants =  _caseFileDefendantDal.GetAllQueryable().Where(d => d.caseFileID.Equals(caseFileID)).ToList();
             return new SuccessDataResult<List<CaseFileDefendant>>(caseFileDefendants);
         }
 
-        public IDataResult<List<DefendantListDto>> GetAllDefendant()
+        public async Task<IDataResult<List<DefendantListDto>>> GetAllDefendant()
         {
-            List<Defendant> Defendants = _defendantDal.GetAllQueryable().ToList();
-            var list = _mapper.Map<List<DefendantListDto>>(Defendants);
+			List<DefendantListDto> list = _mapper.Map<List<DefendantListDto>>(_defendantDal.GetAllQueryable().ToList());
             return new SuccessDataResult<List<DefendantListDto>>(list);
 
         }
 
-        public IDataResult<CaseFileDefendant> GetById(int caseFileDefendantID)
+        public async Task<IDataResult<CaseFileDefendant>> GetById(int caseFileDefendantID)
         {
-            CaseFileDefendant? caseFileDefendant = _caseFileDefendantDal.GetByIdAsync(caseFileDefendantID).Result;
+            CaseFileDefendant? caseFileDefendant =await _caseFileDefendantDal.GetByIdAsync(caseFileDefendantID);
             return new SuccessDataResult<CaseFileDefendant>(caseFileDefendant);
         }
 
-        public IResult Update(CaseFileDefendant caseFileDefendant)
+        public async Task<IResult> Update(CaseFileDefendant caseFileDefendant)
         {
-            CaseFileDefendant caseFileDefendants = _caseFileDefendantDal.GetByIdAsync(caseFileDefendant.ID).Result;
-            _caseFileDefendantDal.Update(caseFileDefendants);
+            CaseFileDefendant caseFileDefendants = await _caseFileDefendantDal.GetByIdAsync(caseFileDefendant.ID);
+           _caseFileDefendantDal.Update(caseFileDefendants);
             return new SuccessResult();
         }
     }
