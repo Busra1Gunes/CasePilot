@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -97,49 +98,51 @@ namespace Business.Concrete
 		}
 
 
-		public IDataResult<List<CaseFileDocument>> GetAll()
+		public async  Task<IDataResult<List<CaseFileDocument>>> GetAll()
         {
             List<CaseFileDocument> dosyaEvraklar = _caseFileDocumentDal.GetAllQueryable().ToList();
             return new SuccessDataResult<List<CaseFileDocument>>(dosyaEvraklar);
         }
 
-        public IDataResult<List<CaseFileDocumentListDto>> GetAllByCaseFileID(int caseFileID)
+        public async Task<IDataResult<CaseFileDocumentListDto>> GetAllByCaseFileID(int caseFileID)
         {
-            List<CaseFileDocument> caseFileDocuments = _caseFileDocumentDal.GetAllQueryable()
+            List<CaseFileDocument> caseFileDocuments =  _caseFileDocumentDal.GetAllQueryable()
 				.Include(d=>d.DocumentType)
 				.Include(d=>d.CaseFile)
 				.Where(e=>e.CaseFileID.Equals(caseFileID)).ToList();
 
-			var list = _mapper.Map<List<CaseFileDocumentListDto>>(caseFileDocuments);
-			return new SuccessDataResult<List<CaseFileDocumentListDto>>(list);		
+			var list = _mapper.Map<CaseFileDocumentListDto>(caseFileDocuments);
+			return new SuccessDataResult<CaseFileDocumentListDto>(list);		
         }
 
-        public IDataResult<CaseFileDocumentListDto> GetById(int documentID)
+        public async  Task<IDataResult<CaseFileDocumentListDto>> GetById(int documentID)
         {
             CaseFileDocument? evrak = _caseFileDocumentDal.GetAllQueryable()
 				.Include(d => d.DocumentType)
-				.Include(d => d.CaseFile).FirstOrDefaultAsync(d=>d.ID.Equals(documentID)).Result;		
-			if(evrak == null) return new ErrorDataResult<CaseFileDocumentListDto>("");
+				.Include(d => d.CaseFile).FirstOrDefaultAsync(d=>d.ID.Equals(documentID)).Result;
+			if (evrak == null) throw new ArgumentNullException();
 			var list = _mapper.Map<CaseFileDocumentListDto>(evrak);
 			return new SuccessDataResult<CaseFileDocumentListDto>(list);
         }
 
-        public IResult Update(CaseFileDocument document)
+        public async Task<IResult> Update(CaseFileDocument document)
         {
             throw new NotImplementedException();
         }
 
-        public IDataResult<List<DocumentTypeListDto>> GetAllDocumentType()
+        public async Task<IDataResult<List<DocumentTypeListDto>>> GetAllDocumentType()
         {
             List<DocumentType> documents = _documentTypeDal.GetAllQueryable().ToList();
             var list = _mapper.Map<List<DocumentTypeListDto>>(documents);
             return new SuccessDataResult<List<DocumentTypeListDto>>(list);
         }
 
-        public IResult AddDocumentType(DocumentTypeAddDto documentTypeAddDto)
+        public async Task<IResult> AddDocumentType(DocumentTypeAddDto documentTypeAddDto)
         {
             _documentTypeDal.AddAsync(_mapper.Map<DocumentType>(documentTypeAddDto));
             return new SuccessResult();
         }
-    }
+
+
+	}
 }

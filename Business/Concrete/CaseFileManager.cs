@@ -47,16 +47,16 @@ namespace Business.Concrete
 			return new SuccessResult(CommonMessages.EntityAdded);
 		}
 
-		public IDataResult<List<CaseFileDetailDto>> GetAll()
+		public async Task<IDataResult<CaseFileDetailDto>> GetAll()
 		{
 			List<CaseFile> list = _caseFileDal.GetAllQueryable()
 					.Include(d => d.CaseType)
 					.Include(b => b.ApplicationType)
 					.Include(i => i.City)
 					.Include(c => c.District).ToList();
-			return new SuccessDataResult<List<CaseFileDetailDto>>(_mapper.Map<List<CaseFileDetailDto>>(list));
+			return new SuccessDataResult<CaseFileDetailDto>(_mapper.Map<CaseFileDetailDto>(list));
 		}
-		public IDataResult<List<CaseFileDetailDto>> GetAllByCaseTypeId(int id)
+		public  async Task<IDataResult<CaseFileDetailDto>> GetAllByCaseTypeId(int id)
 		{
 			List<CaseFile> list = _caseFileDal.GetAllQueryable()
 				.Include(d => d.CaseType)
@@ -64,10 +64,10 @@ namespace Business.Concrete
 				.Include(i => i.City)
 				.Include(c => c.District).Where(s => s.CaseTypeID.Equals(id)).ToList();
 
-			return new SuccessDataResult<List<CaseFileDetailDto>>(_mapper.Map<List<CaseFileDetailDto>>(list));
+			return new SuccessDataResult<CaseFileDetailDto>(_mapper.Map<CaseFileDetailDto>(list));
 		}
 
-		public IDataResult<CaseFileDetailDto> GetById(int caseFileID)
+		public async Task<IDataResult<CaseFileDetailDto>> GetById(int caseFileID)
 		{
 
 			CaseFile? caseFile = _caseFileDal.Where(k => k.ID == caseFileID)
@@ -80,7 +80,7 @@ namespace Business.Concrete
 
 			if (caseFile == null)
 			{
-				return new ErrorDataResult<CaseFileDetailDto>(CaseFileMessages.CaseFileEmptyError);
+				throw new Exception();
 			}
 
 			var list = _mapper.Map<CaseFileDetailDto>(caseFile);
@@ -106,5 +106,6 @@ namespace Business.Concrete
 
 			return new SuccessResult(CommonMessages.EntityUpdated);
 		}
+
 	}
 }

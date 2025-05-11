@@ -15,17 +15,13 @@ namespace Business.Abstract
 {
     public interface ICaseFileDocumentService
     {
-        IDataResult<List<CaseFileDocument>> GetAll();
-        IDataResult<List<CaseFileDocumentListDto>> GetAllByCaseFileID(int caseFileID);
-
-        IDataResult<CaseFileDocumentListDto> GetById(int evrakId);
+        Task<IDataResult<List<CaseFileDocument>>> GetAll();
+		Task<IDataResult<CaseFileDocumentListDto>> GetAllByCaseFileID(int caseFileID);
+		Task<IDataResult<CaseFileDocumentListDto>> GetById(int evrakId);
 		Task<IResult> AddAsync(CaseFileDocumentAddDto dosya, string url);
-        IResult Update(CaseFileDocument evrak);
-
-
-        IDataResult<List<DocumentTypeListDto>> GetAllDocumentType();
-
-        IResult AddDocumentType(DocumentTypeAddDto documentTypeAddDto);
+		Task<IResult> Update(CaseFileDocument evrak);
+        Task<IDataResult<List<DocumentTypeListDto>>> GetAllDocumentType();
+        Task<IResult> AddDocumentType(DocumentTypeAddDto documentTypeAddDto);
 
     }
 }

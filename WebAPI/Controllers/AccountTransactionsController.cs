@@ -8,7 +8,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
     public class AccountTransactionsController : ControllerBase
@@ -19,13 +19,15 @@ namespace WebAPI.Controllers
             _hareketService = hareketService;
         }
         [SwaggerOperation(Summary = "Maaş 1,Fatura 2, Kira 3, DosyaMasrafı 4, Transfer 5, Diğer 6")]
-        [HttpPost("/AccountTransactionAdd")]
-        public IActionResult AccountTransactionAdd(AccountTransactionAddDto hareket) => Ok(_hareketService.Add(hareket));
+        [HttpPost]
+        public async Task<IActionResult> Add(AccountTransactionAddDto hareket) 
+            => Ok(await _hareketService.Add(hareket));
       
 
 
-        [HttpGet("/UserAccountTransactionList")]
-        public IActionResult UserAccountTransactionList(int userID) => Ok(_hareketService.GetAllByUserID(userID));
+        [HttpGet]
+        public IActionResult Get(int userID) 
+            => Ok(_hareketService.GetAllByUserID(userID));
 
 
     }
