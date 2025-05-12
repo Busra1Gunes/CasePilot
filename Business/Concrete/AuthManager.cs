@@ -17,19 +17,19 @@ namespace Business.Concrete
     {
         IUserService _userService;
         readonly IMapper _mapper;
-        public AuthManager(IUserService kullaniciService, IMapper mapper)
+        public AuthManager(IUserService userService, IMapper mapper)
         {
-            _userService = kullaniciService;
+            _userService = userService;
             _mapper = mapper;
         }
-        public IDataResult<AccessToken> Login(UserLoginDto userLoginDto)
+        public async Task<IDataResult<AccessToken>> Login(UserLoginDto userLoginDto)
         {
-            User? kullanici = _userService
+            User? user = _userService
                 .Where(k => k.UserName.Equals(userLoginDto.UserName) && k.Password.Equals(userLoginDto.Password)).FirstOrDefault();
             
-            if (kullanici!=null)
+            if (user != null)
             {
-              AccessToken token= _userService.CreateAccessToken(kullanici).Data;
+              AccessToken token= _userService.CreateAccessToken(user).Result.Data;
                 return new SuccessDataResult<AccessToken>(token);
             }
            return new ErrorDataResult<AccessToken>();
@@ -37,10 +37,10 @@ namespace Business.Concrete
           
         }
 
-        public IDataResult<User> Register(UserAddDto userAddDto)
+        public async Task<IDataResult<User>> Register(UserAddDto userAddDto)
         {
-            var kullanici = _userService.Where(k => k.UserName.Equals(userAddDto.UserName)).Any();
-            if (kullanici)
+            var User = _userService.Where(k => k.UserName.Equals(userAddDto.UserName)).Any();
+            if (User)
             {
                 return new ErrorDataResult<User>("");
             }

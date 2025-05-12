@@ -23,7 +23,7 @@ namespace Service.Mapping
             CreateMap<User, UserAddDto>()               
                 .ReverseMap();
 
-            CreateMap<User, KullaniciListeDto>()
+            CreateMap<User, UserListDto>()
                 .ForMember(dest => dest.City, opt => opt.MapFrom(x => x.City.Name))
                 .ForMember(dest => dest.District, opt => opt.MapFrom(x => x.District.Name))
                 .ReverseMap();

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstract;
+using Business.Constants.Messages;
 using Business.DependencyResolvers.ValidationRules.FluentValidation;
 using Business.Utilities.Security;
 using Core.Aspects.Autofac.Validation;
@@ -34,42 +35,40 @@ namespace Business.Concrete
 			_mapper = mapper;
 			_tokenHelper = tokenHelper;
 		}
-		// [LogAspect] --> AOP, Autofac ,AOP imkanı sunar
+		
 		[ValidationAspect(typeof(UserValidator))]
-		public IResult Add(UserAddDto user)
+		public async Task<IResult> Add(UserAddDto user)
 		{
 			User list = _mapper.Map<UserAddDto, User>(user);
             _userDal.AddAsync(list);
-			return new SuccessResult("Kullanıcı eklendi");
+			return new SuccessResult(CommonMessages.EntityAdded);
 		}
-		public IDataResult<KullaniciListeDto> GetById(int id)
+		public async Task<IDataResult<UserListDto>> GetById(int id)
 		{
 			var user = _userDal.GetByIdAsync(id);
-			var list = _mapper.Map<KullaniciListeDto>(user);
-			return new SuccessDataResult<KullaniciListeDto>(list);
+			var list = _mapper.Map<UserListDto>(user);
+			return new SuccessDataResult<UserListDto>(list);
 		}
 		public async Task<object> GetAll()
 		{
 			var list = _userDal.GetAllQueryable()
 				.Include(i=>i.City)
 				.Include(i => i.District);
-			return _mapper.Map<List<KullaniciListeDto>>(list);
+			return _mapper.Map<List<UserListDto>>(list);
 		}
 
 
-		public IResult DeleteById(int id)
-		{
-			//var kullanici = _kullaniciDal.GetByIdAsync(id);
-			//_kullaniciDal.de(kullanici);
-			return new SuccessResult("Kullanıcı Silindi");
+		public async Task<IResult> DeleteById(int id)
+		{			
+			return new SuccessResult(CommonMessages.EntityDeleted);
 		}
 
-        public IResult UserExists(string email)
+        public async Task<IResult> UserExists(string email)
         {
             throw new NotImplementedException();
         }
 
-        public IDataResult<AccessToken> CreateAccessToken(User user)
+        public async Task<IDataResult<AccessToken>> CreateAccessToken(User user)
         {
          
             var accessToken = _tokenHelper.CreateToken(user);

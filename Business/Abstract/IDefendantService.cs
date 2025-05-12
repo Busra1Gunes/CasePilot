@@ -11,8 +11,8 @@ namespace Business.Abstract
 {
     public interface IDefendantService
     {
-        IDataResult<List<DefendantListDto>> GetAllDefendant();
+        Task<IDataResult<List<DefendantListDto>>> GetAllDefendant();
 
-        IResult AddDefendat(DefendantAddDto defendantAddDto);
+        Task<IResult> AddDefendat(DefendantAddDto defendantAddDto);
     }
 }

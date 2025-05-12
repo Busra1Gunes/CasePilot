@@ -4,6 +4,7 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,25 +22,25 @@ namespace Business.Concrete
             _applicationTypeDal = applicationTypeDal;
             _mapper = mapper;
         }
-        public IResult Add(ApplicationType basvuruTur)
+        public async Task<IResult> Add(ApplicationType basvuruTur)
         {
-            _applicationTypeDal.AddAsync(basvuruTur);
+            await _applicationTypeDal.AddAsync(basvuruTur);
             return new SuccessResult();
         }
 
-        public IDataResult<List<ApplicationType>> GetAll()
+        public async Task<IDataResult<List<ApplicationType>>> GetAll()
         {
-            List<ApplicationType> applicationTypes = _applicationTypeDal.GetAllQueryable().ToList();
+            List<ApplicationType> applicationTypes = await _applicationTypeDal.GetAllQueryable().ToListAsync();
             return new SuccessDataResult<List<ApplicationType>>(applicationTypes);
         }
 
-        public IDataResult<ApplicationType> GetById(int basvuruTurId)
+        public async Task<IDataResult<ApplicationType>> Get(int applicationTypeID)
         {
-            ApplicationType applicationTypes = _applicationTypeDal.GetByIdAsync(basvuruTurId).Result;
+            ApplicationType applicationTypes =await _applicationTypeDal.GetByIdAsync(applicationTypeID);
             return new SuccessDataResult<ApplicationType>(applicationTypes);
         }
 
-        public IResult Update(ApplicationType basvuruTur)
+        public async Task<IResult> Update(ApplicationType basvuruTur)
         {
             throw new NotImplementedException();
         }

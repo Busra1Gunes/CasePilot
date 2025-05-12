@@ -25,8 +25,8 @@ namespace WebAPI.Controllers
             => Ok(_caseFileDocumentService.GetAllByCaseFileID(caseFileID));
 
         [HttpGet]
-        public IActionResult GetDocumentByID(int documentID) 
-            => Ok(_caseFileDocumentService.GetById(documentID));
+        public async Task<IActionResult> GetDocumentByID(int documentID) 
+            => Ok(await _caseFileDocumentService.GetById(documentID));
 
         [HttpPost]
         public async Task<IActionResult> AddCaseFileDocument([FromForm] CaseFileDocumentAddDto documentName)
@@ -36,6 +36,7 @@ namespace WebAPI.Controllers
             int userID = Convert.ToInt32(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
            return Ok(await _caseFileDocumentService.AddAsync(documentName, baseUrl));    
         }
+
         [HttpPost]
         public async Task<IActionResult> AddDocument(DocumentTypeAddDto documentTypeAdd) 
             => Ok(await _caseFileDocumentService.AddDocumentType(documentTypeAdd));

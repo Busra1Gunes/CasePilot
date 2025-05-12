@@ -10,9 +10,9 @@ namespace Business.Abstract
 {
     public interface IApplicationTypeService
     {
-        IDataResult<List<ApplicationType>> GetAll();
-        IDataResult<ApplicationType> GetById(int applicationTypeID);
-        IResult Add(ApplicationType applicationType);
-        IResult Update(ApplicationType applicationType);
+        Task<IDataResult<List<ApplicationType>>> GetAll();
+        Task<IDataResult<ApplicationType>> Get(int applicationTypeID);
+        Task<IResult> Add(ApplicationType applicationType);
+        Task<IResult> Update(ApplicationType applicationType);
     }
 }

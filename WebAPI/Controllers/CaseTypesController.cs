@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
+    [Route("api/[controller]/[action]")]
+    [ApiController]
     [Authorize]
     public class CaseTypesController : ControllerBase
 	{
@@ -16,9 +16,9 @@ namespace WebAPI.Controllers
 		{
 			_caseTypeService = caseTypeService;
 		}
-
     
-        [HttpGet("/caseTypes")]
-		public IActionResult Get()=>Ok(_caseTypeService.GetAll());
+        [HttpGet]
+		public async Task<IActionResult> GetAll()
+            =>Ok(await _caseTypeService.GetAll());
 	}
 }

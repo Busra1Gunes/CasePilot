@@ -13,11 +13,11 @@ namespace Business.Abstract
 {
     public interface ICaseFileShareService
     {
-        IDataResult<CaseFileShareListDto> GetAll();
-        IDataResult<CaseFileShareListDto> GetAllByCaseFileID(int caseFileID);
+        Task<IDataResult<CaseFileShareListDto>> GetAll();
+        Task<IDataResult<CaseFileShareListDto>> GetAllByCaseFileID(int caseFileID);
 
-        IDataResult<CaseFileShareDto> GetById(int shareID);
-       Task<IResult> Add(CaseFileShareAddDto caseFileShareAddDto);
-        IResult Update(CaseFileShareAddDto caseFileShare);
+        Task<IDataResult<CaseFileShareDto>> Get(int shareID);
+        Task<IResult> Add(CaseFileShareAddDto caseFileShareAddDto);
+        Task<IResult> Update(CaseFileShareAddDto caseFileShare);
     }
 }

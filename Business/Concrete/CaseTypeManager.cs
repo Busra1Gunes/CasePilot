@@ -20,25 +20,25 @@ namespace Business.Concrete
             _caseTypeDal = caseTypeDal;
 			_mapper = mapper;	
         }
-        public IResult Add(CaseType davaTur)
+        public async Task<IResult> Add(CaseType davaTur)
 		{
             _caseTypeDal.AddAsync(davaTur);
 			return new SuccessResult();
 		}
 
-		public IDataResult<List<CaseType>> GetAll()
+		public async Task<IDataResult<List<CaseType>>> GetAll()
 		{
 		   List<CaseType> davaTurleri= _caseTypeDal.GetAllQueryable().ToList();
 			return new SuccessDataResult<List<CaseType>>(davaTurleri);
 		}
 
-		public IDataResult<CaseType> GetById(int davaturId)
+		public async Task<IDataResult<CaseType>> Get(int davaturId)
 		{
 			CaseType davaTur= _caseTypeDal.GetByIdAsync(davaturId).Result;
 			return new SuccessDataResult<CaseType>(davaTur);
 		}
 
-		public IResult Update(CaseType davaTur)
+		public async Task<IResult> Update(CaseType davaTur)
 		{
 			throw new NotImplementedException();
 		}

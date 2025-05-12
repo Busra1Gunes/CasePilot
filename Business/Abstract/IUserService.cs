@@ -12,16 +12,14 @@ using Business.Utilities.Security;
 
 namespace Business.Abstract
 {
-    public interface IUserService:IService<User>
-	{
-       Task<object> GetAll();
-        IDataResult<KullaniciListeDto> GetById(int id);
-        IResult Add(UserAddDto kullanici);
-
-
-        IResult DeleteById(int id);
-        IResult UserExists(string email);
-        IDataResult<AccessToken> CreateAccessToken(User kullanici);
+    public interface IUserService : IService<User>
+    {
+        Task<object> GetAll();
+        Task<IDataResult<UserListDto>> GetById(int id);
+        Task<IResult> Add(UserAddDto kullanici);
+        Task<IResult> DeleteById(int id);
+        Task<IResult> UserExists(string email);
+        Task<IDataResult<AccessToken>> CreateAccessToken(User kullanici);
 
     }
 }

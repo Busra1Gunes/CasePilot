@@ -8,7 +8,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
     public class CaseFileSharesController : ControllerBase
@@ -18,11 +18,13 @@ namespace WebAPI.Controllers
         {
             _caseFileShareService = caseFileShareService;
         }
-        [SwaggerOperation(Summary = "")]
-        [HttpPost("/CaseFileShareAdd")]
-        public IActionResult CaseFileShareAdd(CaseFileShareAddDto share) => Ok(_caseFileShareService.Add(share));
+       
+        [HttpPost]
+        public async Task<IActionResult> Add(CaseFileShareAddDto share) 
+            => Ok(await _caseFileShareService.Add(share));
 
-        [HttpGet("/CaseFileShareList")]
-        public IActionResult CaseFileShareList(int casFileID) => Ok(_caseFileShareService.GetAllByCaseFileID(casFileID));
+        [HttpGet]
+        public async Task<IActionResult> Get(int casFileID) 
+            => Ok(await _caseFileShareService.GetAllByCaseFileID(casFileID));
     }
 }

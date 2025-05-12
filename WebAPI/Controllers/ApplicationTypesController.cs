@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
     public class ApplicationTypesController : ControllerBase
@@ -17,15 +17,18 @@ namespace WebAPI.Controllers
             _applicationTypeService = applicationTypeService;
         }
        
-        [HttpGet("/applicationTypes")]
-        public IActionResult Get() => Ok(_applicationTypeService.GetAll());
+        [HttpGet]
+        public async Task<IActionResult> GetAll() 
+            => Ok(await _applicationTypeService.GetAll());
 
        
-        [HttpGet("/applicationTypes/getbyID")]
-        public IActionResult GetById(int basvuruTurId) => Ok(_applicationTypeService.GetById(basvuruTurId));
+        [HttpGet]
+        public async Task<IActionResult> Get(int applicationTypeID) 
+            => Ok(await _applicationTypeService.Get(applicationTypeID));
 
       
-        [HttpPost("/applicationTypes/add")]
-        public IActionResult Add(ApplicationType basvuruTur) => Ok(_applicationTypeService.Add(basvuruTur));
+        [HttpPost]
+        public async Task<IActionResult> Add(ApplicationType applicationType) 
+            => Ok(await _applicationTypeService.Add(applicationType));
     }
 }

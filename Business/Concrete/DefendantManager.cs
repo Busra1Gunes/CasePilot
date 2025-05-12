@@ -6,6 +6,7 @@ using Entities.Concrete;
 using Entities.Dto.AddDto;
 using Entities.Dto.DosyaDto;
 using Entities.Dto.ListDto;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,16 +26,15 @@ namespace Business.Concrete
             _defendantDal = defendantDal;
 
         }
-        public IResult AddDefendat(DefendantAddDto defendantAddDto)
+        public async Task<IResult> AddDefendat(DefendantAddDto defendantAddDto)
         {
-            _defendantDal.AddAsync(_mapper.Map<Defendant>(defendantAddDto));
+            await _defendantDal.AddAsync(_mapper.Map<Defendant>(defendantAddDto));
             return new SuccessResult();
         }
-        public IDataResult<List<DefendantListDto>> GetAllDefendant()
+        public async  Task<IDataResult<List<DefendantListDto>>> GetAllDefendant()
         {
-            List<Defendant> Defendants = _defendantDal.GetAllQueryable().ToList();
-            var list = _mapper.Map<List<DefendantListDto>>(Defendants);
-            return new SuccessDataResult<List<DefendantListDto>>(list);
+            List<Defendant> Defendants =await _defendantDal.GetAllQueryable().ToListAsync();
+            return new SuccessDataResult<List<DefendantListDto>>(_mapper.Map<List<DefendantListDto>>(Defendants));
 
         }
 

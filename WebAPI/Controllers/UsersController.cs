@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
+    [Route("api/[controller]/[action]")]
+    [ApiController]
 	public class UsersController : ControllerBase
 	{
 		readonly IUserService _userService;
@@ -23,26 +23,21 @@ namespace WebAPI.Controllers
 		}
         
         [HttpGet]
-		public IActionResult Get() => Ok(_userService.GetAll().Result);
+		public async Task<IActionResult> GetAll() 
+            => Ok(await _userService.GetAll());
 
         [Authorize]
-        [HttpGet("/getbyID")]
-		public IActionResult GetById(int kullaniciId) => Ok(_userService.GetById(kullaniciId));
+        [HttpGet]
+		public async Task<IActionResult> Get(int kullaniciId) 
+            => Ok(_userService.GetById(kullaniciId));
 
-		[HttpPost]
-		public IActionResult Add(UserAddDto kullanici)
-		{
-            var result = _userService.Add(kullanici);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
+        [HttpPost]
+        public async Task<IActionResult> Add(UserAddDto kullanici) => Ok(await _userService.Add(kullanici));
 
         [AllowAnonymous]
-        [HttpPost("/Login")]
-        public IActionResult Login(UserLoginDto userLoginDto) => Ok(_authService.Login(userLoginDto));
+        [HttpPost]
+        public async Task<IActionResult> Login(UserLoginDto userLoginDto) 
+            => Ok(await _authService.Login(userLoginDto));
 
 
     }

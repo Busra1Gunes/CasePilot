@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
     public class DefendantsController : ControllerBase
@@ -18,24 +18,12 @@ namespace WebAPI.Controllers
         {
             _defendantService = defendantService;
         }
-
-
-
-        [HttpPost("/defendantAdd")]
-        public IActionResult DefendantAdd(DefendantAddDto defendantAddDto)
-        {
-
-            var result = _defendantService.AddDefendat(defendantAddDto);
-
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
-        }
-        [HttpGet("/defendantList")]
-        public IActionResult DefendantList() => Ok(_defendantService.GetAllDefendant());
-
+        [HttpPost]
+        public async Task<IActionResult> Add(DefendantAddDto defendantAddDto) 
+            => Ok(await _defendantService.AddDefendat(defendantAddDto));
+      
+        [HttpGet]
+        public async Task<IActionResult> GetAll() 
+            => Ok(await _defendantService.GetAllDefendant());
     }
 }

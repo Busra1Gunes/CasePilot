@@ -26,8 +26,8 @@ namespace WebAPI.Controllers
 
 
         [HttpGet]
-        public IActionResult Get(int userID) 
-            => Ok(_hareketService.GetAllByUserID(userID));
+        public async Task<IActionResult> Get(int userID) 
+            => Ok(await _hareketService.GetAllByUserID(userID));
 
 
     }

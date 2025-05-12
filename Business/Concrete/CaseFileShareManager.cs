@@ -35,7 +35,12 @@ namespace Business.Concrete
             return new SuccessResult(CommonMessages.EntityAdded);
         }
 
-        public IDataResult<CaseFileShareListDto> GetAll()
+        public Task<IDataResult<CaseFileShareDto>> Get(int shareID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IDataResult<CaseFileShareListDto>> GetAll()
         {
             var shares = _caseFileShareDal
                  .Where(x => x.Status == false)
@@ -58,7 +63,7 @@ namespace Business.Concrete
             return new SuccessDataResult<CaseFileShareListDto>(caseFileShareListDto,CommonMessages.EntityListed);
         }
 
-        public IDataResult<CaseFileShareListDto> GetAllByCaseFileID(int caseFileID)
+        public async Task<IDataResult<CaseFileShareListDto>> GetAllByCaseFileID(int caseFileID)
         {
             var shares = _caseFileShareDal
                  .Where(x => x.Status == false && x.CaseFileID == caseFileID)
@@ -82,12 +87,7 @@ namespace Business.Concrete
             return new SuccessDataResult<CaseFileShareListDto>(caseFileShareListDto, CommonMessages.EntityListed);
         }
 
-        public IDataResult<CaseFileShareDto> GetById(int shareID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IResult Update(CaseFileShareAddDto caseFileShare)
+        public Task<IResult> Update(CaseFileShareAddDto caseFileShare)
         {
             throw new NotImplementedException();
         }

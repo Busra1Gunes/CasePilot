@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
     public class CitiesDistrictsController : ControllerBase
@@ -18,10 +18,12 @@ namespace WebAPI.Controllers
             _cityDistrictService = cityDistrictService;
         }
       
-        [HttpGet("/cityList")]
-        public IActionResult cityList() => Ok(_cityDistrictService.GetAllCity());
+        [HttpGet]
+        public async Task<IActionResult> GetAll() 
+            => Ok(_cityDistrictService.GetAllCity());
 
-        [HttpGet("/districtList")]
-        public IActionResult districtList(int CityID) => Ok(_cityDistrictService.DistrictList(CityID));
+        [HttpGet]
+        public async Task<IActionResult> Get(int CityID) 
+            => Ok(_cityDistrictService.DistrictList(CityID));
     }
 }
