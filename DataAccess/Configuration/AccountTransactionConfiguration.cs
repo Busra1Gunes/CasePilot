@@ -22,9 +22,11 @@ namespace DataAccess.Configuration
             builder.Property(x => x.Description).HasMaxLength(500);
             builder.Property(x => x.Status).HasDefaultValue(false);
             builder.Property(x => x.CaseFileID).HasDefaultValue(null);
-           
-            //builder.Property(x => x.HareketDurumu).HasDefaultValue((byte)HareketDurumu.Borc);
+
+            //builder.Property(x => x.HareketDurumu).HasDewfaultValue((byte)HareketDurumu.Borc);
             //builder.Property(x => x.HareketTuru).HasDefaultValue((byte)HareketTuru.Transfer);
+            builder.Property(x => x.Amount)
+              .HasColumnType("decimal(18,2)"); // veya .HasPrecision(18, 2);
 
             builder.HasOne(x => x.User1)
       .WithMany(x => x.HesapHareket1)

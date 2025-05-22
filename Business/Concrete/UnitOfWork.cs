@@ -17,7 +17,7 @@ namespace Business.Concrete
 
         public async Task SaveChangesAsync()
         {
-			CaseFileContext context = _serviceProvider.GetRequiredService<CaseFileContext>();
+			CasePilotContext context = _serviceProvider.GetRequiredService<CasePilotContext>();
             using var transaction = await context.Database.BeginTransactionAsync();
 
             try

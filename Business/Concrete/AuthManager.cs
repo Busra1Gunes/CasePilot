@@ -10,6 +10,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Serilog;
+
+using Log = Serilog.Log;
 
 namespace Business.Concrete
 {
@@ -22,20 +25,30 @@ namespace Business.Concrete
             _userService = userService;
             _mapper = mapper;
         }
+        
         public async Task<IDataResult<AccessToken>> Login(UserLoginDto userLoginDto)
         {
+            // Kullanıcı adı ve şifre açıkça loglanıyor
+            Log.Information("Giriş denemesi yapıldı → Kullanıcı Adı: {UserName}", userLoginDto.UserName, userLoginDto.Password);
+
             User? user = _userService
-                .Where(k => k.UserName.Equals(userLoginDto.UserName) && k.Password.Equals(userLoginDto.Password)).FirstOrDefault();
-            
+                .Where(k => k.UserName == userLoginDto.UserName && k.Password == userLoginDto.Password)
+                .FirstOrDefault();
+
             if (user != null)
             {
-              AccessToken token= _userService.CreateAccessToken(user).Result.Data;
-                return new SuccessDataResult<AccessToken>(token);
-            }
-           return new ErrorDataResult<AccessToken>();
+                Log.Information(" Başarılı giriş → Kullanıcı Adı: {UserName}", user.UserName);
 
-          
+                var tokenResult = await _userService.CreateAccessToken(user);
+                if (tokenResult.Success)
+                    return new SuccessDataResult<AccessToken>(tokenResult.Data);
+            }
+
+            Log.Warning("Hatalı giriş → Kullanıcı Adı: {UserName}", userLoginDto.UserName, userLoginDto.Password);
+
+            return new ErrorDataResult<AccessToken>("Kullanıcı adı veya şifre hatalı");
         }
+
 
         public async Task<IDataResult<User>> Register(UserAddDto userAddDto)
         {

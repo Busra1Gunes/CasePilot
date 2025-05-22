@@ -7,34 +7,53 @@ using System.Threading.Tasks;
 
 namespace Core.Utilities.Interceptors
 {
-     public abstract class MethodInterception : MethodInterceptionBaseAttribute
+    public abstract class MethodInterception : MethodInterceptionBaseAttribute
     {
         protected virtual void OnBefore(IInvocation invocation) { }
         protected virtual void OnAfter(IInvocation invocation) { }
-        protected virtual void OnException(IInvocation invocation, System.Exception e) { }
-        protected virtual void OnSuccess(IInvocation invocation) { }
+        protected virtual void OnException(IInvocation invocation, Exception e) { }
+
         public override void Intercept(IInvocation invocation)
         {
+            var isAsync = invocation.Method.ReturnType == typeof(Task) ||
+                          (invocation.Method.ReturnType.IsGenericType && invocation.Method.ReturnType.GetGenericTypeDefinition() == typeof(Task<>));
+
             var isSuccess = true;
-            OnBefore(invocation);//metodun başında çalıştır
+            OnBefore(invocation);
             try
             {
                 invocation.Proceed();
+                if (isAsync)
+                {
+                    var task = (Task)invocation.ReturnValue;
+                    task.ContinueWith(t =>
+                    {
+                        if (t.Exception != null)
+                        {
+                            isSuccess = false;
+                            OnException(invocation, t.Exception);
+                        }
+                        else
+                        {
+                            OnAfter(invocation);
+                        }
+                    });
+                }
+                else
+                {
+                    OnAfter(invocation);
+                }
             }
             catch (Exception e)
             {
                 isSuccess = false;
-                OnException(invocation, e); //hata aldığında
+                OnException(invocation, e);
                 throw;
             }
-            finally
-            {
-                if (isSuccess)
-                {
-                    OnSuccess(invocation);
-                }
-            }
-            OnAfter(invocation);//metod bitiğinde
         }
     }
+
+ 
+    
 }
+

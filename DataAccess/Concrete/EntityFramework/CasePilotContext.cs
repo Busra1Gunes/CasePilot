@@ -14,16 +14,18 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-	public class CaseFileContext : DbContext
+	public class CasePilotContext : DbContext
     {
         private readonly IConfiguration _configuration;
-        public CaseFileContext(DbContextOptions<CaseFileContext> options, IConfiguration configuration)
+        public CasePilotContext(DbContextOptions<CasePilotContext> options, IConfiguration configuration)
         : base(options)
         {
             _configuration = configuration;
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
+
+
 
             if (!optionsBuilder.IsConfigured)
             {
@@ -35,6 +37,7 @@ namespace DataAccess.Concrete.EntityFramework
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());//Bütün Configurationları tek seferde bulup uygular
             base.OnModelCreating(modelBuilder);
+
 		}
 		DbSet<City> Cities { get; set; }
 		DbSet<District> Districts { get; set; }
@@ -48,5 +51,6 @@ namespace DataAccess.Concrete.EntityFramework
 		DbSet<CaseFileShare> CaseFileShares { get; set; }
 		DbSet<CaseFileDefendant> CaseFileDefendant { get; set; }
         DbSet<AccountTransaction> AccountTransactions { get; set; }
+    //    DbSet<Log> Logs { get; set; }
     }
 }

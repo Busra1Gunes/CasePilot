@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace Entities.Concrete
 {
-    public class AccountTransaction : Entity, IEntity
+    public class AccountTransaction : Entity
     {
 
         public int DebtorID { get; set; }               // BorcluID → DebtorId

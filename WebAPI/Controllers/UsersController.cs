@@ -7,6 +7,7 @@ using Entities.Dto.KullaniciDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace WebAPI.Controllers
 {
@@ -20,25 +21,23 @@ namespace WebAPI.Controllers
 		{
             _userService = userService;
 			_authService = authService;
-		}
-        
+		}        
         [HttpGet]
 		public async Task<IActionResult> GetAll() 
             => Ok(await _userService.GetAll());
 
-        [Authorize]
         [HttpGet]
 		public async Task<IActionResult> Get(int kullaniciId) 
             => Ok(_userService.GetById(kullaniciId));
 
         [HttpPost]
-        public async Task<IActionResult> Add(UserAddDto kullanici) => Ok(await _userService.Add(kullanici));
+        public async Task<IActionResult> Add(UserAddDto kullanici) 
+            => Ok(await _userService.Add(kullanici));
 
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login(UserLoginDto userLoginDto) 
-            => Ok(await _authService.Login(userLoginDto));
-
-
+            =>Ok(await _authService.Login(userLoginDto));
+               
     }
 }

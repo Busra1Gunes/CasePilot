@@ -3,11 +3,13 @@ using Autofac.Extras.DynamicProxy;
 using Business.Abstract;
 using Business.Concrete;
 using Castle.DynamicProxy;
+
 using Core.CrossCuttingConcerns.Caching;
 using Core.CrossCuttingConcerns.Caching.Microsoft;
 using Core.Utilities.Interceptors;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +22,6 @@ namespace Business.DependencyResolvers.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-            //Birisi senden IStockService isterse ona StockManager registe et
 
 
             builder.RegisterType<AuthManager>().As<IAuthService>().InstancePerLifetimeScope();
@@ -64,7 +65,7 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<EfDistrictDal>().As<IDistrictDal>().InstancePerLifetimeScope();
             builder.RegisterType<CityDistrictManager>().As<ICityDistrictService>().InstancePerLifetimeScope();
 
-            builder.RegisterType<CaseFileContext>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<CasePilotContext>().AsSelf().InstancePerLifetimeScope();
 
 
 
@@ -78,9 +79,11 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()
                 .EnableInterfaceInterceptors(new ProxyGenerationOptions()
                 {
-                    Selector = new AspectInterceptorSelector()
-                }).SingleInstance();
-
+                    Selector = new AspectInterceptorSelector() // <== BU ÖNEMLİ
+                })
+                .SingleInstance();
         }
+
+       
     }
 }

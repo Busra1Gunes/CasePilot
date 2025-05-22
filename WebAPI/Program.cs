@@ -6,16 +6,23 @@ using Business.Abstract;
 using Business.Concrete;
 using Business.DependencyResolvers.Autofac;
 using Core.Aspects;
+
 using Core.FTP;
 using Core.Utilities.IoC;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
 using DataAccess.Concrete.EntityFramework;
+using Entities.Concrete;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Sinks.MSSqlServer;
 using Service.Mapping;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,9 +37,8 @@ builder.Services.AddScoped(provider =>
 
     return mapperConfiguration.CreateMapper();
 });
-builder.Services.AddDbContext<CaseFileContext>();
+builder.Services.AddDbContext<CasePilotContext>();
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
-// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opt =>
@@ -51,15 +57,13 @@ builder.Services.AddSwaggerGen(opt =>
         Scheme = "bearer"
     });
 
-    // Custom Header tanýmý (örneðin x-api-key)
     opt.AddSecurityDefinition("CustomHeader", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
-        Name = "x-api-key", // Header adý
+        Name = "x-api-key",
         Description = "Custom header for API key",
         Type = SecuritySchemeType.ApiKey
     });
-
 
     opt.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -76,17 +80,6 @@ builder.Services.AddSwaggerGen(opt =>
         }
     });
 });
-
-
-
-
-
-
-//Bu kod:JWT bearer authentication sistemini tanımlar.
-
-//app.UseAuthentication(); satırının işe yaraması için gerekli olan ayarları yapar.
-
-//JWT içeriğini appsettings.json dosyasından alır.
 
 builder.Services.AddAuthentication(options =>
 {
@@ -107,7 +100,12 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+Serilog.Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
 
+builder.Host.UseSerilog();
 
 builder.Host.UseServiceProviderFactory(services => new AutofacServiceProviderFactory()).
     ConfigureContainer<ContainerBuilder>(builder =>
@@ -119,7 +117,8 @@ builder.Services.AddCors(options =>
     .AllowAnyOrigin()
     .AllowAnyHeader()
     .AllowAnyMethod())
-);
+); 
+builder.Host.UseSerilog();
 builder.Services.Configure<FtpSettings>(builder.Configuration.GetSection("FtpSettings"));
 builder.Services.AddControllers();
 builder.Services.AddMemoryCache();
@@ -127,26 +126,16 @@ ServiceTool.Create(builder.Services);
 var app = builder.Build();
 
 app.UseCors();
-
-// HTTPS yönlendirmesini development ortamında devre dışı bırak
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
-//// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-
-//}
-
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Api v1");
 });
 app.UseCors();
-
-//app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 

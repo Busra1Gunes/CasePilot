@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfDistrictDal : EfEntityRepositoryBase<District, CaseFileContext>, IDistrictDal
+    public class EfDistrictDal : EfEntityRepositoryBase<District, CasePilotContext>, IDistrictDal
     {
-        public EfDistrictDal(CaseFileContext context) : base(context)
+        public EfDistrictDal(CasePilotContext context) : base(context)
         {
         }
     }

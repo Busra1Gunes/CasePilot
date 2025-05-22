@@ -35,8 +35,8 @@ namespace Business.Concrete
 			_mapper = mapper;
 			_tokenHelper = tokenHelper;
 		}
-		
-		[ValidationAspect(typeof(UserValidator))]
+       
+        [ValidationAspect(typeof(UserValidator))]
 		public async Task<IResult> Add(UserAddDto user)
 		{
 			User list = _mapper.Map<UserAddDto, User>(user);
