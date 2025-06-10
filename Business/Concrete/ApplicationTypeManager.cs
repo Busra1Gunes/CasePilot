@@ -4,6 +4,7 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
+using Entities.Dto.ApplicationTypeDto;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,15 +17,18 @@ namespace Business.Concrete
     public class ApplicationTypeManager : IApplicationTypeService
     {
         IApplicationTypeDal _applicationTypeDal;
-        readonly IMapper _mapper;
-        public ApplicationTypeManager(IApplicationTypeDal applicationTypeDal, IMapper mapper)
+        IMapper _mapper;
+        IUnitOfWork _unitOfWork;
+        public ApplicationTypeManager(IApplicationTypeDal applicationTypeDal, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _applicationTypeDal = applicationTypeDal;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
-        public async Task<IResult> Add(ApplicationType basvuruTur)
+        public async Task<IResult> Add(ApplicationTypeDto applicationType)
         {
-            await _applicationTypeDal.AddAsync(basvuruTur);
+            await _applicationTypeDal.AddAsync(_mapper.Map<ApplicationType>(applicationType));
+            _unitOfWork.SaveChangesAsync();
             return new SuccessResult();
         }
 

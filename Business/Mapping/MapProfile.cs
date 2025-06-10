@@ -3,6 +3,7 @@ using Core;
 
 using Entities.Concrete;
 using Entities.Dto.AddDto;
+using Entities.Dto.ApplicationTypeDto;
 using Entities.Dto.CaseFileDto;
 using Entities.Dto.DocumentDto;
 using Entities.Dto.DosyaDto;
@@ -92,6 +93,10 @@ namespace Service.Mapping
 
             CreateMap<City, CityListDto>().ReverseMap();
             CreateMap<District, DistrictListDto>().ReverseMap();
+
+
+
+            CreateMap<ApplicationType, ApplicationTypeDto>().ReverseMap();
 
         }
     }

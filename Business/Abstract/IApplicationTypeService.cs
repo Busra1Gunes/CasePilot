@@ -1,5 +1,6 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
+using Entities.Dto.ApplicationTypeDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Business.Abstract
     {
         Task<IDataResult<List<ApplicationType>>> GetAll();
         Task<IDataResult<ApplicationType>> Get(int applicationTypeID);
-        Task<IResult> Add(ApplicationType applicationType);
+        Task<IResult> Add(ApplicationTypeDto applicationType);
         Task<IResult> Update(ApplicationType applicationType);
     }
 }

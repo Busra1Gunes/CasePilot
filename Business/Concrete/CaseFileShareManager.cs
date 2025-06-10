@@ -32,6 +32,7 @@ namespace Business.Concrete
         {
             CaseFileShare? caseFileShareAdd = _mapper.Map<CaseFileShareAddDto, CaseFileShare>(caseFileShareAddDto);
             await _caseFileShareDal.AddAsync(caseFileShareAdd);
+            _unitOfWork.SaveChangesAsync();
             return new SuccessResult(CommonMessages.EntityAdded);
         }
 

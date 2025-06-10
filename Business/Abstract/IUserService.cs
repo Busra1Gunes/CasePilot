@@ -15,11 +15,11 @@ namespace Business.Abstract
     public interface IUserService : IService<User>
     {
         Task<object> GetAll();
-        Task<IDataResult<UserListDto>> GetById(int id);
-        Task<IResult> Add(UserAddDto kullanici);
+        Task<object> GetById(int id);
+        Task<IResult> Add(UserAddDto user);
         Task<IResult> DeleteById(int id);
         Task<IResult> UserExists(string email);
-        Task<IDataResult<AccessToken>> CreateAccessToken(User kullanici);
+        Task<IDataResult<AccessToken>> CreateAccessToken(User user);
 
     }
 }

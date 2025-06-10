@@ -24,9 +24,9 @@ namespace Business.Concrete
 {
 	public class CaseFileManager : ICaseFileService
 	{
-		readonly ICaseFileDal _caseFileDal;
-		readonly IMapper _mapper;
-		readonly IUnitOfWork _unitOfWork;
+        private ICaseFileDal _caseFileDal;
+        private IMapper _mapper;
+		private IUnitOfWork _unitOfWork;
 
 		public CaseFileManager(Lazy<ICaseFileDal> caseFileDal, IMapper mapper, IUnitOfWork unitOfWork)
 		{

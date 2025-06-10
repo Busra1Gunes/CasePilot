@@ -24,16 +24,18 @@ namespace Business.Concrete
 	public class UserManager :Manager<User>, IUserService
 	{
 		
-		IUserDal _userDal;
-		ITokenHelper _tokenHelper;
-		readonly IMapper _mapper;
+		private IUserDal _userDal;
+		private  ITokenHelper _tokenHelper;
+		private IMapper _mapper;
+        private IUnitOfWork _unitOfWork;
 
-		public UserManager(IUserDal userDal, IMapper mapper,ITokenHelper tokenHelper):base(userDal)
+        public UserManager(IUserDal userDal, IMapper mapper,ITokenHelper tokenHelper, IUnitOfWork unitOfWork):base(userDal)
 		{
 
             _userDal = userDal;
 			_mapper = mapper;
 			_tokenHelper = tokenHelper;
+			_unitOfWork = unitOfWork;
 		}
        
         [ValidationAspect(typeof(UserValidator))]
@@ -41,13 +43,16 @@ namespace Business.Concrete
 		{
 			User list = _mapper.Map<UserAddDto, User>(user);
             _userDal.AddAsync(list);
+			_unitOfWork.SaveChangesAsync();
 			return new SuccessResult(CommonMessages.EntityAdded);
 		}
-		public async Task<IDataResult<UserListDto>> GetById(int id)
+		public async Task<object> GetById(int id)
 		{
-			var user = _userDal.GetByIdAsync(id);
-			var list = _mapper.Map<UserListDto>(user);
-			return new SuccessDataResult<UserListDto>(list);
+			var user = _userDal.Where(u => u.ID.Equals(id))
+				.Include(i => i.City)
+				.Include(i => i.District).First();
+			
+			return (_mapper.Map<UserListDto>(user));
 		}
 		public async Task<object> GetAll()
 		{

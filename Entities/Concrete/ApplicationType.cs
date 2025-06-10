@@ -11,9 +11,6 @@ namespace Entities.Concrete
     {
         public int CaseTypeID { get; set; } 
         public string Name { get; set; } 
-
-
-        //public ICollection<Dosya> Dosyalar { get;set; }
-        //public DavaTur DavaTur { get; set; }
+       
     }
 }

@@ -20,17 +20,19 @@ namespace Business.Concrete
         ICaseFileDefendantDal _caseFileDefendantDal;
         IDefendantDal _defendantDal;
         IMapper _mapper;
+        IUnitOfWork _unitOfWork;
 
-        public CaseFileDefendantManager(ICaseFileDefendantDal caseFileDefendantDal, IMapper mapper, IDefendantDal defendantDal)
+        public CaseFileDefendantManager(ICaseFileDefendantDal caseFileDefendantDal, IMapper mapper, IDefendantDal defendantDal, IUnitOfWork unitOfWork)
         {
             _caseFileDefendantDal = caseFileDefendantDal;
             _mapper = mapper;
             _defendantDal = defendantDal;
-
+            _unitOfWork = unitOfWork;   
         }
         public async Task<IResult> Add(CaseFileDefendantAddDto caseFileDefendant)
         {
             await _caseFileDefendantDal.AddAsync(_mapper.Map<CaseFileDefendant>(caseFileDefendant));
+            _unitOfWork.SaveChangesAsync();
             return new SuccessResult();
         }
 

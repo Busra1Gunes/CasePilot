@@ -19,16 +19,19 @@ namespace Business.Concrete
     {      
         IDefendantDal _defendantDal;
         IMapper _mapper;
+        IUnitOfWork _unitOfWork;
 
-        public DefendantManager( IMapper mapper, IDefendantDal defendantDal)
+        public DefendantManager( IMapper mapper, IDefendantDal defendantDal,    IUnitOfWork unitOfWork)
         {          
             _mapper = mapper;
             _defendantDal = defendantDal;
+            _unitOfWork = unitOfWork;
 
         }
         public async Task<IResult> AddDefendat(DefendantAddDto defendantAddDto)
         {
             await _defendantDal.AddAsync(_mapper.Map<Defendant>(defendantAddDto));
+            _unitOfWork.SaveChangesAsync();
             return new SuccessResult();
         }
         public async  Task<IDataResult<List<DefendantListDto>>> GetAllDefendant()

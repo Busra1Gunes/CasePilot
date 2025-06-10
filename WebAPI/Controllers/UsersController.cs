@@ -27,12 +27,12 @@ namespace WebAPI.Controllers
             => Ok(await _userService.GetAll());
 
         [HttpGet]
-		public async Task<IActionResult> Get(int kullaniciId) 
-            => Ok(_userService.GetById(kullaniciId));
+		public async Task<IActionResult> Get(int userID) 
+            => Ok(_userService.GetById(userID).Result);
 
         [HttpPost]
-        public async Task<IActionResult> Add(UserAddDto kullanici) 
-            => Ok(await _userService.Add(kullanici));
+        public async Task<IActionResult> Add(UserAddDto user) 
+            => Ok(await _userService.Add(user));
 
         [AllowAnonymous]
         [HttpPost]

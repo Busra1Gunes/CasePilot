@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Entities.Dto.ApplicationTypeDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,7 @@ namespace WebAPI.Controllers
 
       
         [HttpPost]
-        public async Task<IActionResult> Add(ApplicationType applicationType) 
+        public async Task<IActionResult> Add(ApplicationTypeDto applicationType) 
             => Ok(await _applicationTypeService.Add(applicationType));
     }
 }

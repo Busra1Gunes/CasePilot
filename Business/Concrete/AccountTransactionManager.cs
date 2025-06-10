@@ -22,19 +22,22 @@ namespace Business.Concrete
 
     public class AccountTransactionManager : IAccountTransactionService
     {
-        readonly IMapper _mapper;
-        readonly IAccountTransactionDal _hesapHareketDal;
-        public AccountTransactionManager(IAccountTransactionDal hesapHareketDal, IMapper mapper)
+        private IMapper _mapper;
+        private IAccountTransactionDal _hesapHareketDal;
+        private IUnitOfWork _unitOfWork;
+        public AccountTransactionManager(IAccountTransactionDal hesapHareketDal, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _hesapHareketDal = hesapHareketDal;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
-        [ValidationAspect(typeof(AccountTransactionAddDtoValidator))]
+        //[ValidationAspect(typeof(AccountTransactionAddDtoValidator))]
         public  async Task<IResult> Add(AccountTransactionAddDto hareket)
         {
             var hesapHareket = _mapper.Map<AccountTransactionAddDto, AccountTransaction>(hareket);
             
             await _hesapHareketDal.AddAsync(hesapHareket);
+            _unitOfWork.SaveChangesAsync();
             return new SuccessResult("Hareket Kaydedildi");
         }
 
