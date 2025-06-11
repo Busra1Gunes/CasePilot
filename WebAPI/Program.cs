@@ -6,7 +6,6 @@ using Business.Abstract;
 using Business.Concrete;
 using Business.DependencyResolvers.Autofac;
 using Core.Aspects;
-
 using Core.FTP;
 using Core.Utilities.IoC;
 using DataAccess.Abstract;
@@ -121,7 +120,12 @@ builder.Services.AddCors(options =>
 builder.Host.UseSerilog();
 builder.Services.Configure<FtpSettings>(builder.Configuration.GetSection("FtpSettings"));
 builder.Services.AddControllers();
-builder.Services.AddMemoryCache();
+
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+	options.Configuration = builder.Configuration.GetConnectionString("Redis");
+});
 ServiceTool.Create(builder.Services);
 var app = builder.Build();
 

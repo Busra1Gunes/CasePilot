@@ -14,7 +14,6 @@ using Entities.Dto.KullaniciDto.KullaniciDto;
 using System.Security.Cryptography;
 using Entities.Dto;
 using Core.Utilities.Interceptors;
-using Core.Aspects.Autofac.Caching;
 using Core.Utilities.Messages;
 using Business.Constants.Messages;
 using Business.Constants.Messages.Entity;

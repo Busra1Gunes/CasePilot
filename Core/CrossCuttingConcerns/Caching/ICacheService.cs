@@ -8,7 +8,8 @@ namespace Core.CrossCuttingConcerns.Caching
 {
     public interface ICacheService
     {
-        T GetOrAdd<T>(string key, Func<T> getItemCallback, TimeSpan duration);
-        void Remove(string key);
-    }
+		Task<T> GetAsync<T>(string key);
+		Task SetAsync<T>(string key, T value, TimeSpan? expiry = null);
+		Task RemoveAsync(string key);
+	}
 }
