@@ -11,8 +11,8 @@ namespace Business.Abstract
 {
 	public interface ICaseFileService
 	{
-		Task<IDataResult<CaseFileDetailDto>> GetAll();
-		Task<IDataResult<CaseFileDetailDto>> GetAllByCaseTypeId(int ID);
+		Task<object> GetAll();
+        Task<object> GetAllByCaseTypeId(int ID);
 		Task<IDataResult<CaseFileDetailDto>> GetById(int caseFileID);
 		Task<IResult> Add(CaseFileAddDto caseFile);
 		Task<IResult> Update(CaseFileUpdateDto caseFile);

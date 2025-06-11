@@ -49,16 +49,16 @@ namespace Business.Concrete
 			return new SuccessResult(CommonMessages.EntityAdded);
 		}
 
-		public async Task<IDataResult<CaseFileDetailDto>> GetAll()
+		public async Task<object> GetAll()
 		{
 			List<CaseFile> list = _caseFileDal.GetAllQueryable()
 					.Include(d => d.CaseType)
 					.Include(b => b.ApplicationType)
 					.Include(i => i.City)
 					.Include(c => c.District).ToList();
-			return new SuccessDataResult<CaseFileDetailDto>(_mapper.Map<CaseFileDetailDto>(list));
-		}
-		public  async Task<IDataResult<CaseFileDetailDto>> GetAllByCaseTypeId(int id)
+            return _mapper.Map<List<CaseFileDetailDto>>(list);
+        }
+		public  async Task<object> GetAllByCaseTypeId(int id)
 		{
 			List<CaseFile> list = _caseFileDal.GetAllQueryable()
 				.Include(d => d.CaseType)
@@ -66,8 +66,8 @@ namespace Business.Concrete
 				.Include(i => i.City)
 				.Include(c => c.District).Where(s => s.CaseTypeID.Equals(id)).ToList();
 
-			return new SuccessDataResult<CaseFileDetailDto>(_mapper.Map<CaseFileDetailDto>(list));
-		}
+            return _mapper.Map<List<CaseFileDetailDto>>(list);
+        }
 
 		public async Task<IDataResult<CaseFileDetailDto>> GetById(int caseFileID)
 		{
