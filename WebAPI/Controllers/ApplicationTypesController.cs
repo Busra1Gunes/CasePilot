@@ -19,8 +19,8 @@ namespace WebAPI.Controllers
         }
        
         [HttpGet]
-        public async Task<IActionResult> GetAll() 
-            => Ok(await _applicationTypeService.GetAll());
+        public async Task<IActionResult> GetAll(int caseTypeID) 
+            => Ok(await _applicationTypeService.GetByCaseTypeID(caseTypeID));
 
        
         [HttpGet]

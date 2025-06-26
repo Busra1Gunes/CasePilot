@@ -32,10 +32,10 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        public async Task<IDataResult<List<ApplicationType>>> GetAll()
+        public async Task<IDataResult<List<ApplicationTypeDto>>> GetByCaseTypeID(int caseTypeID)
         {
-            List<ApplicationType> applicationTypes = await _applicationTypeDal.GetAllQueryable().ToListAsync();
-            return new SuccessDataResult<List<ApplicationType>>(applicationTypes);
+            List<ApplicationType> applicationTypes = await _applicationTypeDal.GetAllQueryable(a=>a.CaseTypeID.Equals(caseTypeID)).ToListAsync();
+            return new SuccessDataResult<List<ApplicationTypeDto>>(_mapper.Map<List<ApplicationTypeDto>>(applicationTypes));
         }
 
         public async Task<IDataResult<ApplicationType>> Get(int applicationTypeID)

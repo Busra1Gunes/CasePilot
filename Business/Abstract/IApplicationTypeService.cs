@@ -11,7 +11,7 @@ namespace Business.Abstract
 {
     public interface IApplicationTypeService
     {
-        Task<IDataResult<List<ApplicationType>>> GetAll();
+        Task<IDataResult<List<ApplicationTypeDto>>> GetByCaseTypeID(int caseTypeID);
         Task<IDataResult<ApplicationType>> Get(int applicationTypeID);
         Task<IResult> Add(ApplicationTypeDto applicationType);
         Task<IResult> Update(ApplicationType applicationType);
