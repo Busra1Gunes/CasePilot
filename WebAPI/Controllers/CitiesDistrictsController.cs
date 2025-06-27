@@ -17,11 +17,11 @@ namespace WebAPI.Controllers
     public class CitiesDistrictsController : ControllerBase
     {
         ICityDistrictService _cityDistrictService;
-        ICacheService _cacheService;
-        public CitiesDistrictsController(ICityDistrictService cityDistrictService,ICacheService cacheService)
+        //ICacheService _cacheService;
+        public CitiesDistrictsController(ICityDistrictService cityDistrictService/*,ICacheService cacheService*/)
         {
             _cityDistrictService = cityDistrictService;
-            _cacheService = cacheService;
+           // _cacheService = cacheService;
         }
 
         [HttpGet]
@@ -29,14 +29,14 @@ namespace WebAPI.Controllers
         {
 			string cacheKey = "cities_all";
 
-			var cachedData = await _cacheService.GetAsync<ApiResponse<List<CityListDto>>>(cacheKey);
-			if (cachedData != null)
-			{
-				return Ok(cachedData); // ✅ Cache'den geldi
-			}
+			//var cachedData = await _cacheService.GetAsync<ApiResponse<List<CityListDto>>>(cacheKey);
+			//if (cachedData != null)
+			//{
+			//	return Ok(cachedData); // ✅ Cache'den geldi
+			//}
 
 			var data = _cityDistrictService.GetAllCity(); // EF üzerinden veri çek
-			await _cacheService.SetAsync(cacheKey, data, TimeSpan.FromMinutes(10)); // cache'e yaz
+			//await _cacheService.SetAsync(cacheKey, data, TimeSpan.FromMinutes(10)); // cache'e yaz
 
 			return Ok(data); // ✅ DB'den geldi
 		}
