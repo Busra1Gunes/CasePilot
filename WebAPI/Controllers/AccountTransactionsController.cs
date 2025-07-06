@@ -8,28 +8,31 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]/[action]")]
-    [ApiController]
-    [Authorize]
-    public class AccountTransactionsController : ControllerBase
-    {
-        readonly IAccountTransactionService _hareketService;
-        public AccountTransactionsController(IAccountTransactionService hareketService)
-        {
-            _hareketService = hareketService;
-        }
-        [SwaggerOperation(Summary = "Maaş 1,Fatura 2, Kira 3, DosyaMasrafı 4, Transfer 5, Diğer 6")]
-        [HttpPost]
-        public async Task<IActionResult> Add(AccountTransactionAddDto hareket) 
-            => Ok(await _hareketService.Add(hareket));
-      
+	[Route("api/[controller]/[action]")]
+	[ApiController]
+	[Authorize]
+	public class AccountTransactionsController : ControllerBase
+	{
+		readonly IAccountTransactionService _hareketService;
+		public AccountTransactionsController(IAccountTransactionService hareketService)
+		{
+			_hareketService = hareketService;
+		}
+		[SwaggerOperation(Summary = "Maaş 1,Fatura 2, Kira 3, DosyaMasrafı 4, Transfer 5, Diğer 6")]
+		[HttpPost]
+		public async Task<IActionResult> Add(AccountTransactionAddDto hareket)
+			=> Ok(await _hareketService.Add(hareket));
 
 
-        [HttpGet]
-        public async Task<IActionResult> Get(int userID) 
-            => Ok(await _hareketService.GetAllByUserID(userID));
+
+		[HttpGet]
+		public async Task<IActionResult> Get(int userID)
+			=> Ok(await _hareketService.GetAllByUserID(userID));
+
+		[HttpGet]
+		public async Task<IActionResult> GetByCaseFileID(int caseFileID)
+	        => Ok(await _hareketService.GetAllByCaseFileID(caseFileID));
 
 
-    }
+	}
 }
-    

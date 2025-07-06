@@ -13,7 +13,8 @@ namespace Business.Abstract
     public interface IAccountTransactionService
     {
         Task<IDataResult<List<AccountTransaction>>> GetAll();
-        Task<IDataResult<AccountTransactionListDto>> GetAllByUserID(int userID);
+        Task<IDataResult<AccountTransactionListDto>> GetAllByUserID(int userID);  
+        Task<IDataResult<AccountTransactionListDto>> GetAllByCaseFileID(int caseFileID);
 		Task<IDataResult<AccountTransaction>> GetById(int transactionID);
         Task<IResult> Add(AccountTransactionAddDto accountTransactionAddDto);
 		Task<IResult> Update(AccountTransaction transaction);
