@@ -24,12 +24,11 @@ namespace WebAPI.Controllers
 			=> Ok(await _hareketService.Add(hareket));
 
 
-
 		[HttpGet]
 		public async Task<IActionResult> Get(int userID)
 			=> Ok(await _hareketService.GetAllByUserID(userID));
 
-		[HttpGet]
+    	[HttpGet]
 		public async Task<IActionResult> GetByCaseFileID(int caseFileID)
 	        => Ok(await _hareketService.GetAllByCaseFileID(caseFileID));
 
