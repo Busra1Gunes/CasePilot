@@ -18,6 +18,7 @@ using Core.Utilities.Messages;
 using Business.Constants.Messages;
 using Business.Constants.Messages.Entity;
 using Business.Exceptions.CaseFile;
+using Entities.Dto.CaseFileDto;
 
 namespace Business.Concrete
 {
@@ -48,14 +49,31 @@ namespace Business.Concrete
 			return new SuccessResult(CommonMessages.EntityAdded);
 		}
 
-		public async Task<object> GetAll()
+        public async Task<IResult> Delete(int caseFileID)
+        {
+           CaseFile? caseFiles = _caseFileDal.Where(d => d.ID == caseFileID && d.Status.Equals(true)).SingleOrDefault();
+
+			if (caseFiles == null)
+				throw new InvalidCaseFileException();
+
+		
+			caseFiles.DeletedDate = DateTime.Now;
+			caseFiles.Status=false;
+			 _caseFileDal.Update(caseFiles);
+
+			await _unitOfWork.SaveChangesAsync();
+
+			return new SuccessResult(CommonMessages.EntityDeleted);
+        }
+
+        public async Task<object> GetAll()
 		{
 			List<CaseFile> list = _caseFileDal.GetAllQueryable()
 					.Include(d => d.CaseType)
 					.Include(b => b.ApplicationType)
 					.Include(i => i.City)
-					.Include(c => c.District).ToList();
-            return _mapper.Map<List<CaseFileDetailDto>>(list);
+					.Include(c => c.District).Where(c=>c.Status.Equals(true)).ToList();
+            return _mapper.Map<List<CaseFileListDto>>(list);
         }
 		public  async Task<object> GetAllByCaseTypeId(int id)
 		{
@@ -63,7 +81,7 @@ namespace Business.Concrete
 				.Include(d => d.CaseType)
 				.Include(b => b.ApplicationType)
 				.Include(i => i.City)
-				.Include(c => c.District).Where(s => s.CaseTypeID.Equals(id)).ToList();
+				.Include(c => c.District).Where(s => s.CaseTypeID.Equals(id) && s.Status.Equals(true)).ToList();
 
             return _mapper.Map<List<CaseFileDetailDto>>(list);
         }
@@ -71,7 +89,7 @@ namespace Business.Concrete
 		public async Task<IDataResult<CaseFileDetailDto>> GetById(int caseFileID)
 		{
 
-			CaseFile? caseFile = _caseFileDal.Where(k => k.ID == caseFileID)
+			CaseFile? caseFile = _caseFileDal.Where(k => k.ID == caseFileID && k.Status.Equals(true))
 				.Include(d => d.CaseType)
 				.Include(b => b.ApplicationType)
 				.Include(i => i.City)
@@ -87,9 +105,9 @@ namespace Business.Concrete
 			return new SuccessDataResult<CaseFileDetailDto>(_mapper.Map<CaseFileDetailDto>(caseFile), CommonMessages.EntityListed);
 		}
 
-		public async Task<IResult> Update(CaseFileUpdateDto caseFileUpdate)
+		public async Task<IResult> Update(int caseFileID, CaseFileUpdateDto caseFileUpdate)
 		{
-			CaseFile? caseFiles = _caseFileDal.Where(d => d.ID == caseFileUpdate.ID).SingleOrDefault();
+			CaseFile? caseFiles = _caseFileDal.Where(d => d.ID == caseFileID && d.Status.Equals(true)).SingleOrDefault();
 
 			if (caseFiles == null)
 				throw new InvalidCaseFileException();

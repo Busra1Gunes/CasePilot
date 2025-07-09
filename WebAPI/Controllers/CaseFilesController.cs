@@ -41,8 +41,12 @@ namespace WebAPI.Controllers
        
       
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] CaseFileUpdateDto caseFileUpdate)     
-            =>Ok(await _caseFileService.Update(caseFileUpdate));
-      
+        public async Task<IActionResult> Update(int caseFileID, [FromBody] CaseFileUpdateDto caseFileUpdate)     
+            =>Ok(await _caseFileService.Update(caseFileID, caseFileUpdate));
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int caseFileID)
+          => Ok(await _caseFileService.Delete(caseFileID));
+
     }
 }

@@ -15,7 +15,8 @@ namespace Business.Abstract
         Task<object> GetAllByCaseTypeId(int ID);
 		Task<IDataResult<CaseFileDetailDto>> GetById(int caseFileID);
 		Task<IResult> Add(CaseFileAddDto caseFile);
-		Task<IResult> Update(CaseFileUpdateDto caseFile);
+		Task<IResult> Update(int caseFileID, CaseFileUpdateDto caseFile);
+        Task<IResult> Delete(int caseFileID);
 
-	}
+    }
 }

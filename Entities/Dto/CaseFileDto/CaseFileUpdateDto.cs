@@ -8,7 +8,7 @@ namespace Entities.Dto.DosyaDto
 {
     public class CaseFileUpdateDto:CaseFileAddDto
     {
-        public int ID { get; set; }
+       
        
     }
 }

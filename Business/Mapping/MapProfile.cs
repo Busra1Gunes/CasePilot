@@ -42,7 +42,15 @@ namespace Service.Mapping
         .ForMember(dest => dest.applicationTypeID, opt => opt.MapFrom(x => x.ApplicationType.ID))
         .ReverseMap();
 
-			CreateMap<CaseFileDocument, CaseFileDocumentListDto>()
+
+         CreateMap<CaseFile, CaseFileListDto>()
+        .ForMember(dest => dest.City, opt => opt.MapFrom(x => x.City.Name))
+        .ForMember(dest => dest.District, opt => opt.MapFrom(x => x.District.Name))
+        .ForMember(dest => dest.CaseType, opt => opt.MapFrom(x => x.CaseType.Name))  
+        .ForMember(dest => dest.ApplicationType, opt => opt.MapFrom(x => x.ApplicationType.Name))
+        .ReverseMap();
+
+            CreateMap<CaseFileDocument, CaseFileDocumentListDto>()
 	   .ForMember(dest => dest.CaseFile, opt => opt.MapFrom(x => x.CaseFile.Name+" "+x.CaseFile.Surname))
 	   .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(x => x.DocumentType.Name))
 	   .ReverseMap();
