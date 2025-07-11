@@ -1,44 +1,58 @@
 ﻿using Autofac;
-using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
-using Business.Abstract;
-using Business.Concrete;
 using Business.DependencyResolvers.Autofac;
-using Core.Aspects;
 using Core.FTP;
 using Core.Utilities.IoC;
-using DataAccess.Abstract;
 using DataAccess.Concrete;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Serilog.Sinks.MSSqlServer;
 using Service.Mapping;
-using System.Collections.ObjectModel;
-using System.Data;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Serilog
+builder.Host.UseSerilog((context, config) =>
+{
+    config.ReadFrom.Configuration(context.Configuration);
+});
+
+// Autofac
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+    .ConfigureContainer<ContainerBuilder>(containerBuilder =>
+    {
+        containerBuilder.RegisterModule(new AutofacBusinessModule());
+    });
+
+// Services
+builder.Services.AddDbContext<CasePilotContext>();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddControllers();
+builder.Services.Configure<FtpSettings>(builder.Configuration.GetSection("FtpSettings"));
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+});
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+
+// AutoMapper (profil bağımlı)
 builder.Services.AddScoped(provider =>
 {
     var httpContextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
-    var mapperConfiguration = new MapperConfiguration(cfg =>
+    var config = new MapperConfiguration(cfg =>
     {
         cfg.AddProfile(new MapProfile(httpContextAccessor));
     });
-
-    return mapperConfiguration.CreateMapper();
+    return config.CreateMapper();
 });
-builder.Services.AddDbContext<CasePilotContext>();
-builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
-builder.Services.AddControllers();
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opt =>
 {
@@ -71,15 +85,16 @@ builder.Services.AddSwaggerGen(opt =>
             {
                 Reference = new OpenApiReference
                 {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
                 }
             },
-            new string[]{}
+            new string[] {}
         }
     });
 });
 
+// JWT Authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -99,54 +114,52 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-Serilog.Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .CreateLogger();
-
-builder.Host.UseSerilog();
-
-builder.Host.UseServiceProviderFactory(services => new AutofacServiceProviderFactory()).
-    ConfigureContainer<ContainerBuilder>(builder =>
-    {
-        builder.RegisterModule(new AutofacBusinessModule());
-    });
+// CORS: Geliştirme/test ortamı için herkese izinli
 builder.Services.AddCors(options =>
-    options.AddDefaultPolicy(policy => policy
-    .AllowAnyOrigin()
-    .AllowAnyHeader()
-    .AllowAnyMethod())
-); 
-builder.Host.UseSerilog();
-builder.Services.Configure<FtpSettings>(builder.Configuration.GetSection("FtpSettings"));
-builder.Services.AddControllers();
-
-
-builder.Services.AddStackExchangeRedisCache(options =>
 {
-	options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
 });
+
+// IoC
 ServiceTool.Create(builder.Services);
+
 var app = builder.Build();
 
-app.UseCors();
+// 🌐 Middleware Sırası Çok Önemli
+
+// CORS önce routing'e göre devreye alınmalı
+app.UseRouting();
+app.UseCors("AllowAll");
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
+
+// Swagger
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Api v1");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1");
 });
-app.UseCors();
 
+// Statik dosyalar
 app.UseStaticFiles();
 
+// Kimlik Doğrulama ve Yetkilendirme
 app.UseAuthentication();
-
 app.UseAuthorization();
 
-app.MapControllers();
+// Routing - controller endpointleri
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();

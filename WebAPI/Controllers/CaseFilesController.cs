@@ -34,7 +34,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetAll() 
             => Ok(await _caseFileService.GetAll());
 
-
+        
         [HttpGet]
         public async Task<IActionResult> GetByCaseTypeID(int caseTypeID) 
             => Ok(await _caseFileService.GetAllByCaseTypeId(caseTypeID));
