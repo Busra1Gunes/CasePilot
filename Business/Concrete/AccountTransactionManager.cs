@@ -20,12 +20,12 @@ using System.Threading.Tasks;
 namespace Business.Concrete
 {
 
-	public class AccountTransactionManager : IAccountTransactionService
+	public class AccountTransactionManager :Manager<AccountTransaction>, IAccountTransactionService
 	{
 		private IMapper _mapper;
 		private IAccountTransactionDal _hesapHareketDal;
 		private IUnitOfWork _unitOfWork;
-		public AccountTransactionManager(IAccountTransactionDal hesapHareketDal, IMapper mapper, IUnitOfWork unitOfWork)
+		public AccountTransactionManager(IAccountTransactionDal hesapHareketDal, IMapper mapper, IUnitOfWork unitOfWork):base(hesapHareketDal)
 		{
 			_hesapHareketDal = hesapHareketDal;
 			_mapper = mapper;

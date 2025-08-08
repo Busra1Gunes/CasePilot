@@ -65,7 +65,7 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<CityDistrictManager>().As<ICityDistrictService>().InstancePerLifetimeScope();
 
             builder.RegisterType<CasePilotContext>().AsSelf().InstancePerLifetimeScope();
-
+            builder.RegisterType<MainManager>().As<IMainService>().InstancePerLifetimeScope();
 
 
 

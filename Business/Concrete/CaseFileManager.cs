@@ -22,15 +22,15 @@ using Entities.Dto.CaseFileDto;
 
 namespace Business.Concrete
 {
-	public class CaseFileManager : ICaseFileService
-	{
+	public class CaseFileManager : Manager<CaseFile>, ICaseFileService
+    {
         private ICaseFileDal _caseFileDal;
         private IMapper _mapper;
 		private IUnitOfWork _unitOfWork;
 
-		public CaseFileManager(Lazy<ICaseFileDal> caseFileDal, IMapper mapper, IUnitOfWork unitOfWork)
-		{
-			_caseFileDal = caseFileDal.Value;
+		public CaseFileManager(ICaseFileDal caseFileDal, IMapper mapper, IUnitOfWork unitOfWork) : base(caseFileDal)
+        {
+			_caseFileDal = caseFileDal;
 			_mapper = mapper;
 			_unitOfWork = unitOfWork;
 		}
@@ -42,7 +42,7 @@ namespace Business.Concrete
                 throw new IdentyNumberAlreadyExistsException();
     
                 caseFileAdd.OpeningDate = DateTime.Now;
-			caseFileAdd.CaseStatus = 0;
+			caseFileAdd.Status = true;
 
 			await _caseFileDal.AddAsync(caseFileAdd);
 			await _unitOfWork.SaveChangesAsync();

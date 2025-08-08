@@ -2,6 +2,7 @@
 using Core.DataAccess;
 using Core.Entities;
 using Core.Utilities.Results;
+using DataAccess.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,10 @@ namespace Business.Concrete
         public Manager(IEntityRepository<TEntity> repository)
         {
             _repository = repository;
+        }
+
+        public Manager(Lazy<ICaseFileDal> caseFileDal)
+        {
         }
 
         public async Task<IDataResult<TEntity>> AddAsync(TEntity entity)

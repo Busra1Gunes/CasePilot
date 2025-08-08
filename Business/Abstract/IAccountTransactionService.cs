@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public interface IAccountTransactionService
+    public interface IAccountTransactionService:IService<AccountTransaction>
     {
         Task<IDataResult<List<AccountTransaction>>> GetAll();
         Task<IDataResult<AccountTransactionListDto>> GetAllByUserID(int userID);  

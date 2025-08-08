@@ -152,6 +152,7 @@ app.UseSwaggerUI(c =>
 // Statik dosyalar
 app.UseStaticFiles();
 
+
 // Kimlik Doğrulama ve Yetkilendirme
 app.UseAuthentication();
 app.UseAuthorization();

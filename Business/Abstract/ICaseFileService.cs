@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-	public interface ICaseFileService
+	public interface ICaseFileService:IService<CaseFile>
 	{
 		Task<object> GetAll();
         Task<object> GetAllByCaseTypeId(int ID);
