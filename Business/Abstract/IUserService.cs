@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Business.Utilities.Security;
+using Microsoft.AspNetCore.Http;
 
 namespace Business.Abstract
 {
@@ -20,6 +21,7 @@ namespace Business.Abstract
         Task<IResult> DeleteById(int id);
         Task<IResult> UserExists(string email);
         Task<IDataResult<AccessToken>> CreateAccessToken(User user);
+        Task<IResult> AddFromExcel(IFormFile file);
 
     }
 }

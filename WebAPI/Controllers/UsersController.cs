@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using System.ComponentModel;
 
 namespace WebAPI.Controllers
 {
@@ -38,6 +39,11 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(UserLoginDto userLoginDto) 
             =>Ok(await _authService.Login(userLoginDto));
-               
+
+        [HttpPost]
+        public async Task<IActionResult> UploadExcel(IFormFile file)
+       => Ok(await _userService.AddFromExcel(file));
+
+
     }
 }
