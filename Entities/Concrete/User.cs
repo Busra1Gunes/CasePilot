@@ -23,8 +23,6 @@ namespace Entities.Concrete
 
         public ICollection<AccountTransaction> HesapHareket1 { get; set; } = new List<AccountTransaction>();
         public ICollection<AccountTransaction> HesapHareket2 { get; set; } = new List<AccountTransaction>();
-
-
-
+        public ICollection<UserRole> UserRoles { get; set; }
     }
 }

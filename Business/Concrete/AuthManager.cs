@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Serilog;
 
 using Log = Serilog.Log;
+using Microsoft.EntityFrameworkCore;
 
 namespace Business.Concrete
 {
@@ -25,15 +26,19 @@ namespace Business.Concrete
             _userService = userService;
             _mapper = mapper;
         }
-        
+
         public async Task<IDataResult<AccessToken>> Login(UserLoginDto userLoginDto)
         {
             // Kullanıcı adı ve şifre açıkça loglanıyor
             Log.Information("Giriş denemesi yapıldı → Kullanıcı Adı: {UserName}", userLoginDto.UserName, userLoginDto.Password);
 
-            User? user = _userService
-                .Where(k => k.UserName == userLoginDto.UserName && k.Password == userLoginDto.Password)
-                .FirstOrDefault();
+            var user = _userService
+                       .Where(u => u.UserName == userLoginDto.UserName && u.Password == userLoginDto.Password)
+                       .Include(u => u.UserRoles)
+                       .ThenInclude(ur => ur.Role)
+                       .ThenInclude(r => r.RolePermissions)
+                       .ThenInclude(rp => rp.Permission)
+                       .FirstOrDefault();
 
             if (user != null)
             {

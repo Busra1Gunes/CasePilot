@@ -80,7 +80,17 @@ namespace Business.Concrete
         public async Task<IDataResult<AccessToken>> CreateAccessToken(User user)
         {
 
+            // Kullanıcının rollerini ve yetkilerini çek
+            var roles = user.UserRoles?.Select(ur => ur.Role).ToList() ?? new List<Role>();
+            var permissions = roles
+                .SelectMany(r => r.RolePermissions)
+                .Select(rp => rp.Permission.Name)
+                .Distinct()
+                .ToList();
+
+            // Token helper'ı kullanarak token oluştur
             var accessToken = _tokenHelper.CreateToken(user);
+
             return new SuccessDataResult<AccessToken>(accessToken);
         }
 

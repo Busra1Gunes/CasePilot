@@ -11,5 +11,7 @@ namespace Business.Utilities.Security
     {
         public string Token { get; set; }
         public DateTime Expiration { get; set; } 
+
+        public string Permissions { get; set; }
     }
 }

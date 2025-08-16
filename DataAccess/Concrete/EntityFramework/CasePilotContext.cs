@@ -51,6 +51,9 @@ namespace DataAccess.Concrete.EntityFramework
 		DbSet<CaseFileShare> CaseFileShares { get; set; }
 		DbSet<CaseFileDefendant> CaseFileDefendant { get; set; }
         DbSet<AccountTransaction> AccountTransactions { get; set; }
-    //    DbSet<Log> Logs { get; set; }
+        DbSet<Permissions> Permissions { get; set; }
+        DbSet<Role> Roles { get; set; }
+        DbSet<RolePermission> RolePermissions { get; set; }
+        DbSet<UserRole> UserRoles { get; set; }
     }
 }

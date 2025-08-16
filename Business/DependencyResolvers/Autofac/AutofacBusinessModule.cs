@@ -68,6 +68,8 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<MainManager>().As<IMainService>().InstancePerLifetimeScope();
 
 
+            builder.RegisterType<RoleManager>().As<IRoleService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfRoleDal>().As<IRoleDal>().InstancePerLifetimeScope();
 
             //Bu C# kodu, Dependency Injection (Bağımlılık Enjeksiyonu) işlemi için kullanılan bir yapılandırmadır
             //ve genellikle Autofac gibi bir Inversion of Control (IoC) konteyneri kullanılarak gerçekleştirilir. Kodun amacı,
