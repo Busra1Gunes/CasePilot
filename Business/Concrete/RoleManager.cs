@@ -1,63 +1,71 @@
-﻿using Business.Abstract;
+﻿using AutoMapper;
+using Business.Abstract;
+using Business.Constants.Messages;
+using Business.Exceptions.CaseFile;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
+using Entities.Dto.DosyaDto;
+using Entities.Dto.RoleDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class RoleManager:IRoleService
+    public class RoleManager : IRoleService
     {
         private readonly IRoleDal _roleDal;
-      
+        private readonly IMapper _mapper;
 
-        public RoleManager(IRoleDal roleDal)
+
+        public RoleManager(IRoleDal roleDal, IMapper mapper)
         {
             _roleDal = roleDal;
+            _mapper = mapper;
+
         }
 
         public async Task<List<Role>> GetAllRolesAsync()
         {
-            return await _roleDal.GetAllAsync();
+            return await _roleDal.GetAllAsync(r=>r.Status.Equals(true));
         }
 
         public async Task<Role> GetRoleByIdAsync(int id)
         {
-            return await _roleDal.GetByIdAsync(id);
+            return await _roleDal.GetAsync(z => z.Status.Equals(true) && z.ID.Equals(id));
         }
 
-        public async Task<Role> CreateRoleAsync(string name, List<int> permissionIds)
+        public async Task<IResult> CreateRoleAsync(CreateRoleDto createRoleDto)
         {
-            var role = new Role { Name = name };
+            Role role = _mapper.Map<CreateRoleDto, Role>(createRoleDto);
 
-            role.RolePermissions = permissionIds.Select(pid => new RolePermission
-            {
-                PermissionID = pid
-            }).ToList();
+            if (_roleDal.Where(k => k.Name == createRoleDto.Name).Any())
+                return new ErrorResult("");
+
+            role.CreatedDate = DateTime.Now;
+            role.Status = true;
 
             await _roleDal.AddAsync(role);
-            return role;
+          
+            return new SuccessResult(CommonMessages.EntityAdded);
         }
 
-        public async  Task<Role> UpdateRoleAsync(int id, string name, List<int> permissionIds)
+        public async Task<IResult> UpdateRoleAsync(int id, CreateRoleDto createRoleDto)
         {
-            var role =await  _roleDal.GetByIdAsync(id);
-            if (role == null) return null;
+            Role? role = _roleDal.Where(d => d.Name == createRoleDto.Name && d.Status.Equals(true)).SingleOrDefault();
 
-            role.Name = name;
-            role.RolePermissions.Clear();
+            if (role == null)
+                throw new InvalidCaseFileException();
+            _mapper.Map(createRoleDto, role);
+            role.UpdatedDate = DateTime.Now;
+            _roleDal.Update(role);
 
-            role.RolePermissions = permissionIds.Select(pid => new RolePermission
-            {
-                RoleID = id,
-                PermissionID = pid
-            }).ToList();
-
-             _roleDal.Update(role);
-            return role;
+            return new SuccessResult(CommonMessages.EntityUpdated);
         }
 
         public async Task<bool> DeleteRoleAsync(int id)
@@ -65,7 +73,7 @@ namespace Business.Concrete
             var role = await _roleDal.GetByIdAsync(id);
             if (role == null) return false;
 
-             _roleDal.Remove(role);
+            _roleDal.Remove(role);
             return true;
         }
     }

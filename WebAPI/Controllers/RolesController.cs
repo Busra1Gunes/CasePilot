@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Entities.Concrete;
 using Entities.Dto.RoleDto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,39 +19,25 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
-        {
-            return Ok(await _roleService.GetAllRolesAsync());
-        }
+            => Ok(await _roleService.GetAllRolesAsync());
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
-        {
-            var role = await _roleService.GetRoleByIdAsync(id);
-            if (role == null) return NotFound();
-            return Ok(role);
-        }
+            => Ok(await _roleService.GetRoleByIdAsync(id));
+
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateRoleDto dto)
-        {
-            var role = await _roleService.CreateRoleAsync(dto.Name, dto.PermissionIDs);
-            return CreatedAtAction(nameof(Get), new { id = role.ID }, role);
-        }
+            => Ok(await _roleService.CreateRoleAsync(dto));
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateRoleDto dto)
-        {
-            var role = await _roleService.UpdateRoleAsync(id, dto.Name, dto.PermissionIDs);
-            if (role == null) return NotFound();
-            return Ok(role);
-        }
+        public async Task<IActionResult> Update(int id, [FromBody] CreateRoleDto dto)
+            => Ok(await _roleService.UpdateRoleAsync(id, dto));
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
-        {
-            var deleted = await _roleService.DeleteRoleAsync(id);
-            if (!deleted) return NotFound();
-            return NoContent();
-        }
+            => Ok(await _roleService.DeleteRoleAsync(id));
+
     }
 }

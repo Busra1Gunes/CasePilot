@@ -9,6 +9,6 @@ namespace Entities.Dto.RoleDto
     public class CreateRoleDto
     {
         public string Name { get; set; }
-        public List<int> PermissionIDs { get; set; }
+        public string Description { get; set; }
     }
 }

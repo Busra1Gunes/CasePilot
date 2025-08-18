@@ -1,4 +1,6 @@
-﻿using Entities.Concrete;
+﻿using Core.Utilities.Results;
+using Entities.Concrete;
+using Entities.Dto.RoleDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +13,8 @@ namespace Business.Abstract
     {
         Task<List<Role>> GetAllRolesAsync();
         Task<Role> GetRoleByIdAsync(int id);
-        Task<Role> CreateRoleAsync(string name, List<int> permissionIds);
-        Task<Role> UpdateRoleAsync(int id, string name, List<int> permissionIds);
+        Task<IResult> CreateRoleAsync(CreateRoleDto createRoleDto);
+        Task<IResult> UpdateRoleAsync(int id, CreateRoleDto createRoleDto);
         Task<bool> DeleteRoleAsync(int id);
     }
 }
