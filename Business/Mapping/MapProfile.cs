@@ -12,6 +12,7 @@ using Entities.Dto.HesapHareketDto;
 using Entities.Dto.KullaniciDto;
 using Entities.Dto.KullaniciDto.KullaniciDto;
 using Entities.Dto.ListDto;
+using Entities.Dto.PermissionDto;
 using Entities.Dto.RoleDto;
 using Entities.Enums;
 using Microsoft.AspNetCore.Http;
@@ -115,6 +116,9 @@ namespace Service.Mapping
 
             CreateMap<Role, CreateRoleDto>().ReverseMap();
 
+            CreateMap<Permissions, PermissionAddDto>().ReverseMap();
+
+            CreateMap<RolePermission, RolePermissionAddDto>().ReverseMap();
         }
     }
 }

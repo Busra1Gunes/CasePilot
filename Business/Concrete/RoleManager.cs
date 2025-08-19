@@ -21,13 +21,14 @@ namespace Business.Concrete
     {
         private readonly IRoleDal _roleDal;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
 
-        public RoleManager(IRoleDal roleDal, IMapper mapper)
+        public RoleManager(IRoleDal roleDal, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _roleDal = roleDal;
             _mapper = mapper;
-
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<List<Role>> GetAllRolesAsync()
@@ -51,7 +52,7 @@ namespace Business.Concrete
             role.Status = true;
 
             await _roleDal.AddAsync(role);
-          
+            await _unitOfWork.SaveChangesAsync();
             return new SuccessResult(CommonMessages.EntityAdded);
         }
 
@@ -64,7 +65,7 @@ namespace Business.Concrete
             _mapper.Map(createRoleDto, role);
             role.UpdatedDate = DateTime.Now;
             _roleDal.Update(role);
-
+            await _unitOfWork.SaveChangesAsync();
             return new SuccessResult(CommonMessages.EntityUpdated);
         }
 
