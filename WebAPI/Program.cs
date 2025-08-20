@@ -70,13 +70,7 @@ builder.Services.AddSwaggerGen(opt =>
         Scheme = "bearer"
     });
 
-    opt.AddSecurityDefinition("CustomHeader", new OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Name = "x-api-key",
-        Description = "Custom header for API key",
-        Type = SecuritySchemeType.ApiKey
-    });
+
 
     opt.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
