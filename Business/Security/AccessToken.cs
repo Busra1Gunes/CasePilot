@@ -10,8 +10,8 @@ namespace Business.Utilities.Security
                               //isteği gönderirken bir token'a ihtiyacı vardır. Bu classta da, o token'da olması gereken değerler var.
     {
         public string Token { get; set; }
-        public DateTime Expiration { get; set; } 
+        public DateTime Expiration { get; set; }
 
-        public string Permissions { get; set; }
-    }
+		public  List<string> Permissions { get; set; }   // bunu eklemen lazım { get; set; }
+	}
 }

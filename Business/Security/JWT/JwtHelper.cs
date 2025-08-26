@@ -12,97 +12,104 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Business.Utilities.Security.JWT
 {
-    public class JwtHelper : ITokenHelper
-    {
-        public IConfiguration Configuration { get; }
-        private TokenOptions _tokenOptions;
-        private DateTime _accessTokenExpiration;
+	public class JwtHelper : ITokenHelper
+	{
+		public IConfiguration Configuration { get; }
+		private TokenOptions _tokenOptions;
+		private DateTime _accessTokenExpiration;
 
-        public JwtHelper(IConfiguration configuration)
-        {
-            Configuration = configuration;
-            _tokenOptions = Configuration.GetSection("JWT").Get<TokenOptions>();
-        }
+		public JwtHelper(IConfiguration configuration)
+		{
+			Configuration = configuration;
+			_tokenOptions = Configuration.GetSection("JWT").Get<TokenOptions>();
+		}
 
-        public AccessToken CreateToken(User user)
-        {
-            _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
-            var securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey);
-            var signingCredentials = SigningCredentialsHelper.CreateSigningCredentials(securityKey);
+		public AccessToken CreateToken(User user, List<Permissions> permissions)
+		{
+			_accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
+			var securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey);
+			var signingCredentials = SigningCredentialsHelper.CreateSigningCredentials(securityKey);
 
-            var jwt = CreateJwtSecurityToken(_tokenOptions, user, signingCredentials);
+			var jwt = CreateJwtSecurityToken(_tokenOptions, user, permissions, signingCredentials);
+			var tokenHandler = new JwtSecurityTokenHandler();
+			var token = tokenHandler.WriteToken(jwt);
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.WriteToken(jwt);
-            // Yetkileri buradan toplayalım
-            var permissions = user.UserRoles?
-                .Where(ur => ur.Role != null)
-                .SelectMany(ur => ur.Role.RolePermissions ?? new List<RolePermission>())
-                .Where(rp => rp.Permission != null)
-                .Select(rp => rp.Permission.Name)
-                .Distinct()
-                .ToList() ?? new List<string>();
+			return new AccessToken
+			{
+				Token = token,
+				Expiration = _accessTokenExpiration,
+				Permissions = permissions.Select(p => p.Code).ToList() // burada ekle
+			};
+		}
 
-            return new AccessToken
-            {
-                Token = token,
-                Expiration = _accessTokenExpiration,
-                Permissions= string.Join(",", permissions)
-            };
-        }
+		private JwtSecurityToken CreateJwtSecurityToken(TokenOptions tokenOptions, User user, List<Permissions> permissions, SigningCredentials signingCredentials)
+		{
+			var claims = new List<Claim>
+	{
+		new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()),
+		new Claim(ClaimTypes.Name, user.UserName),
+		new Claim(ClaimTypes.Role, user.Role?.Name ?? "")
+	};
 
-        public JwtSecurityToken CreateJwtSecurityToken(TokenOptions tokenOptions, User user,
-            SigningCredentials signingCredentials)
-        {
-            return new JwtSecurityToken(
-                issuer: tokenOptions.Issuer,
-                audience: tokenOptions.Audience,
-                expires: _accessTokenExpiration,
-                notBefore: DateTime.Now,
-                claims: SetClaims(user),
-                signingCredentials: signingCredentials
-            );
-        }
+			// Permission’ları JSON olarak ekle
+			var permissionCodes = permissions.Select(p => p.Code).ToList();
+			var permissionJson = JsonConvert.SerializeObject(permissionCodes);
 
-        private IEnumerable<Claim> SetClaims(User user)
-        {
-            var claims = new List<Claim>();
+			// Permission’ları ekle
+			claims.Add(new Claim("permissions", permissionJson));
 
-            // Temel bilgiler
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()));
-            claims.Add(new Claim(ClaimTypes.Email, user.Mail ?? ""));
-            claims.Add(new Claim(ClaimTypes.Name, $"{user.Name} {user.Surname}"));
+			var jwt = new JwtSecurityToken(
+		issuer: tokenOptions.Issuer,
+		audience: tokenOptions.Audience,
+		claims: claims,
+		notBefore: DateTime.Now,
+		expires: _accessTokenExpiration,
+		signingCredentials: signingCredentials
+	);
 
-            // Roller ve yetkiler
-            if (user.UserRoles != null)
-            {
-                // Roller
-                var roles = user.UserRoles
-                    .Where(ur => ur.Role != null)
-                    .Select(ur => ur.Role.Name)
-                    .Distinct()
-                    .ToList();
+			return jwt;
+		}
 
-                foreach (var role in roles)
-                    claims.Add(new Claim(ClaimTypes.Role, role));
+		private IEnumerable<Claim> SetClaims(User user)
+		{
+			var claims = new List<Claim>();
 
-                // Yetkiler
-                var permissions = user.UserRoles
-                    .Where(ur => ur.Role != null)
-                    .SelectMany(ur => ur.Role.RolePermissions ?? new List<RolePermission>())
-                    .Where(rp => rp.Permission != null)
-                    .Select(rp => rp.Permission.Name)
-                    .Distinct()
-                    .ToList();
+			// Temel bilgiler
+			claims.Add(new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()));
+			claims.Add(new Claim(ClaimTypes.Email, user.Mail ?? ""));
+			claims.Add(new Claim(ClaimTypes.Name, $"{user.Name} {user.Surname}"));
 
-                foreach (var permission in permissions)
-                    claims.Add(new Claim("permission", permission));
-            }
+			//// Roller ve yetkiler
+			//if (user.UserRoles != null)
+			//{
+			//    // Roller
+			//    var roles = user.UserRoles
+			//        .Where(ur => ur.Role != null)
+			//        .Select(ur => ur.Role.Name)
+			//        .Distinct()
+			//        .ToList();
 
-            return claims;
-        }
-    }
+			//    foreach (var role in roles)
+			//        claims.Add(new Claim(ClaimTypes.Role, role));
+
+			//    // Yetkiler
+			//    var permissions = user.UserRoles
+			//        .Where(ur => ur.Role != null)
+			//        .SelectMany(ur => ur.Role.RolePermissions ?? new List<RolePermission>())
+			//        .Where(rp => rp.Permission != null)
+			//        .Select(rp => rp.Permission.Name)
+			//        .Distinct()
+			//        .ToList();
+
+			//    foreach (var permission in permissions)
+			//        claims.Add(new Claim("permission", permission));
+			//}
+
+			return claims;
+		}
+	}
 }

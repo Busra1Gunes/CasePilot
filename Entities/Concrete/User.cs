@@ -7,22 +7,22 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class User :Entity
-    {
-        public int? CityID { get; set; }
-        public int? DistrictID { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string Mail { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public City? City { get; set; }
-        public District? District { get; set; }
+	public class User : Entity
+	{
+		public int? CityID { get; set; }
+		public int? DistrictID { get; set; }
+		public int? RoleID { get; set; }
+		public string Name { get; set; }
+		public string Surname { get; set; }
+		public string Mail { get; set; }
+		public string UserName { get; set; }
+		public string Password { get; set; }
+		public City? City { get; set; }
+		public District? District { get; set; }
+		public Role? Role { get; set; }
+		public ICollection<CaseFileShare>? CaseFileShares { get; set; }
+		public ICollection<AccountTransaction> HesapHareket1 { get; set; } = new List<AccountTransaction>();
+		public ICollection<AccountTransaction> HesapHareket2 { get; set; } = new List<AccountTransaction>();
 
-        public ICollection<CaseFileShare>? CaseFileShares { get; set; }
-
-        public ICollection<AccountTransaction> HesapHareket1 { get; set; } = new List<AccountTransaction>();
-        public ICollection<AccountTransaction> HesapHareket2 { get; set; } = new List<AccountTransaction>();
-        public ICollection<UserRole> UserRoles { get; set; }
-    }
+	}
 }

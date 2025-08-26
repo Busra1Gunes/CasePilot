@@ -20,11 +20,13 @@ namespace Business.Concrete
     public class AuthManager : IAuthService
     {
         IUserService _userService;
+        IRolePermissionService _rolePermissionService;
         readonly IMapper _mapper;
-        public AuthManager(IUserService userService, IMapper mapper)
+        public AuthManager(IUserService userService, IMapper mapper,  IRolePermissionService rolePermissionService)
         {
             _userService = userService;
             _mapper = mapper;
+            _rolePermissionService = rolePermissionService;
         }
 
         public async Task<IDataResult<AccessToken>> Login(UserLoginDto userLoginDto)
@@ -34,22 +36,21 @@ namespace Business.Concrete
 
             var user = _userService
                        .Where(u => u.UserName == userLoginDto.UserName && u.Password == userLoginDto.Password)
-                       .Include(u => u.UserRoles)
-                       .ThenInclude(ur => ur.Role)
-                       .ThenInclude(r => r.RolePermissions)
-                       .ThenInclude(rp => rp.Permission)
+                     
                        .FirstOrDefault();
 
-            if (user != null)
-            {
-                Log.Information(" Başarılı giriş → Kullanıcı Adı: {UserName}", user.UserName);
+			if (user != null)
+			{
+				Log.Information("Başarılı giriş → Kullanıcı Adı: {UserName}", user.UserName);
 
-                var tokenResult = await _userService.CreateAccessToken(user);
-                if (tokenResult.Success)
-                    return new SuccessDataResult<AccessToken>(tokenResult.Data);
-            }
+				var permissions = await _rolePermissionService.GetPermissionsByRoleAsync(user.RoleID.Value);
 
-            Log.Warning("Hatalı giriş → Kullanıcı Adı: {UserName}", userLoginDto.UserName, userLoginDto.Password);
+				var tokenResult =await _userService.CreateAccessToken(user, permissions);
+
+				return new SuccessDataResult<AccessToken>(tokenResult.Data);
+			}
+
+			Log.Warning("Hatalı giriş → Kullanıcı Adı: {UserName}", userLoginDto.UserName, userLoginDto.Password);
 
             return new ErrorDataResult<AccessToken>("Kullanıcı adı veya şifre hatalı");
         }

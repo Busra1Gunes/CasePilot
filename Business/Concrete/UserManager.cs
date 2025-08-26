@@ -62,7 +62,8 @@ namespace Business.Concrete
         {
             var list = _userDal.GetAllQueryable()
                 .Include(i => i.City)
-                .Include(i => i.District);
+                .Include(i => i.District)
+                .Include(i=>i.Role);
             return _mapper.Map<List<UserListDto>>(list);
         }
 
@@ -77,19 +78,11 @@ namespace Business.Concrete
             throw new NotImplementedException();
         }
 
-        public async Task<IDataResult<AccessToken>> CreateAccessToken(User user)
+        public async Task<IDataResult<AccessToken>> CreateAccessToken(User user, List<Permissions> permissions)
         {
 
-            // Kullanıcının rollerini ve yetkilerini çek
-            var roles = user.UserRoles?.Select(ur => ur.Role).ToList() ?? new List<Role>();
-            var permissions = roles
-                .SelectMany(r => r.RolePermissions)
-                .Select(rp => rp.Permission.Name)
-                .Distinct()
-                .ToList();
-
-            // Token helper'ı kullanarak token oluştur
-            var accessToken = _tokenHelper.CreateToken(user);
+        
+            var accessToken = _tokenHelper.CreateToken(user,permissions);
 
             return new SuccessDataResult<AccessToken>(accessToken);
         }

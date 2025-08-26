@@ -20,7 +20,7 @@ namespace Business.Abstract
         Task<IResult> Add(UserAddDto user);
         Task<IResult> DeleteById(int id);
         Task<IResult> UserExists(string email);
-        Task<IDataResult<AccessToken>> CreateAccessToken(User user);
+        Task<IDataResult<AccessToken>> CreateAccessToken(User user, List<Permissions> permissions);
         Task<IResult> AddFromExcel(IFormFile file);
 
     }

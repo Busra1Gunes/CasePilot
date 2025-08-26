@@ -30,7 +30,8 @@ namespace Service.Mapping
             CreateMap<User, UserListDto>()
                 .ForMember(dest => dest.City, opt => opt.MapFrom(x => x.City.Name))
                 .ForMember(dest => dest.District, opt => opt.MapFrom(x => x.District.Name))
-                .ReverseMap();
+				  .ForMember(dest => dest.Role, opt => opt.MapFrom(x => x.Role.Name))
+				.ReverseMap();
 
             CreateMap<CaseFile, CaseFileAddDto>().ReverseMap();
 

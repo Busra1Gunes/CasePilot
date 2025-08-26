@@ -11,6 +11,7 @@ namespace Entities.Dto.KullaniciDto.KullaniciDto
         public int ID { get; set; }
         public string City { get; set; }
         public string District { get; set; }
+        public string Role { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Mail { get; set; }

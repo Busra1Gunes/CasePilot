@@ -11,6 +11,6 @@ namespace Entities.Concrete
         public string Name { get; set; } // e.g. "Lawyer", "Intern"
         public string Description { get; set; }
         public ICollection<RolePermission> RolePermissions { get; set; }
-        public ICollection<UserRole> UserRoles { get; set; }
+        public ICollection<User> Users { get; set; }
     }
 }
