@@ -73,7 +73,8 @@ namespace Business.Concrete
 					.Include(b => b.ApplicationType)
 					.Include(i => i.City)
 					.Include(c => c.District).Where(c=>c.Status.Equals(true)).ToList();
-            return _mapper.Map<List<CaseFileListDto>>(list);
+      
+            return new SuccessDataResult<List<CaseFileListDto>>(_mapper.Map<List<CaseFileListDto>>(list));
         }
 		public  async Task<object> GetAllByCaseTypeId(int id)
 		{
