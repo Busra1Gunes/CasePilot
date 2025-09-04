@@ -9,6 +9,7 @@ using Core.Utilities.Results;
 using Core.Utilities.Security;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dto.CaseFileDto;
 using Entities.Dto.KullaniciDto;
 using Entities.Dto.KullaniciDto.KullaniciDto;
 using Microsoft.AspNetCore.Http;
@@ -64,7 +65,7 @@ namespace Business.Concrete
                 .Include(i => i.City)
                 .Include(i => i.District)
                 .Include(i=>i.Role);
-            return _mapper.Map<List<UserListDto>>(list);
+            return new SuccessDataResult<List<UserListDto>>(_mapper.Map<List<UserListDto>>(list));
         }
 
 
