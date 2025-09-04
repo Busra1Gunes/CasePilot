@@ -46,7 +46,7 @@ namespace Business.Concrete
 
 			await _caseFileDal.AddAsync(caseFileAdd);
 			await _unitOfWork.SaveChangesAsync();
-			return new SuccessResult(CommonMessages.EntityAdded);
+			return new SuccessDataResult<int>(caseFileAdd.ID, CommonMessages.EntityAdded);
 		}
 
         public async Task<IResult> Delete(int caseFileID)
