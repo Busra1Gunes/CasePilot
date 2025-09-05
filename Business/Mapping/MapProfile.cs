@@ -94,7 +94,11 @@ namespace Service.Mapping
             .ForMember(dest => dest.Debtor, opt => opt.MapFrom(x => x.User1.Name+" "+x.User1.Surname))
             .ForMember(dest => dest.Credit, opt => opt.MapFrom(x => x.User2.Name + " " + x.User2.Surname))
             .ForMember(dest => dest.CaseFile, opt => opt.MapFrom(x => x.CaseFile.Name+" "+x.CaseFile.Surname))
-            .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(x => x.PaymentStatus == true ? "Ödendi" : x.PaymentStatus == false ? "Ödenmedi" : "-"))
+           .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(x =>
+                                         x.PaymentStatus == 1 ? "Ödendi" :
+                                         x.PaymentStatus == 2 ? "Ödenmedi" :
+                                         x.PaymentStatus == 3 ? "Mahsup Edildi" : "-"
+                                                                    ))
             .ForMember(dest => dest.Type, opt => opt.MapFrom(x => x.Type == TransactionType.Fatura ? "Fatura" :
                                                                  x.Type == TransactionType.Kira ? "Kira" :
                                                                  x.Type == TransactionType.Maas ? "Maaş" :

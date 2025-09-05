@@ -22,7 +22,7 @@ namespace Entities.Concrete
         public DateTime PaymentDate { get; set; }       // OdemeTarihi → PaymentDate
         public DateTime PaymentReceivedDate { get; set; }// OdemeYapıldığıTarih → PaymentReceivedDate
         public DateTime FinalPaymentDate { get; set; }  // SonOdemeTarihi → FinalPaymentDate
-        public bool PaymentStatus { get; set; }         // OdemeDurumu → PaymentStatus
+        public int PaymentStatus { get; set; }         //1 ödendi , 2 ödenmedi , 3 mahsuplaşma
 
         public CaseFile CaseFile { get; set; }
         

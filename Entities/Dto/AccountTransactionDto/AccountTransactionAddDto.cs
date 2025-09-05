@@ -22,6 +22,6 @@ namespace Entities.Dto.HesapHareketDto
         public DateTime PaymentDate { get; set; }       // OdemeTarihi → PaymentDate
         public DateTime PaymentReceivedDate { get; set; }// OdemeYapıldığıTarih → PaymentReceivedDate
         public DateTime FinalPaymentDate { get; set; }  // SonOdemeTarihi → FinalPaymentDate
-        public bool PaymentStatus { get; set; }         // OdemeDurumu → PaymentStatus
+        public int PaymentStatus { get; set; }         // OdemeDurumu → PaymentStatus
     }
 }

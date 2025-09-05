@@ -61,7 +61,7 @@ namespace Business.Concrete
 			foreach (var h in hareketler)
 			{
 				// Ödeme yapılmış mı kontrolü
-				bool odendi = h.PaymentStatus == true;
+				bool odendi = h.PaymentStatus == 1;
 
 				// Kullanıcı borçlu taraf mı?
 				if (h.DebtorID == userID)
@@ -108,7 +108,7 @@ namespace Business.Concrete
 
 			foreach (var h in hareketler)
 			{
-				bool odendi = h.PaymentStatus == true;
+				bool odendi = h.PaymentStatus == 1;
 
 				bakiyeDto.TotalDebt += h.Amount; // tüm masraf
 
