@@ -7,6 +7,7 @@ using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using Entities.Dto.DosyaDto;
+using Entities.Dto.KullaniciDto.KullaniciDto;
 using Entities.Dto.RoleDto;
 using System;
 using System.Collections.Generic;
@@ -31,9 +32,11 @@ namespace Business.Concrete
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<Role>> GetAllRolesAsync()
-        {
-            return await _roleDal.GetAllAsync(r=>r.Status.Equals(true));
+        public async Task<IDataResult<List<Role>>>  GetAllRolesAsync()
+        { 
+        
+          List<Role> roleList =  _roleDal.GetAllAsync(r=>r.Status.Equals(true)).Result;
+            return new SuccessDataResult<List<Role>>(roleList);
         }
 
         public async Task<Role> GetRoleByIdAsync(int id)

@@ -49,7 +49,7 @@ namespace Business.Concrete
             User list = _mapper.Map<UserAddDto, User>(user);
             _userDal.AddAsync(list);
             _unitOfWork.SaveChangesAsync();
-            return new SuccessResult(CommonMessages.EntityAdded);
+            return new SuccessDataResult<int>(list.ID, CommonMessages.EntityAdded);
         }
         public async Task<object> GetById(int id)
         {

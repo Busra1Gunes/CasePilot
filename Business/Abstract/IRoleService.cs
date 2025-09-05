@@ -11,7 +11,7 @@ namespace Business.Abstract
 {
     public interface IRoleService
     {
-        Task<List<Role>> GetAllRolesAsync();
+        Task<IDataResult<List<Role>>> GetAllRolesAsync();
         Task<Role> GetRoleByIdAsync(int id);
         Task<IResult> CreateRoleAsync(CreateRoleDto createRoleDto);
         Task<IResult> UpdateRoleAsync(int id, CreateRoleDto createRoleDto);
