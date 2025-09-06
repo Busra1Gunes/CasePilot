@@ -15,7 +15,7 @@ namespace Business.Abstract
 	public interface ICaseFileDefendantService
 	{
 		Task<IDataResult<List<CaseFileDefendant>>> GetAll();
-		Task<IDataResult<List<CaseFileDefendant>>> GetAllByCaseFileId(int caseFileID);
+		Task<IDataResult<List<CaseFileDefendantListDto>>> GetAllByCaseFileId(int caseFileID);
 		Task<IDataResult<CaseFileDefendant>> GetById(int caseFileDefendantID);
         Task<IResult> Add(CaseFileDefendantAddDto caseFileDefendant);
 		Task<IResult> Update(CaseFileDefendant caseFileDefendant);

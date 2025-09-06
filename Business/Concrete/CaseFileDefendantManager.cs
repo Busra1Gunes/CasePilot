@@ -4,6 +4,7 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dto.AddDto;
+using Entities.Dto.CaseFileDto;
 using Entities.Dto.DosyaDto;
 using Entities.Dto.ListDto;
 using Microsoft.EntityFrameworkCore;
@@ -47,10 +48,12 @@ namespace Business.Concrete
             throw new NotImplementedException();
         }
 
-        public async Task<IDataResult<List<CaseFileDefendant>>> GetAllByCaseFileId(int caseFileID)
+        public async Task<IDataResult<List<CaseFileDefendantListDto>>> GetAllByCaseFileId(int caseFileID)
         {
-			List<CaseFileDefendant> caseFileDefendants =  _caseFileDefendantDal.GetAllQueryable().Where(d => d.caseFileID.Equals(caseFileID)).ToList();
-            return new SuccessDataResult<List<CaseFileDefendant>>(caseFileDefendants);
+			List<CaseFileDefendant> caseFileDefendants =  _caseFileDefendantDal.GetAllQueryable().Where(d => d.caseFileID.Equals(caseFileID)).Include(d=>d.Defendant)
+                .Include(d=>d.CaseFile)
+                .ToList();
+            return new SuccessDataResult<List<CaseFileDefendantListDto>>(_mapper.Map<List<CaseFileDefendantListDto>>(caseFileDefendants));
         }
 
         public async Task<IDataResult<List<DefendantListDto>>> GetAllDefendant()
