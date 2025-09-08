@@ -25,7 +25,7 @@ namespace Entities.Concrete
         public DateTime AccidentDate { get; set; } //kaza tarihi
         public DateTime OpeningDate { get; set; }     // AcilisTarihi → OpeningDate
         public DateTime ClosingDate { get; set; }     // KapanisTarihi → ClosingDate
-        public int CaseStatus { get; set; }           // DosyaDurum → CaseStatus
+        public int CaseStatus { get; set; } = 1;       // DosyaDurum → CaseStatus
         public City City { get; set; }
 		public District District { get; set; }
 

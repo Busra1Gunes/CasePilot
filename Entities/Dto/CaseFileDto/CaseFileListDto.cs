@@ -24,11 +24,12 @@ namespace Entities.Dto.CaseFileDto
         public DateTime AccidentDate { get; set; } //kaza tarihi
         public DateTime OpeningDate { get; set; }     // AcilisTarihi → OpeningDate
         public DateTime ClosingDate { get; set; }     // KapanisTarihi → ClosingDate
-        public int CaseStatus { get; set; }           // DosyaDurum → CaseStatus
+        public string CaseStatus { get; set; }           // DosyaDurum → CaseStatus
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; } 
         public DateTime? DeletedDate { get; set; } 
         public bool Status { get; set; } = false;
-
+        public string Defendants { get; set; }
+        public string Shares { get; set; }
     }
 }

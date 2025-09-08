@@ -51,6 +51,12 @@ namespace Service.Mapping
         .ForMember(dest => dest.District, opt => opt.MapFrom(x => x.District.Name))
         .ForMember(dest => dest.CaseType, opt => opt.MapFrom(x => x.CaseType.Name))  
         .ForMember(dest => dest.ApplicationType, opt => opt.MapFrom(x => x.ApplicationType.Name))
+        .ForMember(dest => dest.CaseStatus, opt => opt.MapFrom(x =>
+                      x.CaseStatus == 1 ? "Açık" :
+                      x.CaseStatus == 2 ? "Kapalı" :
+                      x.CaseStatus == 3 ? "İptal Edildi" : "Bilinmiyor"))
+        .ForMember(dest => dest.Defendants,  opt => opt.MapFrom(x => string.Join(" - ",x.CaseFileDefendant.Select(d => d.Defendant.Name))))
+        .ForMember(dest => dest.Shares, opt => opt.MapFrom(x => string.Join(" - ", x.CaseFileShares.Select(d => d.User.Name+" "+d.User.Surname))))
         .ReverseMap();
 
             CreateMap<CaseFileDocument, CaseFileDocumentListDto>()

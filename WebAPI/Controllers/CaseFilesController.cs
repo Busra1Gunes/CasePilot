@@ -2,6 +2,7 @@
 using Entities.Concrete;
 using Entities.Dto;
 using Entities.Dto.DosyaDto;
+using Entities.Dto.FilterDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,10 +32,14 @@ namespace WebAPI.Controllers
             => Ok(await _caseFileService.GetById(caseFileID));
 
         [HttpGet]
-        public async Task<IActionResult> GetAll() 
-            => Ok(await _caseFileService.GetAll());
+        public async Task<IActionResult> GetAll()
+                     => Ok(await _caseFileService.GetAllAsync());
 
-        
+        [HttpGet]
+        public async Task<IActionResult> GetFiltered([FromQuery] CaseFileFilterDto filterDto)
+                           => Ok(await _caseFileService.GetFilteredAsync(filterDto));
+
+
         [HttpGet]
         public async Task<IActionResult> GetByCaseTypeID(int caseTypeID) 
             => Ok(await _caseFileService.GetAllByCaseTypeId(caseTypeID));
