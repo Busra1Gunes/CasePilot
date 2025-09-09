@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstract;
+using Business.Constants.Messages;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
@@ -27,9 +28,10 @@ namespace Business.Concrete
         }
         public async Task<IResult> Add(ApplicationTypeDto applicationType)
         {
-            await _applicationTypeDal.AddAsync(_mapper.Map<ApplicationType>(applicationType));
+            var applicationType1 = _mapper.Map<ApplicationType>(applicationType);
+            await _applicationTypeDal.AddAsync(applicationType1);
             _unitOfWork.SaveChangesAsync();
-            return new SuccessResult();
+            return new SuccessDataResult<int>(applicationType1.ID, CommonMessages.EntityAdded);
         }
 
         public async Task<IDataResult<List<ApplicationTypeDto>>> GetByCaseTypeID(int caseTypeID)

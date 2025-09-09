@@ -130,6 +130,9 @@ namespace Service.Mapping
             CreateMap<Permissions, PermissionAddDto>().ReverseMap();
 
             CreateMap<RolePermission, RolePermissionAddDto>().ReverseMap();
+
+            CreateMap<CaseFileNote, CaseFileNoteDto>().ReverseMap();
+            CreateMap<CaseFileNote, CaseFileNoteAddDto>().ReverseMap();
         }
     }
 }

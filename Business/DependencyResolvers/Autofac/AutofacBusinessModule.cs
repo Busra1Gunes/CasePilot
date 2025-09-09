@@ -78,6 +78,9 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<RolePermissionManager>().As<IRolePermissionService>().InstancePerLifetimeScope();
             builder.RegisterType<EfRolePermissionDal>().As<IRolePermissionDal>().InstancePerLifetimeScope();
 
+            builder.RegisterType<CaseFileNoteManager>().As<ICaseFileNoteService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfCaseFileNoteDal>().As<ICaseFileNoteDal>().InstancePerLifetimeScope();
+
             //Bu C# kodu, Dependency Injection (Bağımlılık Enjeksiyonu) işlemi için kullanılan bir yapılandırmadır
             //ve genellikle Autofac gibi bir Inversion of Control (IoC) konteyneri kullanılarak gerçekleştirilir. Kodun amacı,
             //belirtilen assembly'deki tüm sınıfları tarayarak, onların uyguladıkları arayüzler ile birlikte IoC konteynerine kaydetmek

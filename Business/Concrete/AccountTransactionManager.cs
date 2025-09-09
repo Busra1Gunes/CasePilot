@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstract;
+using Business.Constants.Messages;
 using Business.ValidationRules;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
@@ -34,12 +35,12 @@ namespace Business.Concrete
 		//[ValidationAspect(typeof(AccountTransactionAddDtoValidator))]
 		public async Task<IResult> Add(AccountTransactionAddDto hareket)
 		{
-			var hesapHareket = _mapper.Map<AccountTransactionAddDto, AccountTransaction>(hareket);
+			var accountTransaction = _mapper.Map<AccountTransactionAddDto, AccountTransaction>(hareket);
 
-			await _hesapHareketDal.AddAsync(hesapHareket);
+			await _hesapHareketDal.AddAsync(accountTransaction);
 			_unitOfWork.SaveChangesAsync();
-			return new SuccessResult("Hareket Kaydedildi");
-		}
+            return new SuccessDataResult<int>(accountTransaction.ID, CommonMessages.EntityAdded);
+        }
 
 		public Task<IDataResult<List<AccountTransaction>>> GetAll()
 		{

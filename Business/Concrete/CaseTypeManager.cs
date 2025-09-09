@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstract;
+using Business.Constants.Messages;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -20,11 +21,11 @@ namespace Business.Concrete
             _caseTypeDal = caseTypeDal;
 			_mapper = mapper;	
         }
-        public async Task<IResult> Add(CaseType davaTur)
+        public async Task<IResult> Add(CaseType caseType)
 		{
-            _caseTypeDal.AddAsync(davaTur);
-			return new SuccessResult();
-		}
+            _caseTypeDal.AddAsync(caseType);
+            return new SuccessDataResult<int>(caseType.ID, CommonMessages.EntityAdded);
+        }
 
 		public async Task<IDataResult<List<CaseType>>> GetAll()
 		{

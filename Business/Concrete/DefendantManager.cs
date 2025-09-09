@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstract;
+using Business.Constants.Messages;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -30,9 +31,10 @@ namespace Business.Concrete
         }
         public async Task<IResult> AddDefendat(DefendantAddDto defendantAddDto)
         {
-            await _defendantDal.AddAsync(_mapper.Map<Defendant>(defendantAddDto));
+            var defendant = _mapper.Map<Defendant>(defendantAddDto);
+            await _defendantDal.AddAsync(defendant);
             _unitOfWork.SaveChangesAsync();
-            return new SuccessResult();
+            return new SuccessDataResult<int>(defendant.ID, CommonMessages.EntityAdded);
         }
         public async  Task<IDataResult<List<DefendantListDto>>> GetAllDefendant()
         {

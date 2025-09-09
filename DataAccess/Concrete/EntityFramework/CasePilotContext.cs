@@ -54,6 +54,6 @@ namespace DataAccess.Concrete.EntityFramework
         DbSet<Permissions> Permissions { get; set; }
         DbSet<Role> Roles { get; set; }
         DbSet<RolePermission> RolePermissions { get; set; }
-       
+        DbSet<CaseFileNote> CaseFileNotes { get; set; }
     }
 }
