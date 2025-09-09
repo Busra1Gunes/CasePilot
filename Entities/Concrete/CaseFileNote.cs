@@ -11,7 +11,7 @@ namespace Entities.Concrete
         public int CaseFileID { get; set; }   // Hangi dosyaya bağlı
         public int UserID { get; set; }       // Notu ekleyen kullanıcı
         public string Content { get; set; }   // Not içeriği
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime NoteDate { get; set; }
 
         // Navigation Properties
         public virtual CaseFile CaseFile { get; set; }

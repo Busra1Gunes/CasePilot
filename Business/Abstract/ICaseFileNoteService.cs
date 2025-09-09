@@ -10,7 +10,8 @@ namespace Business.Abstract
 {
     public interface ICaseFileNoteService
     {
-        Task<IDataResult<List<CaseFileNoteDto>>> GetByCaseFileId(int caseFileID);
+        Task<IDataResult<List<CaseFileNoteListDto>>> GetByCaseFileId(int caseFileID);
+        Task<IDataResult<List<CaseFileNoteListDto>>> GetByUserId(int userID);
         Task<IResult> Add(CaseFileNoteAddDto noteDto);
         Task<IResult> Delete(int noteID);
     }

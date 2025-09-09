@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,8 @@ namespace Business.Utilities.Security
     {
         public string Token { get; set; }
         public DateTime Expiration { get; set; }
-
-		public  List<string> Permissions { get; set; }   // bunu eklemen lazım { get; set; }
+        public int UserID { get; set; }
+        public string UserNameSurname { get; set; }
+        public  List<string> Permissions { get; set; }   // bunu eklemen lazım { get; set; }
 	}
 }

@@ -5,6 +5,8 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dto.CaseFileDto;
+using Entities.Dto.HesapHareketDto;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,24 +29,29 @@ namespace Business.Concrete
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IDataResult<List<CaseFileNoteDto>>> GetByCaseFileId(int caseFileId)
+        public async Task<IDataResult<List<CaseFileNoteListDto>>> GetByCaseFileId(int caseFileId)
         {
-            var notes = _noteDal.GetAllQueryable()
+            var notes = _noteDal
                                 .Where(n => n.CaseFileID == caseFileId)
-                                .OrderByDescending(n => n.CreatedDate)
+                                .Include(u=>u.User)
+                                .Include(c=>c.CaseFile)
+                                .OrderByDescending(n => n.NoteDate)
                                 .ToList();
 
-            var dto = _mapper.Map<List<CaseFileNoteDto>>(notes);
-            return new SuccessDataResult<List<CaseFileNoteDto>>(dto);
+            var dto = _mapper.Map<List<CaseFileNoteListDto>>(notes);
+            return new SuccessDataResult<List<CaseFileNoteListDto>>(dto);
         }
-
         public async Task<IResult> Add(CaseFileNoteAddDto noteDto)
         {
-            var entity = _mapper.Map<CaseFileNote>(noteDto);
-            await _noteDal.AddAsync(entity);
+            var note = _mapper.Map<CaseFileNoteAddDto, CaseFileNote>(noteDto);
+
+            await _noteDal.AddAsync(note);
             _unitOfWork.SaveChangesAsync();
-            return new SuccessDataResult<int>(entity.ID, CommonMessages.EntityAdded);
+            return new SuccessDataResult<int>(note.ID, CommonMessages.EntityAdded);
         }
+
+
+      
 
         public async Task<IResult> Delete(int noteId)
         {
@@ -55,6 +62,19 @@ namespace Business.Concrete
              _noteDal.Update(note);
             _unitOfWork.SaveChangesAsync();
             return new SuccessResult(CommonMessages.EntityDeleted);
+        }
+
+        public async Task<IDataResult<List<CaseFileNoteListDto>>> GetByUserId(int userID)
+        {
+            var notes = _noteDal
+                               .Where(n => n.UserID == userID)
+                               .Include(u => u.User)
+                               .Include(c => c.CaseFile)
+                               .OrderByDescending(n => n.NoteDate)
+                               .ToList();
+
+            var dto = _mapper.Map<List<CaseFileNoteListDto>>(notes);
+            return new SuccessDataResult<List<CaseFileNoteListDto>>(dto);
         }
     }
 }

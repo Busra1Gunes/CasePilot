@@ -42,7 +42,10 @@ namespace Business.Utilities.Security.JWT
 			{
 				Token = token,
 				Expiration = _accessTokenExpiration,
-				Permissions = permissions.Select(p => p.Code).ToList() // burada ekle
+				Permissions = permissions.Select(p => p.Code).ToList(), // burada ekle
+				UserID=user.ID,
+				UserNameSurname=user.Name+" "+user.Surname,
+				
 			};
 		}
 

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.CaseFileDto
 {
-    public class CaseFileNoteDto
+    public class CaseFileNoteListDto
     {
         public int ID { get; set; }
-        public int CaseFileID { get; set; }
-        public int UserID { get; set; }
+        public string CaseFile { get; set; }
+        public string User { get; set; }
         public string Content { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime NoteDate { get; set; }
     }
 }

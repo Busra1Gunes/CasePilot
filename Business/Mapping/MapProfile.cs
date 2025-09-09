@@ -131,7 +131,11 @@ namespace Service.Mapping
 
             CreateMap<RolePermission, RolePermissionAddDto>().ReverseMap();
 
-            CreateMap<CaseFileNote, CaseFileNoteDto>().ReverseMap();
+            CreateMap<CaseFileNote, CaseFileNoteListDto>()
+                 .ForMember(dest => dest.User, opt => opt.MapFrom(x => x.User.Name + " " + x.User.Surname))
+                 .ForMember(dest => dest.CaseFile, opt => opt.MapFrom(x => x.CaseFile.Name + " " + x.CaseFile.Surname))
+                 .ReverseMap();
+
             CreateMap<CaseFileNote, CaseFileNoteAddDto>().ReverseMap();
         }
     }

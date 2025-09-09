@@ -24,6 +24,12 @@ namespace WebAPI.Controllers
             var result = await _noteService.GetByCaseFileId(caseFileId);
             return Ok(result);
         }
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetByUserId(int userId)
+        {
+            var result = await _noteService.GetByUserId(userId);
+            return Ok(result);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CaseFileNoteAddDto noteDto)
