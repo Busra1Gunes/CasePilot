@@ -165,7 +165,7 @@ namespace Business.Concrete
 			if (caseFiles == null)
 				throw new InvalidCaseFileException();
 
-			if (_caseFileDal.Where(k => k.IdentityNumber == caseFileUpdate.IdentityNumber).Any())
+			if (_caseFileDal.Where(k => k.IdentityNumber == caseFileUpdate.IdentityNumber && k.ID!= caseFileID).Any())
                 throw new IdentyNumberAlreadyExistsException();
 
 
