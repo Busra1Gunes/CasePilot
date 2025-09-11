@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Business.Utilities.Security;
 using Microsoft.AspNetCore.Http;
+using Entities.Dto.DosyaDto;
 
 namespace Business.Abstract
 {
@@ -22,6 +23,8 @@ namespace Business.Abstract
         Task<IResult> UserExists(string email);
         Task<IDataResult<AccessToken>> CreateAccessToken(User user, List<Permissions> permissions);
         Task<IResult> AddFromExcel(IFormFile file);
+        Task<IResult> Update(int userID, UserAddDto userAdd);
+
 
     }
 }

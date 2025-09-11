@@ -2,16 +2,20 @@
 using Business.Abstract;
 using Business.Constants.Messages;
 using Business.DependencyResolvers.ValidationRules.FluentValidation;
+using Business.Exceptions.CaseFile;
 using Business.Utilities.Security;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Messages;
 using Core.Utilities.Results;
 using Core.Utilities.Security;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using Entities.Dto.CaseFileDto;
+using Entities.Dto.DosyaDto;
 using Entities.Dto.KullaniciDto;
 using Entities.Dto.KullaniciDto.KullaniciDto;
+using Entities.Dto.UserDto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
@@ -47,30 +51,39 @@ namespace Business.Concrete
         public async Task<IResult> Add(UserAddDto user)
         {
             User list = _mapper.Map<UserAddDto, User>(user);
+            list.Status = true;
+            list.CreatedDate = DateTime.Now;
             _userDal.AddAsync(list);
             _unitOfWork.SaveChangesAsync();
             return new SuccessDataResult<int>(list.ID, CommonMessages.EntityAdded);
         }
         public async Task<object> GetById(int id)
         {
-            var user = _userDal.Where(u => u.ID.Equals(id))
-                .Include(i => i.City)
-                .Include(i => i.District).First();
+            var user = _userDal.Where(u => u.ID.Equals(id) && u.Status.Equals(true)).First();
 
-            return (_mapper.Map<UserListDto>(user));
+            return (_mapper.Map<UserGetDto>(user));
         }
         public async Task<object> GetAll()
         {
             var list = _userDal.GetAllQueryable()
                 .Include(i => i.City)
                 .Include(i => i.District)
-                .Include(i=>i.Role);
+                .Include(i => i.Role).Where(u=>u.Status.Equals(true));
             return new SuccessDataResult<List<UserListDto>>(_mapper.Map<List<UserListDto>>(list));
         }
 
 
         public async Task<IResult> DeleteById(int id)
         {
+            User? users = _userDal.Where(d => d.ID == id && d.Status.Equals(true)).SingleOrDefault();
+            if (users == null)
+                throw new InvalidDataException();
+
+            users.Status = false;
+            users.DeletedDate = DateTime.Now;
+            _userDal.Update(users);
+            await _unitOfWork.SaveChangesAsync();
+
             return new SuccessResult(CommonMessages.EntityDeleted);
         }
 
@@ -82,8 +95,8 @@ namespace Business.Concrete
         public async Task<IDataResult<AccessToken>> CreateAccessToken(User user, List<Permissions> permissions)
         {
 
-        
-            var accessToken = _tokenHelper.CreateToken(user,permissions);
+
+            var accessToken = _tokenHelper.CreateToken(user, permissions);
 
             return new SuccessDataResult<AccessToken>(accessToken);
         }
@@ -131,7 +144,20 @@ namespace Business.Concrete
             return new SuccessResult($"{successCount} kayıt eklendi, {failCount} kayıt eklenemedi.");
         }
 
+        public async Task<IResult> Update(int userID, UserAddDto userAdd)
+        {
+            User? users = _userDal.Where(d => d.ID == userID && d.Status.Equals(true)).SingleOrDefault();
+            if (users == null)
+                throw new InvalidDataException();
 
+            _mapper.Map(userAdd, users);
+            users.UpdatedDate = DateTime.Now;
+            _userDal.Update(users);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return new SuccessResult(CommonMessages.EntityUpdated);
+        }
 
     }
 }

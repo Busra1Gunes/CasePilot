@@ -14,6 +14,7 @@ using Entities.Dto.KullaniciDto.KullaniciDto;
 using Entities.Dto.ListDto;
 using Entities.Dto.PermissionDto;
 using Entities.Dto.RoleDto;
+using Entities.Dto.UserDto;
 using Entities.Enums;
 using Microsoft.AspNetCore.Http;
 
@@ -94,6 +95,7 @@ namespace Service.Mapping
 
             CreateMap<User, UserAddDto>().ReverseMap();
             CreateMap<User, UserLoginDto>().ReverseMap();
+            CreateMap<User, UserGetDto>().ReverseMap();
 
 
             CreateMap<AccountTransaction, AccountTransactionDto>()

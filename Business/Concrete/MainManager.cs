@@ -26,7 +26,7 @@ namespace Business.Concrete
             int totalCaseFile =await _caseFileService.Where(c => c.Status.Equals(true)).CountAsync();
             decimal totalDept = await _accountTransactionService.Where(c => c.Status.Equals(true) && c.DebtorID == 1).SumAsync(s => s.Amount);
             decimal totalCredit = await _accountTransactionService.Where(c => c.Status.Equals(true) && c.CreditID == 1).SumAsync(s => s.Amount);
-            int totalUser = await _userService.Where(u=>u.Status.Equals(false)).CountAsync();
+            int totalUser = await _userService.Where(u=>u.Status.Equals(true)).CountAsync();
             TotalValueDto totalValueDto = new()
             {
                 TotalCaseFile = totalCaseFile,

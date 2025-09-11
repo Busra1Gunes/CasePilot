@@ -3,6 +3,7 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dto;
+using Entities.Dto.DosyaDto;
 using Entities.Dto.KullaniciDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -43,6 +44,16 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadExcel(IFormFile file)
        => Ok(await _userService.AddFromExcel(file));
+
+        [HttpPut]
+        public async Task<IActionResult> Update(int userID, [FromBody] UserAddDto userUpdateDto)
+          => Ok(await _userService.Update(userID, userUpdateDto));
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int userID)
+        => Ok(await _userService.DeleteById(userID));
+
+
 
 
     }
