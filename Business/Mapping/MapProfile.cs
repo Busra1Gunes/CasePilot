@@ -6,8 +6,10 @@ using Entities.Dto.AddDto;
 using Entities.Dto.ApplicationTypeDto;
 using Entities.Dto.CaseFileDto;
 using Entities.Dto.CaseTypeDto;
+using Entities.Dto.CourtDto;
 using Entities.Dto.DocumentDto;
 using Entities.Dto.DosyaDto;
+using Entities.Dto.HearingDto;
 using Entities.Dto.HesapHareketDto;
 using Entities.Dto.KullaniciDto;
 using Entities.Dto.KullaniciDto.KullaniciDto;
@@ -22,6 +24,17 @@ namespace Service.Mapping
 {
     public class MapProfile : Profile
     {
+        private string GetHearingStatusName(int status)
+        {
+            return status switch
+            {
+                1 => "Planlandı",
+                2 => "Yapıldı",
+                3 => "Ertelendi",
+                4 => "İptal Edildi",
+                _ => "Bilinmeyen"
+            };
+        }
 
         public MapProfile(IHttpContextAccessor httpContextAccessor)
         {
@@ -139,6 +152,35 @@ namespace Service.Mapping
                  .ReverseMap();
 
             CreateMap<CaseFileNote, CaseFileNoteAddDto>().ReverseMap();
+
+            CreateMap<CourtAddDto, Court>();
+            CreateMap<CourtUpdateDto, Court>();
+
+            CreateMap<Court, CourtListDto>()
+                .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.Name))
+                .ForMember(dest => dest.DistrictName, opt => opt.MapFrom(src => src.District.Name));
+
+            CreateMap<Court, CourtDetailDto>()
+                .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.Name))
+                .ForMember(dest => dest.DistrictName, opt => opt.MapFrom(src => src.District.Name))
+                .ForMember(dest => dest.Hearings, opt => opt.MapFrom(src => src.Hearings));
+
+            CreateMap<HearingAddDto, Hearing>();
+            CreateMap<HearingUpdateDto, Hearing>();
+
+            CreateMap<Hearing, HearingListDto>()
+                .ForMember(dest => dest.CaseFileName, opt => opt.MapFrom(src => src.CaseFile.Name + " " + src.CaseFile.Surname))
+                .ForMember(dest => dest.CourtName, opt => opt.MapFrom(src => src.Court.Name))
+                .ForMember(dest => dest.HearingStatusName, opt => opt.MapFrom(src => GetHearingStatusName(src.HearingStatus)));
+
+            CreateMap<Hearing, HearingDetailDto>()
+                .ForMember(dest => dest.CaseFileName, opt => opt.MapFrom(src => src.CaseFile.Name + " " + src.CaseFile.Surname))
+                .ForMember(dest => dest.CaseFileNumber, opt => opt.MapFrom(src => src.CaseFile.ID.ToString()))
+                .ForMember(dest => dest.CourtName, opt => opt.MapFrom(src => src.Court.Name))
+                .ForMember(dest => dest.CourtAddress, opt => opt.MapFrom(src => src.Court.Address))
+                .ForMember(dest => dest.HearingStatusName, opt => opt.MapFrom(src => GetHearingStatusName(src.HearingStatus)));
+
+
         }
     }
 }

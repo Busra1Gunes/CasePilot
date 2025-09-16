@@ -14,16 +14,14 @@ namespace DataAccess.Configuration
     {
         public void Configure(EntityTypeBuilder<CaseFile> builder)
         {
-
             builder.HasKey(x => x.ID);
             builder.Property(x => x.ID).UseIdentityColumn();
-
             builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
 
             builder.HasOne(cf => cf.CaseType)
                    .WithMany(ct => ct.CaseFiles)
                    .HasForeignKey(cf => cf.CaseTypeID)
-                   .OnDelete(DeleteBehavior.Restrict); 
+                   .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.City)
                    .WithMany(i => i.CaseFiles)
@@ -33,17 +31,21 @@ namespace DataAccess.Configuration
             builder.HasOne(x => x.District)
                    .WithMany(ilce => ilce.CaseFiles)
                    .HasForeignKey(x => x.DistrictID)
-                   .OnDelete(DeleteBehavior.Restrict); 
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            // Court ilişkisi eklendi
+            builder.HasOne(x => x.Court)
+                   .WithMany(c => c.CaseFiles)
+                   .HasForeignKey(x => x.CourtID)
+                   .OnDelete(DeleteBehavior.NoAction);
 
             builder.Property(x => x.EntitlementRate)
                    .HasPrecision(18, 2);
-
             builder.Property(x => x.DisabilityRate)
                    .HasPrecision(18, 2);
-
-
 
             builder.ToTable("CaseFiles");
         }
     }
-}
+    }
+

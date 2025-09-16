@@ -20,6 +20,7 @@ using Business.Constants.Messages.Entity;
 using Business.Exceptions.CaseFile;
 using Entities.Dto.CaseFileDto;
 using Entities.Dto.FilterDto;
+using DataAccess.Concrete.EntityFramework;
 
 namespace Business.Concrete
 {
@@ -28,12 +29,14 @@ namespace Business.Concrete
         private ICaseFileDal _caseFileDal;
         private IMapper _mapper;
 		private IUnitOfWork _unitOfWork;
+        private IHearingDal _hearingDal;
 
-		public CaseFileManager(ICaseFileDal caseFileDal, IMapper mapper, IUnitOfWork unitOfWork) : base(caseFileDal)
+		public CaseFileManager(ICaseFileDal caseFileDal, IMapper mapper, IUnitOfWork unitOfWork, IHearingDal hearingDal) : base(caseFileDal)
         {
 			_caseFileDal = caseFileDal;
 			_mapper = mapper;
 			_unitOfWork = unitOfWork;
+            _hearingDal = hearingDal;
 		}
 		public async Task<IResult> Add(CaseFileAddDto caseFile)
 		{
@@ -52,19 +55,27 @@ namespace Business.Concrete
 
         public async Task<IResult> Delete(int caseFileID)
         {
-           CaseFile? caseFiles = _caseFileDal.Where(d => d.ID == caseFileID && d.Status.Equals(true)).SingleOrDefault();
+            CaseFile? caseFiles = _caseFileDal.Where(d => d.ID == caseFileID && d.Status.Equals(true)).SingleOrDefault();
 
-			if (caseFiles == null)
-				throw new InvalidCaseFileException();
+            if (caseFiles == null)
+                throw new InvalidCaseFileException();
 
-		
-			caseFiles.DeletedDate = DateTime.Now;
-			caseFiles.Status=false;
-			 _caseFileDal.Update(caseFiles);
+            // Önce bu dosyaya ait duruşmaları sil
+            var hearings = _hearingDal.Where(h => h.CaseFileID == caseFileID && h.Status == true).ToList();
+            foreach (var hearing in hearings)
+            {
+                hearing.Status = false;
+                hearing.DeletedDate = DateTime.Now;
+                _hearingDal.Update(hearing);
+            }
 
-			await _unitOfWork.SaveChangesAsync();
+            // Sonra dosyayı sil
+            caseFiles.DeletedDate = DateTime.Now;
+            caseFiles.Status = false;
+            _caseFileDal.Update(caseFiles);
 
-			return new SuccessResult(CommonMessages.EntityDeleted);
+            await _unitOfWork.SaveChangesAsync();
+            return new SuccessResult(CommonMessages.EntityDeleted);
         }
 
         public async Task<IDataResult<List<CaseFileListDto>>> GetAllAsync()

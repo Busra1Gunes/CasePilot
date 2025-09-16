@@ -81,6 +81,14 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<CaseFileNoteManager>().As<ICaseFileNoteService>().InstancePerLifetimeScope();
             builder.RegisterType<EfCaseFileNoteDal>().As<ICaseFileNoteDal>().InstancePerLifetimeScope();
 
+
+            builder.RegisterType<CourtManager>().As<ICourtService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfCourtDal>().As<ICourtDal>().InstancePerLifetimeScope();
+
+            builder.RegisterType<HearingManager>().As<IHearingService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfHearingDal>().As<IHearingDal>().InstancePerLifetimeScope();
+
+
             //Bu C# kodu, Dependency Injection (Bağımlılık Enjeksiyonu) işlemi için kullanılan bir yapılandırmadır
             //ve genellikle Autofac gibi bir Inversion of Control (IoC) konteyneri kullanılarak gerçekleştirilir. Kodun amacı,
             //belirtilen assembly'deki tüm sınıfları tarayarak, onların uyguladıkları arayüzler ile birlikte IoC konteynerine kaydetmek
