@@ -128,14 +128,14 @@ var app = builder.Build();
 // 🌐 Middleware Sırası Çok Önemli
 
 // CORS önce routing'e göre devreye alınmalı
-app.UseRouting();
+
 app.UseCors("AllowAll");
 
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
-
+app.UseRouting();
 // Swagger
 app.UseSwagger();
 app.UseSwaggerUI(c =>

@@ -30,7 +30,7 @@ namespace Entities.Concrete
         public City City { get; set; }
 		public District District { get; set; }
         // Navigation Properties
-        public Court Court { get; set; }
+        public Court? Court { get; set; }
         public ICollection<Hearing> Hearings { get; set; }
         public CaseType CaseType { get; set; }
 		public ApplicationType ApplicationType { get; set; }

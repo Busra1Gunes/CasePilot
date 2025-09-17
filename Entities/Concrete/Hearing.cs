@@ -13,7 +13,7 @@ namespace Entities.Concrete
         public int? CourtID { get; set; }
         public DateTime HearingDate { get; set; }
         public TimeSpan HearingTime { get; set; }
-        public string Judge { get; set; }
+        public string Judge { get; set; }//Hakim
         public string Clerk { get; set; } // Katip
         public string Notes { get; set; }
         public string Result { get; set; } // Duruşma sonucu
