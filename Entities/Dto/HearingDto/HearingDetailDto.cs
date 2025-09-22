@@ -14,7 +14,7 @@
         public string Judge { get; set; }
         public string Clerk { get; set; }
         public string Notes { get; set; }
-        public string Result { get; set; }
+        public string? Result { get; set; }
         public int HearingStatus { get; set; }
         public string HearingStatusName { get; set; }
         public DateTime? NextHearingDate { get; set; }

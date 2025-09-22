@@ -47,6 +47,7 @@ namespace Business.Concrete
 
             hearingAdd.HearingStatus = 1; // Planlandı
             hearingAdd.Status = true;
+            
 
             await _hearingDal.AddAsync(hearingAdd);
             await _unitOfWork.SaveChangesAsync();
