@@ -5,17 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.Dto.KullaniciDto
+namespace Entities.Dto.UserDto
 {
-    public class UserLoginDto
+    public class ForgotPasswordDto
     {
         [Required(ErrorMessage = "Email alanı zorunludur")]
         [EmailAddress(ErrorMessage = "Geçerli bir email adresi giriniz")]
         public string Mail { get; set; }
-
-        [Required(ErrorMessage = "Şifre zorunludur")]
-        public string Password { get; set; }
-
-        public bool RememberMe { get; set; } = false;
     }
 }

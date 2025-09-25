@@ -41,11 +41,83 @@ namespace Service.Mapping
             CreateMap<User, UserAddDto>()               
                 .ReverseMap();
 
+            CreateMap<User, UserGetDto>()
+               .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City != null ? src.City.Name : null))
+               .ForMember(dest => dest.DistrictName, opt => opt.MapFrom(src => src.District != null ? src.District.Name : null))
+               .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role != null ? src.Role.Name : null));
+
             CreateMap<User, UserListDto>()
-                .ForMember(dest => dest.City, opt => opt.MapFrom(x => x.City.Name))
-                .ForMember(dest => dest.District, opt => opt.MapFrom(x => x.District.Name))
-				  .ForMember(dest => dest.Role, opt => opt.MapFrom(x => x.Role.Name))
-				.ReverseMap();
+                .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City != null ? src.City.Name : null))
+                .ForMember(dest => dest.DistrictName, opt => opt.MapFrom(src => src.District != null ? src.District.Name : null))
+                .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role != null ? src.Role.Name : null));
+
+            // DTO -> User mappings
+            CreateMap<UserAddDto, User>()
+                .ForMember(dest => dest.ID, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.DeletedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.Status, opt => opt.Ignore())
+                .ForMember(dest => dest.City, opt => opt.Ignore())
+                .ForMember(dest => dest.District, opt => opt.Ignore())
+                .ForMember(dest => dest.Role, opt => opt.Ignore())
+                .ForMember(dest => dest.CaseFileShares, opt => opt.Ignore())
+                .ForMember(dest => dest.HesapHareket1, opt => opt.Ignore())
+                .ForMember(dest => dest.HesapHareket2, opt => opt.Ignore());
+
+            CreateMap<UserRegisterDto, User>()
+                .ForMember(dest => dest.ID, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.DeletedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.Status, opt => opt.Ignore())
+                .ForMember(dest => dest.City, opt => opt.Ignore())
+                .ForMember(dest => dest.District, opt => opt.Ignore())
+                .ForMember(dest => dest.Role, opt => opt.Ignore())
+                .ForMember(dest => dest.CaseFileShares, opt => opt.Ignore())
+                .ForMember(dest => dest.HesapHareket1, opt => opt.Ignore())
+                .ForMember(dest => dest.HesapHareket2, opt => opt.Ignore());
+
+            CreateMap<UserUpdateDto, User>()
+                .ForMember(dest => dest.ID, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.DeletedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.Status, opt => opt.Ignore())
+                .ForMember(dest => dest.City, opt => opt.Ignore())
+                .ForMember(dest => dest.District, opt => opt.Ignore())
+                .ForMember(dest => dest.Role, opt => opt.Ignore())
+                .ForMember(dest => dest.CaseFileShares, opt => opt.Ignore())
+                .ForMember(dest => dest.HesapHareket1, opt => opt.Ignore())
+                .ForMember(dest => dest.HesapHareket2, opt => opt.Ignore())
+                .ForMember(dest => dest.Password, opt => opt.Ignore()); // Şifre ayrıca işleniyor
+
+            CreateMap<UserProfileUpdateDto, User>()
+                .ForMember(dest => dest.ID, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.DeletedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.Status, opt => opt.Ignore())
+                .ForMember(dest => dest.Mail, opt => opt.Ignore()) // Email değiştirilemez
+                .ForMember(dest => dest.Password, opt => opt.Ignore()) // Şifre ayrı endpoint
+                .ForMember(dest => dest.RoleID, opt => opt.Ignore()) // Role değiştirilemez
+                .ForMember(dest => dest.City, opt => opt.Ignore())
+                .ForMember(dest => dest.District, opt => opt.Ignore())
+                .ForMember(dest => dest.Role, opt => opt.Ignore())
+                .ForMember(dest => dest.CaseFileShares, opt => opt.Ignore())
+                .ForMember(dest => dest.HesapHareket1, opt => opt.Ignore())
+                .ForMember(dest => dest.HesapHareket2, opt => opt.Ignore());
+
+            // Cross-DTO mappings
+            CreateMap<UserRegisterDto, UserAddDto>()
+                .ForMember(dest => dest.RoleID, opt => opt.MapFrom(src => 2)); // Default User role
+
+            // Reverse mappings
+            CreateMap<User, UserAddDto>()
+                .ForMember(dest => dest.Password, opt => opt.Ignore()); // Şifre döndürülmez
+
+            CreateMap<User, UserUpdateDto>()
+                .ForMember(dest => dest.Password, opt => opt.Ignore()); // Şifre döndürülmez
 
             CreateMap<CaseFile, CaseFileAddDto>().ReverseMap();
 
@@ -106,10 +178,9 @@ namespace Service.Mapping
 
             CreateMap<AccountTransaction, AccountTransactionAddDto>().ReverseMap();
 
-            CreateMap<User, UserAddDto>().ReverseMap();
+        
             CreateMap<User, UserLoginDto>().ReverseMap();
-            CreateMap<User, UserGetDto>().ReverseMap();
-
+         
 
             CreateMap<AccountTransaction, AccountTransactionDto>()
             .ForMember(dest => dest.Debtor, opt => opt.MapFrom(x => x.User1.Name+" "+x.User1.Surname))
