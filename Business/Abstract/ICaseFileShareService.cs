@@ -15,6 +15,7 @@ namespace Business.Abstract
     {
         Task<IDataResult<CaseFileShareListDto>> GetAll();
         Task<IDataResult<CaseFileShareListDto>> GetAllByCaseFileID(int caseFileID);
+        Task<IDataResult<CaseFileShareListDto>> GetAllByUserID(int userID);
 
         Task<IDataResult<CaseFileShareDto>> Get(int shareID);
         Task<IResult> Add(CaseFileShareAddDto caseFileShareAddDto);

@@ -11,7 +11,7 @@ namespace Entities.Dto.UserDto
         public int ID { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string FullName => $"{Name} {Surname}";
+      
         public string Mail { get; set; }
         public string UserName { get; set; }
         public int? CityID { get; set; }

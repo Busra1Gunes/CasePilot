@@ -28,8 +28,7 @@ namespace Entities.Dto.UserDto
 
         // Şifre güncelleme isteğe bağlı
         [StringLength(100, MinimumLength = 8, ErrorMessage = "Şifre en az 8, en fazla 100 karakter olmalıdır")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]*$",
-            ErrorMessage = "Şifre en az bir büyük harf, bir küçük harf, bir rakam ve bir özel karakter içermelidir")]
+
         public string? Password { get; set; }
 
         public int? CityID { get; set; }

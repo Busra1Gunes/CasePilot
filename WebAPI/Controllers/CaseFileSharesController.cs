@@ -24,7 +24,11 @@ namespace WebAPI.Controllers
             => Ok(await _caseFileShareService.Add(share));
 
         [HttpGet]
-        public async Task<IActionResult> Get(int casFileID) 
-            => Ok(await _caseFileShareService.GetAllByCaseFileID(casFileID));
+        public async Task<IActionResult> GetByCaseFileID(int caseFileID) 
+            => Ok(await _caseFileShareService.GetAllByCaseFileID(caseFileID));
+
+        [HttpGet]
+        public async Task<IActionResult> GetByUserID(int userID)
+           => Ok(await _caseFileShareService.GetAllByUserID(userID));
     }
 }

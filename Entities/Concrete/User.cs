@@ -62,7 +62,7 @@ namespace Entities.Concrete
         public ICollection<AccountTransaction> HesapHareket2 { get; set; } = new List<AccountTransaction>();
 
         // Computed Properties
-        public string FullName => $"{Name} {Surname}";
+        
         public bool IsActive => Status && !IsLocked && (LockedUntil == null || LockedUntil < DateTime.Now);
     }
 }

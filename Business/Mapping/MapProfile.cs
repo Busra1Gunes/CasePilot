@@ -159,6 +159,7 @@ namespace Service.Mapping
 
             CreateMap<CaseFileShare, CaseFileShareDto>()
                 .ForMember(dest => dest.ShareUserName, opt => opt.MapFrom(x => x.User.Name + " " + x.User.Surname))
+                .ForMember(dest => dest.CaseFileName, opt => opt.MapFrom(x => x.CaseFile.Name + " " + x.CaseFile.Surname))
                 .ReverseMap();
 
             CreateMap<CaseFileShare, CaseFileShareAddDto>().ReverseMap();

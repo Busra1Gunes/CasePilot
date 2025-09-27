@@ -100,7 +100,7 @@ namespace Business.Concrete
                     user.IsLocked = false;
                     user.LockedUntil = null;
                     user.FailedLoginAttempts = 0;
-                    _userDal.Update(user);
+                 //   _userDal.Update(user);
                     await _unitOfWork.SaveChangesAsync();
                 }
 
@@ -133,7 +133,7 @@ namespace Business.Concrete
                     user.LockedUntil = null;
                 }
 
-                _userDal.Update(user);
+           //     _userDal.Update(user);
                 await _unitOfWork.SaveChangesAsync();
 
                 // Kullanıcının yetkilerini al

@@ -38,7 +38,7 @@ namespace WebAPI.Controllers
             => Ok(await _userService.GetById(userID));
 
         [HttpPost]
-        [Authorize(Roles = "Admin")] // Sadece admin ekleyebilir
+      //  [Authorize(Roles = "Admin")] // Sadece admin ekleyebilir
         public async Task<IActionResult> Add([FromBody] UserAddDto user)
         {
             if (!ModelState.IsValid)
@@ -92,8 +92,8 @@ namespace WebAPI.Controllers
             var currentUserId = GetCurrentUserId();
             var isAdmin = User.IsInRole("Admin");
 
-            if (currentUserId != userID && !isAdmin)
-                return Forbid("Bu işlem için yetkiniz yok.");
+            //if (currentUserId != userID && !isAdmin)
+            //    return Forbid("Bu işlem için yetkiniz yok.");
 
             var result = await _userService.Update(userID, userUpdateDto);
             return result.Success ? Ok(result) : BadRequest(result);

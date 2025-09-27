@@ -88,6 +88,30 @@ namespace Business.Concrete
             return new SuccessDataResult<CaseFileShareListDto>(caseFileShareListDto, CommonMessages.EntityListed);
         }
 
+        public async Task<IDataResult<CaseFileShareListDto>> GetAllByUserID(int userID)
+        {
+            var shares = _caseFileShareDal
+                .Where(x => x.Status == false && x.UserID == userID)
+                .Include(a => a.CaseFile)
+                .Include(a => a.User);
+
+            var totalDto = new CaseFileShareTotalDto();
+
+            foreach (var h in shares)
+            {
+                if (h.ShareRate != null)
+                    totalDto.TotalShareRate += h.ShareRate;
+            }
+
+
+            CaseFileShareListDto caseFileShareListDto = new()
+            {
+                Total = totalDto,
+                ShareDto = _mapper.Map<List<CaseFileShareDto>>(shares)
+            };
+            return new SuccessDataResult<CaseFileShareListDto>(caseFileShareListDto, CommonMessages.EntityListed);
+        }
+
         public Task<IResult> Update(CaseFileShareAddDto caseFileShare)
         {
             throw new NotImplementedException();
