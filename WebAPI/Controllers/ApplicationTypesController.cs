@@ -29,7 +29,7 @@ namespace WebAPI.Controllers
 
       
         [HttpPost]
-        public async Task<IActionResult> Add(ApplicationTypeDto applicationType) 
+        public async Task<IActionResult> Add(ApplicationTypeAddDto applicationType) 
             => Ok(await _applicationTypeService.Add(applicationType));
     }
 }

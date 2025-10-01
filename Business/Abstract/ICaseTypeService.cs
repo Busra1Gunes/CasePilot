@@ -1,5 +1,6 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
+using Entities.Dto.CaseTypeDto;
 using Entities.Dto.DosyaDto;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,8 @@ namespace Business.Abstract
 	public interface ICaseTypeService
 	{
 		Task<IDataResult<List<CaseType>>> GetAll();
-		Task<IDataResult<CaseType>> Get(int davaturId);
-		Task<IResult> Add(CaseType davaTur);
-		Task<IResult> Update(CaseType davaTur);
+		Task<IDataResult<CaseType>> Get(int caseTypeID);
+		Task<IResult> Add(CaseTypeAddDto caseType);
+		Task<IResult> Update(CaseType caseType);
 	}
 }

@@ -26,7 +26,7 @@ namespace Business.Concrete
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        public async Task<IResult> Add(ApplicationTypeDto applicationType)
+        public async Task<IResult> Add(ApplicationTypeAddDto applicationType)
         {
             var applicationType1 = _mapper.Map<ApplicationType>(applicationType);
             await _applicationTypeDal.AddAsync(applicationType1);

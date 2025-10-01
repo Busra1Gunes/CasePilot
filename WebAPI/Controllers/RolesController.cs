@@ -1,13 +1,15 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
 using Entities.Dto.RoleDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
+    
     public class RolesController : ControllerBase
     {
         private readonly IRoleService _roleService;
@@ -27,7 +29,7 @@ namespace WebAPI.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateRoleDto dto)
+        public async Task<IActionResult> Add([FromBody] CreateRoleDto dto)
             => Ok(await _roleService.CreateRoleAsync(dto));
 
         [HttpPut("{id}")]

@@ -173,9 +173,14 @@ namespace Service.Mapping
             CreateMap<CaseType, CaseTypeDto>()            
                 .ReverseMap();
 
+            CreateMap<CaseType, CaseTypeAddDto>()
+             .ReverseMap();
+
             CreateMap<ApplicationType, ApplicationTypeDto>()
               .ReverseMap();
 
+            CreateMap<ApplicationType, ApplicationTypeAddDto>()
+             .ReverseMap();
 
             CreateMap<AccountTransaction, AccountTransactionAddDto>().ReverseMap();
 

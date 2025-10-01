@@ -13,7 +13,7 @@ namespace Entities.Concrete
 		public DateTime? CreatedDate { get; set; } = DateTime.Now;
         public DateTime? UpdatedDate { get; set; } = DateTime.Now;
 		public DateTime? DeletedDate { get; set; } = DateTime.Now;
-		public bool Status { get; set; } = false;
+		public bool Status { get; set; } = true;
 
     }
 }

@@ -13,7 +13,7 @@ namespace Business.Abstract
     {
         Task<IDataResult<List<ApplicationTypeDto>>> GetByCaseTypeID(int caseTypeID);
         Task<IDataResult<ApplicationType>> Get(int applicationTypeID);
-        Task<IResult> Add(ApplicationTypeDto applicationType);
+        Task<IResult> Add(ApplicationTypeAddDto applicationType);
         Task<IResult> Update(ApplicationType applicationType);
     }
 }
