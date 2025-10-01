@@ -59,7 +59,7 @@ namespace Business.Concrete
                 userToAdd.Password = _passwordService.HashPassword(userRegisterDto.Password);
                 userToAdd.Status = true;
                 userToAdd.CreatedDate = DateTime.Now;
-                userToAdd.RoleID = 2; // Default User role
+                userToAdd.RoleID = userRegisterDto.RoleID;
                 userToAdd.EmailConfirmed = false; // Email doğrulaması gerekiyor
 
                 await _userDal.AddAsync(userToAdd);
