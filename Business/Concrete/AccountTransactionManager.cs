@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Business.Abstract;
 using Business.Constants.Messages;
+using Business.Exceptions.CaseFile;
 using Business.ValidationRules;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
@@ -51,7 +52,7 @@ namespace Business.Concrete
 		{
 
 			var hareketler = _hesapHareketDal
-				.Where(x => x.DebtorID == userID || x.CreditID == userID)
+				.Where(x => (x.DebtorID == userID || x.CreditID == userID) && x.Status == true)
 				.Include(a => a.User1)
 				.Include(a => a.User2)
 				.Include(a => a.CaseFile);
@@ -98,7 +99,7 @@ namespace Business.Concrete
 		public async Task<IDataResult<AccountTransactionListDto>> GetAllByCaseFileID(int caseFileID)
 		{
 			var hareketler = _hesapHareketDal
-		.Where(x => x.CaseFileID == caseFileID && x.Type == TransactionType.DosyaMasrafi)
+		.Where(x => x.CaseFileID == caseFileID && x.Type == TransactionType.DosyaMasrafi && x.Status==true)
 		.Include(x => x.User1)
 		.Include(x => x.User2)
 		.Include(x => x.CaseFile);
@@ -139,5 +140,21 @@ namespace Business.Concrete
 		{
 			throw new NotImplementedException();
 		}
-	}
+        public async Task<IResult> Delete(int accountTransactionID)
+        {
+            AccountTransaction? accountTransaction = _hesapHareketDal.Where(d => d.ID == accountTransactionID && d.Status.Equals(true)).SingleOrDefault();
+
+            if (accountTransaction == null)
+                throw new InvalidCaseFileException();
+
+           
+            // Sonra dosyayı sil
+            accountTransaction.DeletedDate = DateTime.Now;
+            accountTransaction.Status = false;
+            _hesapHareketDal.Update(accountTransaction);
+
+            await _unitOfWork.SaveChangesAsync();
+            return new SuccessResult(CommonMessages.EntityDeleted);
+        }
+    }
 }

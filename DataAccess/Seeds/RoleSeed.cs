@@ -13,7 +13,7 @@ namespace DataAccess.Seeds
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {
-            builder.HasData(new Role { ID = 1, Name="Admin", Description="This is a admin roles" ,CreatedDate = DateTime.Now });
+            builder.HasData(new Role { ID = 1, Name="Admin", Description="This is a admin roles" ,CreatedDate = DateTime.Now ,Status=true});
         }
     }
 }

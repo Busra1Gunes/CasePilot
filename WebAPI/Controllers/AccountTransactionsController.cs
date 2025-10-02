@@ -32,6 +32,8 @@ namespace WebAPI.Controllers
 		public async Task<IActionResult> GetByCaseFileID(int caseFileID)
 	        => Ok(await _hareketService.GetAllByCaseFileID(caseFileID));
 
-
-	}
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int accountTransactionID)
+           => Ok(await _hareketService.Delete(accountTransactionID));
+    }
 }

@@ -18,5 +18,6 @@ namespace Business.Abstract
 		Task<IDataResult<AccountTransaction>> GetById(int transactionID);
         Task<IResult> Add(AccountTransactionAddDto accountTransactionAddDto);
 		Task<IResult> Update(AccountTransaction transaction);
+        Task<IResult> Delete(int accountTransactionID);
     }
 }
