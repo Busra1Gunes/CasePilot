@@ -17,11 +17,12 @@ namespace Business.Abstract
     {
         Task<IDataResult<List<CaseFileDocument>>> GetAll();
 		Task<IDataResult<CaseFileDocumentListDto>> GetAllByCaseFileID(int caseFileID);
-		Task<IDataResult<CaseFileDocumentListDto>> GetById(int evrakId);
-		Task<IResult> AddAsync(CaseFileDocumentAddDto dosya, string url);
-		Task<IResult> Update(CaseFileDocument evrak);
+		Task<IDataResult<CaseFileDocumentListDto>> GetById(int documentID);
+		Task<IResult> AddAsync(CaseFileDocumentAddDto document, string url);
+		Task<IResult> Update(CaseFileDocument document);
         Task<IDataResult<List<DocumentTypeListDto>>> GetAllDocumentType();
         Task<IResult> AddDocumentType(DocumentTypeAddDto documentTypeAddDto);
+        Task<IResult> DeleteCaseFileDocumentAsync(int id);
 
     }
 }

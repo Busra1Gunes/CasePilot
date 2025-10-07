@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Business.Abstract;
 using Business.Constants.Messages;
+using Business.Exceptions.CaseFile;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using Entities.Dto.AddDto;
 using Entities.Dto.CaseFileDto;
@@ -75,7 +77,22 @@ namespace Business.Concrete
         {
             CaseFileDefendant caseFileDefendants = await _caseFileDefendantDal.GetByIdAsync(caseFileDefendant.ID);
             _caseFileDefendantDal.Update(caseFileDefendants);
+            _unitOfWork.SaveChangesAsync();
             return new SuccessResult();
         }
+        public async Task<IResult> DeleteCaseFileDefendantAsync(int id)
+        {
+            CaseFileDefendant? caseFileDefendant = _caseFileDefendantDal.Where(d => d.ID == id && d.Status.Equals(true)).SingleOrDefault();
+
+            if (caseFileDefendant == null)
+                throw new InvalidCaseFileException();
+
+            caseFileDefendant.DeletedDate = DateTime.Now;
+            caseFileDefendant.Status = false;
+            _caseFileDefendantDal.Update(caseFileDefendant);
+            await _unitOfWork.SaveChangesAsync();
+            return new SuccessResult(CommonMessages.EntityUpdated);
+        }
+
     }
 }

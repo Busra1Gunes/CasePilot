@@ -15,6 +15,6 @@ namespace Business.Abstract
         Task<Role> GetRoleByIdAsync(int id);
         Task<IResult> CreateRoleAsync(CreateRoleDto createRoleDto);
         Task<IResult> UpdateRoleAsync(int id, CreateRoleDto createRoleDto);
-        Task<bool> DeleteRoleAsync(int id);
+        Task<IResult> DeleteRoleAsync(int id);
     }
 }

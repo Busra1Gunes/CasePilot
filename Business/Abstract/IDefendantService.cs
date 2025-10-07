@@ -14,5 +14,6 @@ namespace Business.Abstract
         Task<IDataResult<List<DefendantListDto>>> GetAllDefendant();
 
         Task<IResult> AddDefendat(DefendantAddDto defendantAddDto);
+        Task<IResult> DeleteDefendantAsync(int id);
     }
 }

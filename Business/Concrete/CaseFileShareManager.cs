@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Business.Abstract;
 using Business.Constants.Messages;
+using Business.Exceptions.CaseFile;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using Entities.Dto.CaseFileDto;
 using Entities.Dto.DosyaDto;
@@ -115,6 +117,20 @@ namespace Business.Concrete
         public Task<IResult> Update(CaseFileShareAddDto caseFileShare)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IResult> DeleteCaseFileShareAsync(int id)
+        {
+            CaseFileShare? caseFileShare = _caseFileShareDal.Where(d => d.ID == id && d.Status.Equals(true)).SingleOrDefault();
+
+            if (caseFileShare == null)
+                throw new InvalidCaseFileException();
+
+            caseFileShare.DeletedDate = DateTime.Now;
+            caseFileShare.Status = false;
+            _caseFileShareDal.Update(caseFileShare);
+            await _unitOfWork.SaveChangesAsync();
+            return new SuccessResult(CommonMessages.EntityUpdated);
         }
     }
 }

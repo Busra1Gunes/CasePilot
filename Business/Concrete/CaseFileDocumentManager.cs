@@ -22,6 +22,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Business.Constants.Messages;
 
 namespace Business.Concrete
 {
@@ -153,6 +154,20 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
+        public async Task<IResult> DeleteCaseFileDocumentAsync(int id)
+        {
+            CaseFileDocument? caseFileDocument = _caseFileDocumentDal.Where(d => d.ID == id && d.Status.Equals(true)).SingleOrDefault();
 
-	}
+            if (caseFileDocument == null)
+                throw new InvalidCaseFileException();
+
+            caseFileDocument.DeletedDate = DateTime.Now;
+            caseFileDocument.Status = false;
+            _caseFileDocumentDal.Update(caseFileDocument);
+            await _unitOfWork.SaveChangesAsync();
+            return new SuccessResult(CommonMessages.EntityUpdated);
+        }
+
+
+    }
 }

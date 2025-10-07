@@ -44,5 +44,9 @@ namespace WebAPI.Controllers
         [HttpGet]
 		public async Task<IActionResult> GetAllDocument()
             => Ok(await _caseFileDocumentService.GetAllDocumentType());
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+             => Ok(await _caseFileDocumentService.DeleteCaseFileDocumentAsync(id));
     }
 }

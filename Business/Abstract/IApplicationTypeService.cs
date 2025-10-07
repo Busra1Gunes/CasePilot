@@ -15,5 +15,6 @@ namespace Business.Abstract
         Task<IDataResult<ApplicationType>> Get(int applicationTypeID);
         Task<IResult> Add(ApplicationTypeAddDto applicationType);
         Task<IResult> Update(ApplicationType applicationType);
+        Task<IResult> DeleteApplicationTypeAsync(int id);
     }
 }

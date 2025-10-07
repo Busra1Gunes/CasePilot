@@ -16,5 +16,8 @@ namespace Business.Abstract
 		Task<IDataResult<CaseType>> Get(int caseTypeID);
 		Task<IResult> Add(CaseTypeAddDto caseType);
 		Task<IResult> Update(CaseType caseType);
-	}
+		Task<IResult> DeleteCaseTypeAsync(int id);
+
+
+    }
 }

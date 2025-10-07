@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Business.Abstract;
 using Business.Constants.Messages;
+using Business.Exceptions.CaseFile;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using Entities.Dto.AddDto;
 using Entities.Dto.DosyaDto;
@@ -42,7 +44,20 @@ namespace Business.Concrete
             return new SuccessDataResult<List<DefendantListDto>>(_mapper.Map<List<DefendantListDto>>(Defendants));
 
         }
+        public async Task<IResult> DeleteDefendantAsync(int id)
+        {
+            Defendant? defendant = _defendantDal.Where(d => d.ID == id && d.Status.Equals(true)).SingleOrDefault();
 
-      
+            if (defendant == null)
+                throw new InvalidCaseFileException();
+
+            defendant.DeletedDate = DateTime.Now;
+            defendant.Status = false;
+            _defendantDal.Update(defendant);
+            await _unitOfWork.SaveChangesAsync();
+            return new SuccessResult(CommonMessages.EntityUpdated);
+        }
+
+
     }
 }

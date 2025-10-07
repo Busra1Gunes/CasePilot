@@ -72,13 +72,18 @@ namespace Business.Concrete
             return new SuccessResult(CommonMessages.EntityUpdated);
         }
 
-        public async Task<bool> DeleteRoleAsync(int id)
+        public async Task<IResult> DeleteRoleAsync(int id)
         {
-            var role = await _roleDal.GetByIdAsync(id);
-            if (role == null) return false;
+            Role? role = _roleDal.Where(d => d.ID == id && d.Status.Equals(true)).SingleOrDefault();
 
-            _roleDal.Remove(role);
-            return true;
+            if (role == null)
+                throw new InvalidCaseFileException();
+           
+            role.DeletedDate = DateTime.Now;
+            role.Status = false;
+            _roleDal.Update(role);
+            await _unitOfWork.SaveChangesAsync();
+            return new SuccessResult(CommonMessages.EntityUpdated);
         }
     }
 }

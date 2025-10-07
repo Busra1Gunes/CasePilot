@@ -30,5 +30,10 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetByUserID(int userID)
            => Ok(await _caseFileShareService.GetAllByUserID(userID));
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+               => Ok(await _caseFileShareService.DeleteCaseFileShareAsync(id));
     }
+
 }

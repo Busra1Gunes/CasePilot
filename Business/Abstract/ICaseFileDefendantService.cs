@@ -19,8 +19,10 @@ namespace Business.Abstract
 		Task<IDataResult<CaseFileDefendant>> GetById(int caseFileDefendantID);
         Task<IResult> Add(CaseFileDefendantAddDto caseFileDefendant);
 		Task<IResult> Update(CaseFileDefendant caseFileDefendant);
+		Task<IResult> DeleteCaseFileDefendantAsync(int id);
 
 
 
-	}
+
+    }
 }

@@ -31,5 +31,9 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(ApplicationTypeAddDto applicationType) 
             => Ok(await _applicationTypeService.Add(applicationType));
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+                => Ok(await _applicationTypeService.DeleteApplicationTypeAsync(id));
     }
 }

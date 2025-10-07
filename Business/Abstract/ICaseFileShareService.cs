@@ -20,5 +20,6 @@ namespace Business.Abstract
         Task<IDataResult<CaseFileShareDto>> Get(int shareID);
         Task<IResult> Add(CaseFileShareAddDto caseFileShareAddDto);
         Task<IResult> Update(CaseFileShareAddDto caseFileShare);
+        Task<IResult> DeleteCaseFileShareAsync(int id);
     }
 }

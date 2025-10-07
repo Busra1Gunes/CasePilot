@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Business.Abstract;
 using Business.Constants.Messages;
+using Business.Exceptions.CaseFile;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
@@ -49,6 +50,19 @@ namespace Business.Concrete
         public async Task<IResult> Update(ApplicationType basvuruTur)
         {
             throw new NotImplementedException();
+        }
+        public async Task<IResult> DeleteApplicationTypeAsync(int id)
+        {
+            ApplicationType? applicationType = _applicationTypeDal.Where(d => d.ID == id && d.Status.Equals(true)).SingleOrDefault();
+
+            if (applicationType == null)
+                throw new InvalidCaseFileException();
+
+            applicationType.DeletedDate = DateTime.Now;
+            applicationType.Status = false;
+            _applicationTypeDal.Update(applicationType);
+            await _unitOfWork.SaveChangesAsync();
+            return new SuccessResult(CommonMessages.EntityUpdated);
         }
     }
 }

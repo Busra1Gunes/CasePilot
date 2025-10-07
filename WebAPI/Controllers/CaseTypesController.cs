@@ -28,5 +28,8 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Add(CaseTypeAddDto caseTypeAddDto)
            => Ok(await _caseTypeService.Add(caseTypeAddDto));
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+                  => Ok(await _caseTypeService.DeleteCaseTypeAsync(id));
     }
 }
