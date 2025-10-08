@@ -99,12 +99,14 @@ namespace Business.Concrete
                     .Include(b => b.ApplicationType)
                     .Include(i => i.City)
                     .Include(c => c.District)
-                    .Include(cf => cf.CaseFileDefendant).ThenInclude(cfd => cfd.Defendant)
-                    .Include(cf => cf.CaseFileShares).ThenInclude(cfs => cfs.User)
-                    .Where(c => c.Status == true) // aktif dosyalar
+                    .Include(cf => cf.CaseFileDefendant.Where(cfd => cfd.Status == true))
+                        .ThenInclude(cfd => cfd.Defendant)
+                    .Include(cf => cf.CaseFileShares.Where(cfs => cfs.Status == true))
+                       .ThenInclude(cfs => cfs.User)
+                    .Where(c => c.Status == true ) // aktif dosyalar
                     .AsQueryable();
 
-                // 🔎 Dinamik filtreler
+
                 if (filter.CaseTypeID.HasValue)
                     query = query.Where(c => c.CaseTypeID == filter.CaseTypeID.Value);
 
@@ -121,7 +123,7 @@ namespace Business.Concrete
                     query = query.Where(c => c.IdentityNumber == filter.IdentityNumber);
 
                 if (!string.IsNullOrEmpty(filter.FileNumber))
-                    query = query.Where(c => c.ID.ToString() == filter.FileNumber); // ID dosya no ise
+                    query = query.Where(c => c.ID.ToString() == filter.FileNumber); 
 
                 if (!string.IsNullOrEmpty(filter.ShareUserName))
                     query = query.Where(c => c.CaseFileShares

@@ -54,7 +54,7 @@ namespace Business.Concrete
 
         public async Task<IDataResult<List<CaseFileDefendantListDto>>> GetAllByCaseFileId(int caseFileID)
         {
-            List<CaseFileDefendant> caseFileDefendants = _caseFileDefendantDal.GetAllQueryable().Where(d => d.caseFileID.Equals(caseFileID)).Include(d => d.Defendant)
+            List<CaseFileDefendant> caseFileDefendants = _caseFileDefendantDal.GetAllQueryable().Where(d => d.caseFileID.Equals(caseFileID) && d.Status.Equals(true)  ).Include(d => d.Defendant)
                 .Include(d => d.CaseFile)
                 .ToList();
             return new SuccessDataResult<List<CaseFileDefendantListDto>>(_mapper.Map<List<CaseFileDefendantListDto>>(caseFileDefendants));

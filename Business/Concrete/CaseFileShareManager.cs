@@ -46,7 +46,7 @@ namespace Business.Concrete
         public async Task<IDataResult<CaseFileShareListDto>> GetAll()
         {
             var shares = _caseFileShareDal
-                 .Where(x => x.Status == false)
+                 .Where(x => x.Status == true)
                  .Include(a => a.CaseFile)
                  .Include(a => a.User);
 
@@ -69,7 +69,7 @@ namespace Business.Concrete
         public async Task<IDataResult<CaseFileShareListDto>> GetAllByCaseFileID(int caseFileID)
         {
             var shares = _caseFileShareDal
-                 .Where(x => x.Status == false && x.CaseFileID == caseFileID)
+                 .Where(x => x.Status == true && x.CaseFileID == caseFileID)
                  .Include(a => a.CaseFile)
                  .Include(a => a.User);
 
@@ -93,7 +93,7 @@ namespace Business.Concrete
         public async Task<IDataResult<CaseFileShareListDto>> GetAllByUserID(int userID)
         {
             var shares = _caseFileShareDal
-                .Where(x => x.Status == false && x.UserID == userID)
+                .Where(x => x.Status == true && x.UserID == userID)
                 .Include(a => a.CaseFile)
                 .Include(a => a.User);
 
