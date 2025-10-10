@@ -57,5 +57,9 @@ namespace DataAccess.Concrete.EntityFramework
         DbSet<CaseFileNote> CaseFileNotes { get; set; }
         DbSet<Court> Courts { get; set; }
         DbSet<Hearing> Hearings { get; set; }
+        DbSet<Income> Incomes { get; set; }
+        DbSet<Expense> Expenses { get; set; }
+        DbSet<IncomeCategory> ıncomeCategories { get; set; }
+        DbSet<ExpenseCategory> ExpenseCategories { get; set; }
     }
 }

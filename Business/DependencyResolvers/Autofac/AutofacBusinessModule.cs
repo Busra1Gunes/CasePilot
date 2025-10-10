@@ -8,6 +8,7 @@ using Core.CrossCuttingConcerns.Caching;
 using Core.CrossCuttingConcerns.Caching.Microsoft;
 using Core.Utilities.Interceptors;
 using DataAccess.Abstract;
+using DataAccess.Concrete;
 using DataAccess.Concrete.EntityFramework;
 using Serilog;
 using System;
@@ -88,7 +89,21 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<HearingManager>().As<IHearingService>().InstancePerLifetimeScope();
             builder.RegisterType<EfHearingDal>().As<IHearingDal>().InstancePerLifetimeScope();
 
-         
+
+            builder.RegisterType<IncomeManager>().As<IIncomeService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfIncomeDal>().As<IIncomeDal>().InstancePerLifetimeScope();
+
+
+            builder.RegisterType<IncomeCategoryManager>().As<IIncomeCategoryService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfIncomeCategoryDal>().As<IIncomeCategoryDal>().InstancePerLifetimeScope();
+
+            builder.RegisterType<ExpenseManager>().As<IExpenseService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfExpenseDal>().As<IExpenseDal>().InstancePerLifetimeScope();
+
+
+            builder.RegisterType<ExpenseCategoryManager>().As<IExpenseCategoryService>().InstancePerLifetimeScope();
+            builder.RegisterType<EfExpenseCategoryDal>().As<IExpenseCategoryDal>().InstancePerLifetimeScope();
+
             //Bu C# kodu, Dependency Injection (Bağımlılık Enjeksiyonu) işlemi için kullanılan bir yapılandırmadır
             //ve genellikle Autofac gibi bir Inversion of Control (IoC) konteyneri kullanılarak gerçekleştirilir. Kodun amacı,
             //belirtilen assembly'deki tüm sınıfları tarayarak, onların uyguladıkları arayüzler ile birlikte IoC konteynerine kaydetmek

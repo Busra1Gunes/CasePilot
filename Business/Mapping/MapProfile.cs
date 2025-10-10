@@ -2,6 +2,7 @@
 using Core;
 
 using Entities.Concrete;
+using Entities.Dto;
 using Entities.Dto.AddDto;
 using Entities.Dto.ApplicationTypeDto;
 using Entities.Dto.CaseFileDto;
@@ -9,8 +10,10 @@ using Entities.Dto.CaseTypeDto;
 using Entities.Dto.CourtDto;
 using Entities.Dto.DocumentDto;
 using Entities.Dto.DosyaDto;
+using Entities.Dto.ExpenseDto;
 using Entities.Dto.HearingDto;
 using Entities.Dto.HesapHareketDto;
+using Entities.Dto.IncomeDto;
 using Entities.Dto.KullaniciDto;
 using Entities.Dto.KullaniciDto.KullaniciDto;
 using Entities.Dto.ListDto;
@@ -257,6 +260,45 @@ namespace Service.Mapping
                 .ForMember(dest => dest.CourtAddress, opt => opt.MapFrom(src => src.Court.Address))
                 .ForMember(dest => dest.HearingStatusName, opt => opt.MapFrom(src => GetHearingStatusName(src.HearingStatus)));
 
+            // Income Mappings - Gelir haritalama
+            CreateMap<Income, IncomeAddDto>().ReverseMap();
+            CreateMap<Income, IncomeUpdateDto>().ReverseMap();
+
+            CreateMap<Income, IncomeListDto>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name + " " + src.User.Surname))
+                .ForMember(dest => dest.CaseFileName, opt => opt.MapFrom(src => src.CaseFile != null ? src.CaseFile.Name + " " + src.CaseFile.Surname : "-"))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
+
+            CreateMap<Income, IncomeDetailDto>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name + " " + src.User.Surname))
+                .ForMember(dest => dest.CaseFileName, opt => opt.MapFrom(src => src.CaseFile != null ? src.CaseFile.Name + " " + src.CaseFile.Surname : "-"))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
+
+            // Expense Mappings - Gider haritalama
+            CreateMap<Expense, ExpenseAddDto>().ReverseMap();
+            CreateMap<Expense, ExpenseUpdateDto>().ReverseMap();
+
+            CreateMap<Expense, ExpenseListDto>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name + " " + src.User.Surname))
+                .ForMember(dest => dest.CaseFileName, opt => opt.MapFrom(src => src.CaseFile != null ? src.CaseFile.Name + " " + src.CaseFile.Surname : "-"))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
+                .ForMember(dest => dest.PaymentStatusName, opt => opt.MapFrom(src =>
+                    src.PaymentStatus == 1 ? "Ödendi" :
+                    src.PaymentStatus == 2 ? "Ödenmedi" : "-"));
+
+            CreateMap<Expense, ExpenseDetailDto>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name + " " + src.User.Surname))
+                .ForMember(dest => dest.CaseFileName, opt => opt.MapFrom(src => src.CaseFile != null ? src.CaseFile.Name + " " + src.CaseFile.Surname : "-"))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
+                .ForMember(dest => dest.PaymentStatusName, opt => opt.MapFrom(src =>
+                    src.PaymentStatus == 1 ? "Ödendi" :
+                    src.PaymentStatus == 2 ? "Ödenmedi" : "-"));
+
+            // Category Mappings - Kategori haritalama
+            CreateMap<IncomeCategory, IncomeCategoryAddDto>().ReverseMap();
+            CreateMap<IncomeCategory, IncomeCategoryListDto>().ReverseMap();
+            CreateMap<ExpenseCategory, ExpenseCategoryAddDto>().ReverseMap();
+            CreateMap<ExpenseCategory, ExpenseCategoryListDto>().ReverseMap();
 
         }
     }

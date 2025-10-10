@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class CaseType:Entity //Dava Türü
+    public class CaseType : Entity //Dava Türü
     {
         public string Name { get; set; }
         public ICollection<CaseFile> CaseFiles { get; set; }

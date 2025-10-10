@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Seeds
 {
-	public class CaseFileSeed : IEntityTypeConfiguration<CaseFile>
+    public class CaseFileSeed : IEntityTypeConfiguration<CaseFile>
 	{
 		public void Configure(EntityTypeBuilder<CaseFile> builder)
 		{
@@ -36,5 +36,6 @@ namespace Entities.Seeds
 			//});
 
 		}
-	}
-}
+    }
+    
+    }
