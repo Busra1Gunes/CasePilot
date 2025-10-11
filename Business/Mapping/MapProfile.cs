@@ -41,7 +41,7 @@ namespace Service.Mapping
 
         public MapProfile(IHttpContextAccessor httpContextAccessor)
         {
-            CreateMap<User, UserAddDto>()               
+            CreateMap<User, UserAddDto>()
                 .ReverseMap();
 
             CreateMap<User, UserGetDto>()
@@ -124,9 +124,9 @@ namespace Service.Mapping
 
             CreateMap<CaseFile, CaseFileAddDto>().ReverseMap();
 
- 
+
             CreateMap<CaseFile, CaseFileDetailDto>()
-        .ForMember(dest => dest.CityID, opt => opt.MapFrom(x => x.City.ID))    
+        .ForMember(dest => dest.CityID, opt => opt.MapFrom(x => x.City.ID))
         .ForMember(dest => dest.DistrictID, opt => opt.MapFrom(x => x.District.ID))
         .ForMember(dest => dest.CaseTypeID, opt => opt.MapFrom(x => x.CaseType.ID))
         .ForMember(dest => dest.CaseFileShares, opt => opt.MapFrom(x => x.CaseFileShares)) // Güncellendi
@@ -135,28 +135,66 @@ namespace Service.Mapping
         .ReverseMap();
 
 
-         CreateMap<CaseFile, CaseFileListDto>()
-        .ForMember(dest => dest.City, opt => opt.MapFrom(x => x.City.Name))
-        .ForMember(dest => dest.District, opt => opt.MapFrom(x => x.District.Name))
-        .ForMember(dest => dest.CaseType, opt => opt.MapFrom(x => x.CaseType.Name))  
-        .ForMember(dest => dest.ApplicationType, opt => opt.MapFrom(x => x.ApplicationType.Name))
-        .ForMember(dest => dest.CaseStatus, opt => opt.MapFrom(x =>
-                      x.CaseStatus == 1 ? "Açık" :
-                      x.CaseStatus == 2 ? "Kapalı" :
-                      x.CaseStatus == 3 ? "İptal Edildi" : "Bilinmiyor"))
-        .ForMember(dest => dest.Defendants,  opt => opt.MapFrom(x => string.Join(" - ",x.CaseFileDefendant.Select(d => d.Defendant.Name))))
-        .ForMember(dest => dest.Shares, opt => opt.MapFrom(x => string.Join(" - ", x.CaseFileShares.Select(d => d.User.Name+" "+d.User.Surname))))
-        .ReverseMap();
+            CreateMap<CaseFile, CaseFileListDto>()
+           .ForMember(dest => dest.City, opt => opt.MapFrom(x => x.City.Name))
+           .ForMember(dest => dest.District, opt => opt.MapFrom(x => x.District.Name))
+           .ForMember(dest => dest.CaseType, opt => opt.MapFrom(x => x.CaseType.Name))
+           .ForMember(dest => dest.ApplicationType, opt => opt.MapFrom(x => x.ApplicationType.Name))
+           .ForMember(dest => dest.CaseStatus, opt => opt.MapFrom(x =>
+                         x.CaseStatus == 1 ? "Açık" :
+                         x.CaseStatus == 2 ? "Kapalı" :
+                         x.CaseStatus == 3 ? "İptal Edildi" : "Bilinmiyor"))
+           .ForMember(dest => dest.Defendants, opt => opt.MapFrom(x => string.Join(" - ", x.CaseFileDefendant.Select(d => d.Defendant.Name))))
+           .ForMember(dest => dest.Shares, opt => opt.MapFrom(x => string.Join(" - ", x.CaseFileShares.Select(d => d.User.Name + " " + d.User.Surname))))
+           .ReverseMap();
 
+
+
+
+            CreateMap<CaseFile, CaseFileUpdateDto>().ReverseMap();
+            CreateMap<CaseFileDocumentAddDto, CaseFileDocument>()
+     .ForMember(dest => dest.ID, opt => opt.Ignore())
+     .ForMember(dest => dest.FileName, opt => opt.Ignore())        // Manager'da ayarlanacak
+     .ForMember(dest => dest.FileExtension, opt => opt.Ignore())   // Manager'da ayarlanacak
+     .ForMember(dest => dest.FilePath, opt => opt.Ignore())        // Manager'da ayarlanacak
+     .ForMember(dest => dest.FileSize, opt => opt.Ignore())        // Manager'da ayarlanacak
+     .ForMember(dest => dest.ContentType, opt => opt.Ignore())     // Manager'da ayarlanacak
+     .ForMember(dest => dest.CreatedDate, opt => opt.Ignore())
+     .ForMember(dest => dest.UpdatedDate, opt => opt.Ignore())
+     .ForMember(dest => dest.DeletedDate, opt => opt.Ignore())
+     .ForMember(dest => dest.Status, opt => opt.Ignore())
+     .ForMember(dest => dest.CaseFile, opt => opt.Ignore())
+     .ForMember(dest => dest.DocumentType, opt => opt.Ignore());
+
+            // Update DTO -> Entity (Dosya güncellerken)
+            CreateMap<CaseFileDocumentUpdateDto, CaseFileDocument>()
+                .ForMember(dest => dest.ID, opt => opt.Ignore())
+                .ForMember(dest => dest.FileName, opt => opt.Ignore())        // Manager'da ayarlanacak
+                .ForMember(dest => dest.FileExtension, opt => opt.Ignore())   // Manager'da ayarlanacak
+                .ForMember(dest => dest.FilePath, opt => opt.Ignore())        // Manager'da ayarlanacak
+                .ForMember(dest => dest.FileSize, opt => opt.Ignore())        // Manager'da ayarlanacak
+                .ForMember(dest => dest.ContentType, opt => opt.Ignore())     // Manager'da ayarlanacak
+                .ForMember(dest => dest.CreatedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.DeletedDate, opt => opt.Ignore())
+                .ForMember(dest => dest.Status, opt => opt.Ignore())
+                .ForMember(dest => dest.CaseFile, opt => opt.Ignore())
+                .ForMember(dest => dest.DocumentType, opt => opt.Ignore());
+
+            // Entity -> List DTO (Listeleme için)
             CreateMap<CaseFileDocument, CaseFileDocumentListDto>()
-	   .ForMember(dest => dest.CaseFile, opt => opt.MapFrom(x => x.CaseFile.Name+" "+x.CaseFile.Surname))
-	   .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(x => x.DocumentType.Name))
-	   .ReverseMap();
+                .ForMember(dest => dest.CaseFile, opt => opt.MapFrom(x => x.CaseFile.Name + " " + x.CaseFile.Surname))
+                .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(x => x.DocumentType.Name))
+                .ForMember(dest => dest.FileSizeFormatted, opt => opt.Ignore())  // Manager'da hesaplanacak
+                .ForMember(dest => dest.FileUrl, opt => opt.Ignore());           // Manager'da ayarlanacak
 
+            // Entity -> Detail DTO (Detay için)
+            CreateMap<CaseFileDocument, CaseFileDocumentDetailDto>()
+                .ForMember(dest => dest.CaseFile, opt => opt.MapFrom(x => x.CaseFile.Name + " " + x.CaseFile.Surname))
+                .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(x => x.DocumentType.Name))
+                .ForMember(dest => dest.FileSizeFormatted, opt => opt.Ignore())  // Manager'da hesaplanacak
+                .ForMember(dest => dest.FileUrl, opt => opt.Ignore());           // Manager'da ayarlanacak
 
-			CreateMap<CaseFile, CaseFileUpdateDto>().ReverseMap();
-            CreateMap<CaseFileDocument, CaseFileDocumentAddDto>()
-                .ReverseMap();
 
             CreateMap<CaseFileDefendant, CaseFileDefendantAddDto>().ReverseMap();
 
@@ -173,7 +211,7 @@ namespace Service.Mapping
                 .ReverseMap();
 
 
-            CreateMap<CaseType, CaseTypeDto>()            
+            CreateMap<CaseType, CaseTypeDto>()
                 .ReverseMap();
 
             CreateMap<CaseType, CaseTypeAddDto>()
@@ -182,19 +220,22 @@ namespace Service.Mapping
             CreateMap<ApplicationType, ApplicationTypeDto>()
               .ReverseMap();
 
+            CreateMap<ApplicationType, ApplicationTypeUpdateDto>()
+              .ReverseMap();
+
             CreateMap<ApplicationType, ApplicationTypeAddDto>()
              .ReverseMap();
 
             CreateMap<AccountTransaction, AccountTransactionAddDto>().ReverseMap();
 
-        
+
             CreateMap<User, UserLoginDto>().ReverseMap();
-         
+
 
             CreateMap<AccountTransaction, AccountTransactionDto>()
-            .ForMember(dest => dest.Debtor, opt => opt.MapFrom(x => x.User1.Name+" "+x.User1.Surname))
+            .ForMember(dest => dest.Debtor, opt => opt.MapFrom(x => x.User1.Name + " " + x.User1.Surname))
             .ForMember(dest => dest.Credit, opt => opt.MapFrom(x => x.User2.Name + " " + x.User2.Surname))
-            .ForMember(dest => dest.CaseFile, opt => opt.MapFrom(x => x.CaseFile.Name+" "+x.CaseFile.Surname))
+            .ForMember(dest => dest.CaseFile, opt => opt.MapFrom(x => x.CaseFile.Name + " " + x.CaseFile.Surname))
            .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(x =>
                                          x.PaymentStatus == 1 ? "Ödendi" :
                                          x.PaymentStatus == 2 ? "Ödenmedi" :

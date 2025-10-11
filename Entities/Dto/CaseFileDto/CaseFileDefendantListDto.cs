@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Entities.Dto.DosyaDto
 {
-	public class CaseFileDefendantListDto
+    public class CaseFileDefendantListDto
 	{
 		public int ID { get; set; }
 		public string Name { get; set; }
 
-	}
+    }
 }

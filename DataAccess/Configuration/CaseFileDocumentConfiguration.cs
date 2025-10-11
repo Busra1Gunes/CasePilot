@@ -13,30 +13,93 @@ namespace DataAccess.Configuration
     {
         public void Configure(EntityTypeBuilder<CaseFileDocument> builder)
         {
-            // Birincil anahtar tanımlama
-            builder.HasKey(de => de.ID);
-            builder.Property(de => de.ID).UseIdentityColumn();
 
-            // Zorunlu alanlar
-            builder.Property(de => de.CaseFileID).IsRequired();
-            builder.Property(de => de.DocumentTypeID).IsRequired();
-            builder.Property(de => de.DocumentUrl)
-                   .IsRequired()
-                   .HasMaxLength(500); // URL için uzunluk sınırı koyduk
+            builder.ToTable("CaseFileDocuments"); // Çoğul form öneriliyor
 
-            // İlişkiler
+
+            builder.HasKey(x => x.ID);
+            builder.Property(x => x.ID).UseIdentityColumn();
+
+
+            builder.Property(x => x.CaseFileID)
+                .IsRequired();
+
+            builder.Property(x => x.DocumentTypeID)
+                .IsRequired();
+
+
+
+            // Dosya adı
+            builder.Property(x => x.FileName)
+                .IsRequired()
+                .HasMaxLength(255);
+
+            // Dosya uzantısı
+            builder.Property(x => x.FileExtension)
+                .IsRequired()
+                .HasMaxLength(10);
+
+            // Dosya yolu
+            builder.Property(x => x.FilePath)
+                .IsRequired()
+                .HasMaxLength(500); // Dosya yolu için
+
+            // Dosya boyutu
+            builder.Property(x => x.FileSize)
+                .IsRequired();
+
+            // Content Type (MIME)
+            builder.Property(x => x.ContentType)
+                .IsRequired()
+                .HasMaxLength(100);
+
+
+
+            builder.Property(x => x.CreatedDate)
+                .IsRequired()
+                .HasDefaultValueSql("GETDATE()");
+
+            builder.Property(x => x.UpdatedDate)
+                .IsRequired(false);
+
+            builder.Property(x => x.DeletedDate)
+                .IsRequired(false);
+
+            builder.Property(x => x.Status)
+                .IsRequired()
+                .HasDefaultValue(true);
+
+
+
+            // CaseFile ile ilişki
             builder.HasOne(x => x.CaseFile)
-        .WithMany(x => x.CaseFileDocuments) // Eğer CaseFile içinde ICollection varsa
-        .HasForeignKey(x => x.CaseFileID)
-        .OnDelete(DeleteBehavior.Restrict);
+                .WithMany(x => x.CaseFileDocuments)
+                .HasForeignKey(x => x.CaseFileID)
+                .OnDelete(DeleteBehavior.Restrict); // Cascade delete önleniyor
 
+            // DocumentType ile ilişki
             builder.HasOne(x => x.DocumentType)
-                .WithMany() // DocumentType tarafında ICollection yoksa böyle olmalı
+                .WithMany() // DocumentType'da navigation collection yoksa boş bırak
                 .HasForeignKey(x => x.DocumentTypeID)
                 .OnDelete(DeleteBehavior.Restrict);
-            // Tablo adını belirleme
-            builder.ToTable("CaseFileDocument");
-            // builder.Ignore(i => i.SilinmeTarihi); Ignore ile belirtilen alan veritabanına kaydedilmez
+
+
+
+            // CaseFileID üzerine index
+            builder.HasIndex(x => x.CaseFileID)
+                .HasDatabaseName("IX_CaseFileDocuments_CaseFileID");
+
+            // DocumentTypeID üzerine index
+            builder.HasIndex(x => x.DocumentTypeID)
+                .HasDatabaseName("IX_CaseFileDocuments_DocumentTypeID");
+
+            // Status üzerine index (soft delete için)
+            builder.HasIndex(x => x.Status)
+                .HasDatabaseName("IX_CaseFileDocuments_Status");
+
+            // Composite index (CaseFileID + Status)
+            builder.HasIndex(x => new { x.CaseFileID, x.Status })
+                .HasDatabaseName("IX_CaseFileDocuments_CaseFileID_Status");
         }
     }
 }

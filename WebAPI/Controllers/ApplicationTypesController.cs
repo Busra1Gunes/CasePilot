@@ -13,27 +13,33 @@ namespace WebAPI.Controllers
     public class ApplicationTypesController : ControllerBase
     {
         readonly IApplicationTypeService _applicationTypeService;
+
         public ApplicationTypesController(IApplicationTypeService applicationTypeService)
         {
             _applicationTypeService = applicationTypeService;
         }
-       
         [HttpGet]
-        public async Task<IActionResult> GetAll(int caseTypeID) 
+        public async Task<IActionResult> GetAll(int caseTypeID)
             => Ok(await _applicationTypeService.GetByCaseTypeID(caseTypeID));
 
-       
         [HttpGet]
-        public async Task<IActionResult> Get(int applicationTypeID) 
+        public async Task<IActionResult> Get(int applicationTypeID)
             => Ok(await _applicationTypeService.Get(applicationTypeID));
 
-      
         [HttpPost]
-        public async Task<IActionResult> Add(ApplicationTypeAddDto applicationType) 
+        public async Task<IActionResult> Add(ApplicationTypeAddDto applicationType)
             => Ok(await _applicationTypeService.Add(applicationType));
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
-                => Ok(await _applicationTypeService.DeleteApplicationTypeAsync(id));
+            => Ok(await _applicationTypeService.DeleteApplicationTypeAsync(id));
+
+    
+        /// <summary>
+        /// Başvuru türünü günceller
+        /// </summary>
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] ApplicationTypeUpdateDto applicationType)
+            => Ok(await _applicationTypeService.Update(applicationType));
     }
 }

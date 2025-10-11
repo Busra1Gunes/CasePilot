@@ -1,175 +1,354 @@
 ﻿using AutoMapper;
 using Business.Abstract;
-using Business.Exceptions.CaseFile;
-using Business.Exceptions.CaseFileDocument;
-using Core.FTP;
+using Business.Constants.Messages;
+using Business.Settings;
 using Core.Utilities.Results;
-using Business.Constants.Paths;
 using DataAccess.Abstract;
-using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
-using Entities.Dto.AddDto;
 using Entities.Dto.CaseFileDto;
 using Entities.Dto.DocumentDto;
 using Entities.Dto.DosyaDto;
-using Entities.Dto.ListDto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Business.Constants.Messages;
 
-namespace Business.Concrete
+public class CaseFileDocumentManager : ICaseFileDocumentService
 {
-    public class CaseFileDocumentManager : ICaseFileDocumentService
+    readonly ICaseFileDocumentDal _caseFileDocumentDal;
+    readonly IDocumentTypeDal _documentTypeDal;
+    readonly IMapper _mapper;
+    readonly IUnitOfWork _unitOfWork;
+    readonly IFileService _fileService;
+    readonly FileStorageSettings _fileSettings;
+
+    public CaseFileDocumentManager(
+        ICaseFileDocumentDal caseFileDocumentDal,
+        IMapper mapper,
+        IDocumentTypeDal documentTypeDal,
+        IUnitOfWork unitOfWork,
+        IFileService fileService,
+        IOptions<FileStorageSettings> fileSettings)
     {
-        readonly ICaseFileDocumentDal _caseFileDocumentDal;
-        readonly IDocumentTypeDal _documentTypeDal;
-	    readonly FtpSettings _ftpSettings;
-		readonly IMapper _mapper;
-		readonly IUnitOfWork _unitOfWork;
-
-        public CaseFileDocumentManager(ICaseFileDocumentDal caseFileDocumentDal, IMapper mapper, IDocumentTypeDal documentTypeDal,
-			IOptions<FtpSettings> ftpSettings,IUnitOfWork unitOfWork)
-        {
-            _caseFileDocumentDal = caseFileDocumentDal;
-            _mapper = mapper;
-            _documentTypeDal = documentTypeDal;
-			_ftpSettings = ftpSettings.Value;
-			_unitOfWork = unitOfWork;
-		}
-		public async Task<IResult> AddAsync(CaseFileDocumentAddDto resume, string url)
-		{
-			string? ftpFileUrl = null;
-
-			if (resume.DocumentUrl != null)
-			{
-				var uzanti = Path.GetExtension(resume.DocumentUrl.FileName).ToLower();
-				var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".docx", ".pdf", ".xlsx" };
-
-				if (!allowedExtensions.Contains(uzanti))
-					return new ErrorResult("Geçersiz dosya formatı. Sadece JPG, PNG, PDF, DOCX, XLSX kabul edilmektedir.");
-
-				string fileName = $"{DateTime.Now:yyyyMMddHHmmssfff}{uzanti}";
-                string ftpUploadPath = $"{_ftpSettings.Host}/{ FtpPaths.ftpUploadPath}/{fileName}";
-
-                try
-				{
-					using var stream = resume.DocumentUrl.OpenReadStream();
-					bool uploadResult = await UploadToFtpAsync(ftpUploadPath, stream, _ftpSettings.Username, _ftpSettings.Password);
-					if (!uploadResult)
-                        throw new FileUploadException();
-
-                    ftpFileUrl = $"{FtpPaths.FtpFileUrl}/{fileName}";
-                }
-				catch (Exception ex)
-				{
-					throw new FileUploadException();
-				}
-			}
-
-			var document = _mapper.Map<CaseFileDocument>(resume);
-			document.DocumentUrl = ftpFileUrl;
-
-			await _caseFileDocumentDal.AddAsync(document);
-			await _unitOfWork.SaveChangesAsync();
-			return new SuccessResult("Veri başarıyla kaydedildi.");
-		}
-
-
-		private async Task<bool> UploadToFtpAsync(string ftpUrl, Stream fileStream, string username, string password)
-		{
-			try
-			{
-				var request = (FtpWebRequest)WebRequest.Create(ftpUrl);
-				request.Method = WebRequestMethods.Ftp.UploadFile;
-				request.Credentials = new NetworkCredential(username, password);
-				request.EnableSsl = false;
-				request.UseBinary = true;
-				request.UsePassive = true;
-				request.ContentLength = fileStream.Length;
-
-				using var requestStream = await request.GetRequestStreamAsync();
-				await fileStream.CopyToAsync(requestStream);
-
-				using FtpWebResponse? response = (FtpWebResponse)await request.GetResponseAsync();
-				return response.StatusCode != FtpStatusCode.ClosingData;
-			}
-			catch
-			{
-                throw new FileUploadException();
-            }
-		}
-
-
-		public async  Task<IDataResult<List<CaseFileDocument>>> GetAll()
-        {
-            List<CaseFileDocument> dosyaEvraklar = _caseFileDocumentDal.GetAllQueryable().ToList();
-            return new SuccessDataResult<List<CaseFileDocument>>(dosyaEvraklar);
-        }
-
-        public async Task<IDataResult<CaseFileDocumentListDto>> GetAllByCaseFileID(int caseFileID)
-        {
-            List<CaseFileDocument> caseFileDocuments =  _caseFileDocumentDal.GetAllQueryable()
-				.Include(d=>d.DocumentType)
-				.Include(d=>d.CaseFile)
-				.Where(e=>e.CaseFileID.Equals(caseFileID)).ToList();
-
-			var list = _mapper.Map<CaseFileDocumentListDto>(caseFileDocuments);
-			return new SuccessDataResult<CaseFileDocumentListDto>(list);		
-        }
-
-        public async  Task<IDataResult<CaseFileDocumentListDto>> GetById(int documentID)
-        {
-            CaseFileDocument? evrak = _caseFileDocumentDal.GetAllQueryable()
-				.Include(d => d.DocumentType)
-				.Include(d => d.CaseFile)
-				.FirstOrDefaultAsync(d=>d.ID.Equals(documentID)).Result;
-
-			if (evrak == null)
-				throw new CaseFileDocumentNotFoundException(documentID);
-			return new SuccessDataResult<CaseFileDocumentListDto>(_mapper.Map<CaseFileDocumentListDto>(evrak));
-        }
-
-        public async Task<IResult> Update(CaseFileDocument document)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IDataResult<List<DocumentTypeListDto>>> GetAllDocumentType()
-        {
-            List<DocumentType> documents = _documentTypeDal.GetAllQueryable().ToList();
-            return new SuccessDataResult<List<DocumentTypeListDto>>(_mapper.Map<List<DocumentTypeListDto>>(documents));
-        }
-
-        public async Task<IResult> AddDocumentType(DocumentTypeAddDto documentTypeAddDto)
-        {
-            _documentTypeDal.AddAsync(_mapper.Map<DocumentType>(documentTypeAddDto));
-            await _unitOfWork.SaveChangesAsync();
-            return new SuccessResult();
-        }
-
-        public async Task<IResult> DeleteCaseFileDocumentAsync(int id)
-        {
-            CaseFileDocument? caseFileDocument = _caseFileDocumentDal.Where(d => d.ID == id && d.Status.Equals(true)).SingleOrDefault();
-
-            if (caseFileDocument == null)
-                throw new InvalidCaseFileException();
-
-            caseFileDocument.DeletedDate = DateTime.Now;
-            caseFileDocument.Status = false;
-            _caseFileDocumentDal.Update(caseFileDocument);
-            await _unitOfWork.SaveChangesAsync();
-            return new SuccessResult(CommonMessages.EntityUpdated);
-        }
-
-
-
+        _caseFileDocumentDal = caseFileDocumentDal;
+        _mapper = mapper;
+        _documentTypeDal = documentTypeDal;
+        _unitOfWork = unitOfWork;
+        _fileService = fileService;
+        _fileSettings = fileSettings.Value;
     }
 
+    /// <summary>
+    /// Dosya yükler ve kaydeder
+    /// </summary>
+    public async Task<IResult> AddAsync(CaseFileDocumentAddDto documentDto)
+    {
+        try
+        {
+            // DocumentUrl alanını kontrol et (IFormFile)
+            if (documentDto.DocumentUrl == null || documentDto.DocumentUrl.Length == 0)
+            {
+                return new ErrorResult("Dosya seçilmedi veya dosya boş.");
+            }
+
+            // Uzantı kontrolü
+            var fileExtension = Path.GetExtension(documentDto.DocumentUrl.FileName).ToLower();
+            if (!_fileSettings.AllowedExtensions.Contains(fileExtension))
+            {
+                return new ErrorResult($"Geçersiz dosya formatı. İzin verilen: {string.Join(", ", _fileSettings.AllowedExtensions)}");
+            }
+
+            // Boyut kontrolü
+            long maxSizeBytes = _fileSettings.MaxFileSizeMB * 1024 * 1024;
+            if (documentDto.DocumentUrl.Length > maxSizeBytes)
+            {
+                return new ErrorResult($"Dosya boyutu çok büyük. Maksimum {_fileSettings.MaxFileSizeMB} MB.");
+            }
+
+            // Alt klasör (CaseFileID bazlı)
+            string subFolder = $"casefile_{documentDto.CaseFileID}";
+
+            // Dosyayı kaydet
+            string filePath = await _fileService.SaveFileAsync(documentDto.DocumentUrl, subFolder);
+
+            // Database kaydı
+            var document = new CaseFileDocument
+            {
+                CaseFileID = documentDto.CaseFileID,
+                DocumentTypeID = documentDto.DocumentTypeID,
+                FileName = Path.GetFileNameWithoutExtension(documentDto.DocumentUrl.FileName),
+                FileExtension = fileExtension,
+                FilePath = filePath,
+                FileSize = documentDto.DocumentUrl.Length,
+                ContentType = documentDto.DocumentUrl.ContentType,
+                CreatedDate = DateTime.Now,
+                Status = true
+            };
+
+            await _caseFileDocumentDal.AddAsync(document);
+            await _unitOfWork.SaveChangesAsync();
+
+            return new SuccessDataResult<int>(document.ID, "Dosya başarıyla yüklendi.");
+        }
+        catch (Exception ex)
+        {
+            return new ErrorResult($"Dosya yüklenirken hata: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Evrak günceller
+    /// </summary>
+    public async Task<IResult> Update(CaseFileDocumentUpdateDto documentDto)
+    {
+        try
+        {
+            var existingDocument = await _caseFileDocumentDal
+                .Where(x => x.ID == documentDto.ID && x.Status == true)
+                .FirstOrDefaultAsync();
+
+            if (existingDocument == null)
+            {
+                return new ErrorResult("Evrak bulunamadı.");
+            }
+
+            existingDocument.CaseFileID = documentDto.CaseFileID;
+            existingDocument.DocumentTypeID = documentDto.DocumentTypeID;
+            existingDocument.UpdatedDate = DateTime.Now;
+
+            // Eğer yeni dosya yüklendiyse
+            if (documentDto.DocumentUrl != null && documentDto.DocumentUrl.Length > 0)
+            {
+                // Eski dosyayı sil
+                await _fileService.DeleteFileAsync(existingDocument.FilePath);
+
+                // Yeni dosyayı kaydet
+                string subFolder = $"casefile_{documentDto.CaseFileID}";
+                string newFilePath = await _fileService.SaveFileAsync(documentDto.DocumentUrl, subFolder);
+
+                existingDocument.FileName = Path.GetFileNameWithoutExtension(documentDto.DocumentUrl.FileName);
+                existingDocument.FileExtension = Path.GetExtension(documentDto.DocumentUrl.FileName).ToLower();
+                existingDocument.FilePath = newFilePath;
+                existingDocument.FileSize = documentDto.DocumentUrl.Length;
+                existingDocument.ContentType = documentDto.DocumentUrl.ContentType;
+            }
+
+            _caseFileDocumentDal.Update(existingDocument);
+            await _unitOfWork.SaveChangesAsync();
+
+            return new SuccessResult(CommonMessages.EntityUpdated);
+        }
+        catch (Exception ex)
+        {
+            return new ErrorResult($"Evrak güncellenirken hata: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Evrak siler
+    /// </summary>
+    public async Task<IResult> DeleteCaseFileDocumentAsync(int id)
+    {
+        try
+        {
+            var document = await _caseFileDocumentDal
+                .Where(d => d.ID == id && d.Status == true)
+                .FirstOrDefaultAsync();
+
+            if (document == null)
+            {
+                return new ErrorResult("Evrak bulunamadı.");
+            }
+
+            // Fiziksel dosyayı sil
+            await _fileService.DeleteFileAsync(document.FilePath);
+
+            // Soft delete
+            document.DeletedDate = DateTime.Now;
+            document.Status = false;
+            _caseFileDocumentDal.Update(document);
+
+            await _unitOfWork.SaveChangesAsync();
+            return new SuccessResult(CommonMessages.EntityDeleted);
+        }
+        catch (Exception ex)
+        {
+            return new ErrorResult($"Evrak silinirken hata: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Tüm evrakları getirir
+    /// </summary>
+    public async Task<IDataResult<List<CaseFileDocument>>> GetAll()
+    {
+        try
+        {
+            var documents = await _caseFileDocumentDal
+                .GetAllQueryable()
+                .Where(x => x.Status == true)
+                .Include(d => d.DocumentType)
+                .Include(d => d.CaseFile)
+                .OrderByDescending(x => x.CreatedDate)
+                .ToListAsync();
+
+            return new SuccessDataResult<List<CaseFileDocument>>(documents);
+        }
+        catch (Exception ex)
+        {
+            return new ErrorDataResult<List<CaseFileDocument>>($"Hata: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Dosyaya göre evrakları getirir
+    /// </summary>
+    public async Task<IDataResult<List<CaseFileDocumentListDto>>> GetAllByCaseFileID(int caseFileID)
+    {
+        try
+        {
+            var documents = await _caseFileDocumentDal
+                .GetAllQueryable()
+                .Include(d => d.DocumentType)
+                .Include(d => d.CaseFile)
+                .Where(e => e.CaseFileID == caseFileID && e.Status == true)
+                .OrderByDescending(x => x.CreatedDate)
+                .ToListAsync();
+
+            var list = _mapper.Map<List<CaseFileDocumentListDto>>(documents);
+
+            foreach (var item in list)
+            {
+                item.FileSizeFormatted = FormatFileSize(item.FileSize);
+                // Dosya path'ini düzelt (Windows \ yerine / kullan)
+                var doc = documents.First(d => d.ID == item.ID);
+                item.FileUrl = $"/{doc.FilePath.Replace("\\", "/")}";
+            }
+
+            return new SuccessDataResult<List<CaseFileDocumentListDto>>(list);
+        }
+        catch (Exception ex)
+        {
+            return new ErrorDataResult<List<CaseFileDocumentListDto>>($"Hata: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// ID'ye göre evrak getirir
+    /// </summary>
+    public async Task<IDataResult<CaseFileDocumentDetailDto>> GetById(int documentID)
+    {
+        try
+        {
+            var document = await _caseFileDocumentDal
+                .GetAllQueryable()
+                .Include(d => d.DocumentType)
+                .Include(d => d.CaseFile)
+                .FirstOrDefaultAsync(d => d.ID == documentID && d.Status == true);
+
+            if (document == null)
+            {
+                return new ErrorDataResult<CaseFileDocumentDetailDto>("Evrak bulunamadı.");
+            }
+
+            var dto = _mapper.Map<CaseFileDocumentDetailDto>(document);
+            dto.FileSizeFormatted = FormatFileSize(document.FileSize);
+            dto.FileUrl = $"/{document.FilePath.Replace("\\", "/")}";
+
+            return new SuccessDataResult<CaseFileDocumentDetailDto>(dto);
+        }
+        catch (Exception ex)
+        {
+            return new ErrorDataResult<CaseFileDocumentDetailDto>($"Hata: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Dosyayı indirir
+    /// </summary>
+    public async Task<IDataResult<FileDownloadDto>> DownloadFile(int documentID)
+    {
+        try
+        {
+            var document = await _caseFileDocumentDal
+                .Where(x => x.ID == documentID && x.Status == true)
+                .FirstOrDefaultAsync();
+
+            if (document == null)
+            {
+                return new ErrorDataResult<FileDownloadDto>("Dosya bulunamadı.");
+            }
+
+            byte[] fileData = await _fileService.ReadFileAsync(document.FilePath);
+
+            var fileDownload = new FileDownloadDto
+            {
+                FileData = fileData,
+                FileName = $"{document.FileName}{document.FileExtension}",
+                ContentType = document.ContentType
+            };
+
+            return new SuccessDataResult<FileDownloadDto>(fileDownload);
+        }
+        catch (Exception ex)
+        {
+            return new ErrorDataResult<FileDownloadDto>($"Hata: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Tüm evrak türlerini getirir
+    /// </summary>
+    public async Task<IDataResult<List<DocumentTypeListDto>>> GetAllDocumentType()
+    {
+        try
+        {
+            var documents = await _documentTypeDal
+                .GetAllQueryable()
+                .Where(x => x.Status == true)
+                .ToListAsync();
+
+            return new SuccessDataResult<List<DocumentTypeListDto>>(
+                _mapper.Map<List<DocumentTypeListDto>>(documents));
+        }
+        catch (Exception ex)
+        {
+            return new ErrorDataResult<List<DocumentTypeListDto>>($"Hata: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Yeni evrak türü ekler
+    /// </summary>
+    public async Task<IResult> AddDocumentType(DocumentTypeAddDto documentTypeAddDto)
+    {
+        try
+        {
+            await _documentTypeDal.AddAsync(_mapper.Map<DocumentType>(documentTypeAddDto));
+            await _unitOfWork.SaveChangesAsync();
+            return new SuccessResult(CommonMessages.EntityAdded);
+        }
+        catch (Exception ex)
+        {
+            return new ErrorResult($"Hata: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Dosya boyutunu formatlar
+    /// </summary>
+    private string FormatFileSize(long bytes)
+    {
+        string[] sizes = { "B", "KB", "MB", "GB" };
+        double len = bytes;
+        int order = 0;
+
+        while (len >= 1024 && order < sizes.Length - 1)
+        {
+            order++;
+            len = len / 1024;
+        }
+
+        return $"{len:0.##} {sizes[order]}";
+    }
 }
+

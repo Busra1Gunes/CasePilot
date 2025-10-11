@@ -10,8 +10,7 @@ namespace Entities.Dto.DosyaDto
     public class CaseFileDocumentAddDto
     {
         public int CaseFileID { get; set; }
-
         public int DocumentTypeID { get; set; }
-        public IFormFile? DocumentUrl { get; set; }
+        public IFormFile? DocumentUrl { get; set; }  // Dosya burada
     }
 }

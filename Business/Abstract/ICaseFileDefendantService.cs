@@ -14,12 +14,14 @@ namespace Business.Abstract
 {
 	public interface ICaseFileDefendantService
 	{
-		Task<IDataResult<List<CaseFileDefendant>>> GetAll();
-		Task<IDataResult<List<CaseFileDefendantListDto>>> GetAllByCaseFileId(int caseFileID);
-		Task<IDataResult<CaseFileDefendant>> GetById(int caseFileDefendantID);
+        Task<IDataResult<List<CaseFileDefendant>>> GetAll();
+        Task<IDataResult<List<CaseFileDefendantListDto>>> GetAllByCaseFileId(int caseFileID);
+        Task<IDataResult<CaseFileDefendant>> GetById(int caseFileDefendantID);
+        Task<IDataResult<List<DefendantListDto>>> GetAllDefendant();
         Task<IResult> Add(CaseFileDefendantAddDto caseFileDefendant);
-		Task<IResult> Update(CaseFileDefendant caseFileDefendant);
-		Task<IResult> DeleteCaseFileDefendantAsync(int id);
+        Task<IResult> Update(CaseFileDefendantUpdateDto caseFileDefendant);
+        Task<IResult> DeleteCaseFileDefendantAsync(int id);
+        Task<IResult> AddDefendat(DefendantAddDto defendantAddDto);
 
 
 

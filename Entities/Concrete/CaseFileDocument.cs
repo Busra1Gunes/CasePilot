@@ -11,9 +11,14 @@ namespace Entities.Concrete
     {
         public int CaseFileID { get; set; }
         public int DocumentTypeID { get; set; }
-        public string DocumentUrl { get; set; }
+        public string FileName { get; set; }           // Orijinal dosya adı
+        public string FileExtension { get; set; }      // Uzantı (.pdf, .docx)
+        public string FilePath { get; set; }           // Dosya yolu (wwwroot/uploads/documents/...)
+        public long FileSize { get; set; }             // Dosya boyutu (byte)
+        public string ContentType { get; set; }        // MIME tipi
 
-        public CaseFile CaseFile { get; set; } // Tekil
-        public DocumentType DocumentType { get; set; }
+        // Navigation Properties
+        public virtual CaseFile CaseFile { get; set; }
+        public virtual DocumentType DocumentType { get; set; }
     }
 }

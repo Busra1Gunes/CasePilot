@@ -10,43 +10,114 @@ using System.Security.Claims;
 
 namespace WebAPI.Controllers
 {
-	[Route("api/[controller]/[action]")]
-	[ApiController]
+    [Route("api/[controller]/[action]")]
+    [ApiController]
     [Authorize]
     public class CaseFileDocumentController : ControllerBase
     {
-        ICaseFileDocumentService _caseFileDocumentService;
+        readonly ICaseFileDocumentService _caseFileDocumentService;
+
         public CaseFileDocumentController(ICaseFileDocumentService caseFileDocumentService)
         {
             _caseFileDocumentService = caseFileDocumentService;
         }
-        [HttpGet]
-        public IActionResult GetByCaseFileID(int caseFileID) 
-            => Ok(_caseFileDocumentService.GetAllByCaseFileID(caseFileID));
 
-        [HttpGet]
-        public async Task<IActionResult> GetDocumentByID(int documentID) 
-            => Ok(await _caseFileDocumentService.GetById(documentID));
-
+        /// <summary>
+        /// Dosya yükler
+        /// </summary>
+        /// <param name="documentDto">CaseFileID, DocumentTypeID ve DocumentUrl (IFormFile)</param>
         [HttpPost]
-        public async Task<IActionResult> AddCaseFileDocument([FromForm] CaseFileDocumentAddDto documentName)
+        public async Task<IActionResult> Upload([FromForm] CaseFileDocumentAddDto documentDto)
         {
-            var baseUri = new Uri(this.Request.GetEncodedUrl());
-            var baseUrl = $"{baseUri.GetLeftPart(UriPartial.Authority)}{this.Request.PathBase}/";
+            // UserID'yi token'dan al (opsiyonel)
             int userID = Convert.ToInt32(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-           return Ok(await _caseFileDocumentService.AddAsync(documentName, baseUrl));    
+
+            var result = await _caseFileDocumentService.AddAsync(documentDto);
+            return Ok(result);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddDocument(DocumentTypeAddDto documentTypeAdd) 
-            => Ok(await _caseFileDocumentService.AddDocumentType(documentTypeAdd));
-        
-        [HttpGet]
-		public async Task<IActionResult> GetAllDocument()
-            => Ok(await _caseFileDocumentService.GetAllDocumentType());
+        /// <summary>
+        /// Dosya günceller
+        /// </summary>
+        [HttpPut]
+        public async Task<IActionResult> Update([FromForm] CaseFileDocumentUpdateDto documentDto)
+        {
+            var result = await _caseFileDocumentService.Update(documentDto);
+            return Ok(result);
+        }
 
+        /// <summary>
+        /// Dosya siler
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
-             => Ok(await _caseFileDocumentService.DeleteCaseFileDocumentAsync(id));
+        {
+            var result = await _caseFileDocumentService.DeleteCaseFileDocumentAsync(id);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Tüm evrakları listeler
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await _caseFileDocumentService.GetAll();
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Dosyaya göre evrakları listeler
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> GetByCaseFileID(int caseFileID)
+        {
+            var result = await _caseFileDocumentService.GetAllByCaseFileID(caseFileID);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// ID'ye göre evrak getirir
+        /// </summary>
+        [HttpGet("{documentID}")]
+        public async Task<IActionResult> GetById(int documentID)
+        {
+            var result = await _caseFileDocumentService.GetById(documentID);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Dosyayı indirir
+        /// </summary>
+        [HttpGet("{documentID}")]
+        public async Task<IActionResult> Download(int documentID)
+        {
+            var result = await _caseFileDocumentService.DownloadFile(documentID);
+
+            if (!result.Success)
+                return BadRequest(result);
+
+            return File(result.Data.FileData, result.Data.ContentType, result.Data.FileName);
+        }
+
+        /// <summary>
+        /// Tüm evrak türlerini listeler
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> GetAllDocumentTypes()
+        {
+            var result = await _caseFileDocumentService.GetAllDocumentType();
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Yeni evrak türü ekler
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> AddDocumentType([FromBody] DocumentTypeAddDto documentTypeAdd)
+        {
+            var result = await _caseFileDocumentService.AddDocumentType(documentTypeAdd);
+            return Ok(result);
+        }
     }
 }

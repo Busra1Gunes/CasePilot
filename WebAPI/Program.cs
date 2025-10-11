@@ -1,94 +1,70 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using AutoMapper;
+using Business.Abstract;
+using Business.Concrete;
 using Business.DependencyResolvers.Autofac;
-using Core.FTP;
-using Core.Utilities.IoC;
-using DataAccess.Concrete;
+using Business.Settings;
+using Core;
 using DataAccess.Concrete.EntityFramework;
-using Entities.Concrete;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Serilog;
 using Service.Mapping;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Serilog
-builder.Host.UseSerilog((context, config) =>
-{
-    config.ReadFrom.Configuration(context.Configuration);
-});
-
-// Autofac
+// ============================================
+// AUTOFAC CONFIGURATION
+// ============================================
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(containerBuilder =>
     {
         containerBuilder.RegisterModule(new AutofacBusinessModule());
     });
 
-// Services
-builder.Services.AddDbContext<CasePilotContext>();
+// ============================================
+// DATABASE CONFIGURATION
+// ============================================
+builder.Services.AddDbContext<CasePilotContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+// UnitOfWork Registration
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// ============================================
+// AUTOMAPPER CONFIGURATION
+// ============================================
+builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddControllers();
-builder.Services.Configure<FtpSettings>(builder.Configuration.GetSection("FtpSettings"));
-builder.Services.AddStackExchangeRedisCache(options =>
+
+// ============================================
+// FILE STORAGE CONFIGURATION - YENİ EKLENDI
+// ============================================
+// FileStorage ayarlarını appsettings.json'dan oku
+builder.Services.Configure<FileStorageSettings>(
+    builder.Configuration.GetSection("FileStorage"));
+
+// FileService'i kaydet
+builder.Services.AddScoped<IFileService>(provider =>
 {
-    options.Configuration = builder.Configuration.GetConnectionString("Redis");
-});
-builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
-
-// AutoMapper (profil bağımlı)
-builder.Services.AddScoped(provider =>
-{
-    var httpContextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
-    var config = new MapperConfiguration(cfg =>
-    {
-        cfg.AddProfile(new MapProfile(httpContextAccessor));
-    });
-    return config.CreateMapper();
-});
-
-// Swagger
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(opt =>
-{
-    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
-
-    opt.EnableAnnotations();
-
-    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Description = "Please enter token",
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        BearerFormat = "JWT",
-        Scheme = "bearer"
-    });
-
-
-
-    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] {}
-        }
-    });
+    var uploadPath = Path.Combine(
+        Directory.GetCurrentDirectory(),
+        "wwwroot",
+    "uploads",
+        "documents");
+    return new FileManager(uploadPath);
 });
 
-// JWT Authentication
+// ============================================
+// JWT AUTHENTICATION
+// ============================================
+var jwtSettings = builder.Configuration.GetSection("JWT");
+var secretKey = jwtSettings["SecurityKey"];
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -102,59 +78,127 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["JWT:Issuer"],
-        ValidAudience = builder.Configuration["JWT:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecurityKey"]))
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+        ClockSkew = TimeSpan.Zero
     };
 });
 
-// CORS: Geliştirme/test ortamı için herkese izinli
+// ============================================
+// CORS CONFIGURATION
+// ============================================
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", builder =>
-    {
-        builder
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-    });
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
 });
 
-// IoC
-ServiceTool.Create(builder.Services);
+// ============================================
+// SWAGGER CONFIGURATION
+// ============================================
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "CasePilot API",
+        Version = "v1",
+        Description = "Avukatlık Bürosu Yönetim Sistemi API Dokümantasyonu"
+    });
 
+    // JWT Authentication için Swagger yapılandırması
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+
+    // Swagger operasyon açıklamalarını etkinleştir
+    c.EnableAnnotations();
+});
+
+// ============================================
+// CONTROLLERS & JSON OPTIONS
+// ============================================
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // JSON serileştirme sırasında referans döngülerini yoksay
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+    });
+
+builder.Services.AddEndpointsApiExplorer();
+
+// ============================================
+// MEMORY CACHE (optional)
+// ============================================
+builder.Services.AddMemoryCache();
+
+// ============================================
+// APP BUILD
+// ============================================
 var app = builder.Build();
 
-// 🌐 Middleware Sırası Çok Önemli
+// ============================================
+// MIDDLEWARE PIPELINE
+// ============================================
 
-// CORS önce routing'e göre devreye alınmalı
+// Swagger - Development ve Production için
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "CasePilot API V1");
+        c.RoutePrefix = "swagger"; // https://localhost:7205/swagger
+    });
+}
 
+// HTTPS Redirection
+app.UseHttpsRedirection();
+
+// STATIC FILES - DOSYA ERİŞİMİ İÇİN ÖNEMLİ!
+app.UseStaticFiles(); // wwwroot klasörünü web'e aç
+
+// CORS
 app.UseCors("AllowAll");
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
-app.UseRouting();
-// Swagger
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1");
-});
-
-// Statik dosyalar
-app.UseStaticFiles();
-
-
-// Kimlik Doğrulama ve Yetkilendirme
+// AUTHENTICATION & AUTHORIZATION
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Routing - controller endpointleri
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+// CONTROLLERS
+app.MapControllers();
+
+// ============================================
+// UYGULAMA BAŞLATMA MESAJI
+// ============================================
+app.Logger.LogInformation("CasePilot API Started!");
+app.Logger.LogInformation($"Environment: {app.Environment.EnvironmentName}");
+app.Logger.LogInformation($"Swagger UI: https://localhost:7205/swagger");
 
 app.Run();

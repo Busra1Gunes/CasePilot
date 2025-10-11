@@ -15,14 +15,21 @@ namespace Business.Abstract
 {
     public interface ICaseFileDocumentService
     {
-        Task<IDataResult<List<CaseFileDocument>>> GetAll();
-		Task<IDataResult<CaseFileDocumentListDto>> GetAllByCaseFileID(int caseFileID);
-		Task<IDataResult<CaseFileDocumentListDto>> GetById(int documentID);
-		Task<IResult> AddAsync(CaseFileDocumentAddDto document, string url);
-		Task<IResult> Update(CaseFileDocument document);
-        Task<IDataResult<List<DocumentTypeListDto>>> GetAllDocumentType();
-        Task<IResult> AddDocumentType(DocumentTypeAddDto documentTypeAddDto);
+        // Ana CRUD metodları
+        Task<IResult> AddAsync(CaseFileDocumentAddDto document);
+        Task<IResult> Update(CaseFileDocumentUpdateDto document);
         Task<IResult> DeleteCaseFileDocumentAsync(int id);
 
+        // Listeleme metodları
+        Task<IDataResult<List<CaseFileDocument>>> GetAll();
+        Task<IDataResult<List<CaseFileDocumentListDto>>> GetAllByCaseFileID(int caseFileID);
+        Task<IDataResult<CaseFileDocumentDetailDto>> GetById(int documentID);
+
+        // Dosya işlemleri
+        Task<IDataResult<FileDownloadDto>> DownloadFile(int documentID);
+
+        // Evrak türü metodları
+        Task<IDataResult<List<DocumentTypeListDto>>> GetAllDocumentType();
+        Task<IResult> AddDocumentType(DocumentTypeAddDto documentTypeAddDto);
     }
 }
