@@ -117,8 +117,9 @@ builder.Services.AddSwaggerGen(c =>
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
         Name = "Authorization",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
+        Type = SecuritySchemeType.Http,  // ✅ ApiKey yerine Http
+        Scheme = "Bearer",               // ✅ Küçük harf "bearer" yerine "Bearer"
+        BearerFormat = "JWT"             // ✅ Yeni eklendi
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -129,17 +130,15 @@ builder.Services.AddSwaggerGen(c =>
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
+                    Id = "Bearer"  // ✅ "bearer" yerine "Bearer"
                 }
             },
             Array.Empty<string>()
         }
     });
 
-    // Swagger operasyon açıklamalarını etkinleştir
     c.EnableAnnotations();
 });
-
 // ============================================
 // CONTROLLERS & JSON OPTIONS
 // ============================================
@@ -174,7 +173,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "CasePilot API V1");
-        c.RoutePrefix = "swagger"; // https://localhost:7205/swagger
+        c.RoutePrefix = "swagger"; // https://localhost:7285/swagger
     });
 }
 

@@ -39,7 +39,7 @@ namespace Service.Mapping
             };
         }
 
-        public MapProfile(IHttpContextAccessor httpContextAccessor)
+        public MapProfile()
         {
             CreateMap<User, UserAddDto>()
                 .ReverseMap();
