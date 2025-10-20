@@ -8,7 +8,6 @@
         public decimal Amount { get; set; }         // Tutar
         public DateTime IncomeDate { get; set; }    // Gelir tarihi
         public string UserName { get; set; }        // Kullanıcı adı
-        public string CaseFileName { get; set; }    // Dosya adı
         public string CategoryName { get; set; }    // Kategori adı
         public DateTime CreatedDate { get; set; }
     }

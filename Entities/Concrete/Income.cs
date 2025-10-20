@@ -3,7 +3,6 @@
     public class Income : Entity
     { // Gelir kaydı
         public int UserID { get; set; }           // Geliri kaydeden kullanıcı
-        public int? CaseFileID { get; set; }      // İlişkili dosya (opsiyonel)
         public string Title { get; set; }         // Gelir başlığı
         public string Description { get; set; }   // Açıklama
         public decimal Amount { get; set; }       // Tutar
@@ -12,7 +11,6 @@
 
         // Navigation Properties
         public virtual User User { get; set; }
-        public virtual CaseFile CaseFile { get; set; }
         public virtual IncomeCategory Category { get; set; }
     }
 }

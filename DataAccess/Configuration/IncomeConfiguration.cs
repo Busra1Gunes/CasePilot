@@ -32,11 +32,6 @@ namespace DataAccess.Configuration
                 .HasForeignKey(x => x.UserID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(x => x.CaseFile)
-                .WithMany()
-                .HasForeignKey(x => x.CaseFileID)
-                .OnDelete(DeleteBehavior.Restrict);
-
             builder.HasOne(x => x.Category)
                 .WithMany(x => x.Incomes)
                 .HasForeignKey(x => x.CategoryID)

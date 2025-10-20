@@ -29,12 +29,11 @@ namespace Business.Concrete
         public async Task<IDataResult<List<IncomeListDto>>> GetAll()
         {
             var incomes = _incomeDal
-                .GetAllQueryable()
-                .Include(x => x.User)
-                .Include(x => x.CaseFile)
-                .Include(x => x.Category)
-                .OrderByDescending(x => x.IncomeDate)
-                .ToList();
+                 .GetAllQueryable()
+                 .Include(x => x.User)
+                 .Include(x => x.Category)
+                 .OrderByDescending(x => x.IncomeDate)
+                 .ToList();
 
             var dto = _mapper.Map<List<IncomeListDto>>(incomes);
             return new SuccessDataResult<List<IncomeListDto>>(dto);
@@ -45,7 +44,6 @@ namespace Business.Concrete
             var income = await _incomeDal
                 .Where(x => x.ID == id)
                 .Include(x => x.User)
-                .Include(x => x.CaseFile)
                 .Include(x => x.Category)
                 .FirstOrDefaultAsync();
 
@@ -61,7 +59,6 @@ namespace Business.Concrete
             var incomes = _incomeDal
                 .Where(x => x.UserID == userId)
                 .Include(x => x.User)
-                .Include(x => x.CaseFile)
                 .Include(x => x.Category)
                 .OrderByDescending(x => x.IncomeDate)
                 .ToList();
@@ -70,26 +67,13 @@ namespace Business.Concrete
             return new SuccessDataResult<List<IncomeListDto>>(dto);
         }
 
-        public async Task<IDataResult<List<IncomeListDto>>> GetByCaseFileId(int caseFileId)
-        {
-            var incomes = _incomeDal
-                .Where(x => x.CaseFileID == caseFileId)
-                .Include(x => x.User)
-                .Include(x => x.CaseFile)
-                .Include(x => x.Category)
-                .OrderByDescending(x => x.IncomeDate)
-                .ToList();
-
-            var dto = _mapper.Map<List<IncomeListDto>>(incomes);
-            return new SuccessDataResult<List<IncomeListDto>>(dto);
-        }
+     
 
         public async Task<IDataResult<List<IncomeListDto>>> GetByDateRange(DateTime startDate, DateTime endDate)
         {
             var incomes = _incomeDal
                 .Where(x => x.IncomeDate >= startDate && x.IncomeDate <= endDate)
                 .Include(x => x.User)
-                .Include(x => x.CaseFile)
                 .Include(x => x.Category)
                 .OrderByDescending(x => x.IncomeDate)
                 .ToList();
@@ -101,6 +85,7 @@ namespace Business.Concrete
         public async Task<IResult> Add(IncomeAddDto incomeDto)
         {
             var income = _mapper.Map<Income>(incomeDto);
+
             await _incomeDal.AddAsync(income);
             await _unitOfWork.SaveChangesAsync();
             return new SuccessResult("Gelir kaydı eklendi");

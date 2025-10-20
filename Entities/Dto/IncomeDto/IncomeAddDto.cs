@@ -9,7 +9,6 @@ namespace Entities.Dto.IncomeDto
     public class IncomeAddDto
     {
         public int UserID { get; set; }           // Kullanıcı ID
-        public int? CaseFileID { get; set; }      // Dosya ID (opsiyonel)
         public string Title { get; set; }         // Başlık
         public string Description { get; set; }   // Açıklama
         public decimal Amount { get; set; }       // Tutar

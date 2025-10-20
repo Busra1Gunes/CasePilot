@@ -306,13 +306,11 @@ namespace Service.Mapping
             CreateMap<Income, IncomeUpdateDto>().ReverseMap();
 
             CreateMap<Income, IncomeListDto>()
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name + " " + src.User.Surname))
-                .ForMember(dest => dest.CaseFileName, opt => opt.MapFrom(src => src.CaseFile != null ? src.CaseFile.Name + " " + src.CaseFile.Surname : "-"))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name + " " + src.User.Surname))           
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
 
             CreateMap<Income, IncomeDetailDto>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name + " " + src.User.Surname))
-                .ForMember(dest => dest.CaseFileName, opt => opt.MapFrom(src => src.CaseFile != null ? src.CaseFile.Name + " " + src.CaseFile.Surname : "-"))
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
 
             // Expense Mappings - Gider haritalama

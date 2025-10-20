@@ -13,7 +13,6 @@ namespace Business.Abstract
         Task<IDataResult<List<IncomeListDto>>> GetAll();
         Task<IDataResult<IncomeDetailDto>> GetById(int id);
         Task<IDataResult<List<IncomeListDto>>> GetByUserId(int userId);
-        Task<IDataResult<List<IncomeListDto>>> GetByCaseFileId(int caseFileId);
         Task<IDataResult<List<IncomeListDto>>> GetByDateRange(DateTime startDate, DateTime endDate);
         Task<IResult> Add(IncomeAddDto incomeDto);
         Task<IResult> Update(IncomeUpdateDto incomeDto);

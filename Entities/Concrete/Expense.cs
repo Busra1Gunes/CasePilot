@@ -3,7 +3,6 @@
     public class Expense : Entity
     {  // Gider kaydı
         public int UserID { get; set; }           // Gideri kaydeden kullanıcı
-        public int? CaseFileID { get; set; }      // İlişkili dosya (opsiyonel)
         public string Title { get; set; }         // Gider başlığı
         public string Description { get; set; }   // Açıklama
         public decimal Amount { get; set; }       // Tutar

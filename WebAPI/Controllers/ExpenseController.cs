@@ -39,12 +39,7 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{caseFileId}")]
-        public async Task<IActionResult> GetByCaseFileId(int caseFileId)
-        {
-            var result = await _expenseService.GetByCaseFileId(caseFileId);
-            return Ok(result);
-        }
+      
 
         [HttpGet]
         public async Task<IActionResult> GetByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)

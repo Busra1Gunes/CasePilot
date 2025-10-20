@@ -11,7 +11,6 @@
         public DateTime IncomeDate { get; set; }
         public int CategoryID { get; set; }
         public string UserName { get; set; }
-        public string CaseFileName { get; set; }
         public string CategoryName { get; set; }
         public DateTime CreatedDate { get; set; }
     }

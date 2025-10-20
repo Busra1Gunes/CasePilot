@@ -65,19 +65,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<ExpenseListDto>>(dto);
         }
 
-        public async Task<IDataResult<List<ExpenseListDto>>> GetByCaseFileId(int caseFileId)
-        {
-            var expenses = _expenseDal
-                .Where(x => x.CaseFileID == caseFileId)
-                .Include(x => x.User)
-                .Include(x => x.CaseFile)
-                .Include(x => x.Category)
-                .OrderByDescending(x => x.ExpenseDate)
-                .ToList();
 
-            var dto = _mapper.Map<List<ExpenseListDto>>(expenses);
-            return new SuccessDataResult<List<ExpenseListDto>>(dto);
-        }
 
         public async Task<IDataResult<List<ExpenseListDto>>> GetByDateRange(DateTime startDate, DateTime endDate)
         {
