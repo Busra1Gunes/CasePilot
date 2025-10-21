@@ -2,19 +2,20 @@
 using Business.Abstract;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using Entities.Dto.ExpenseDto;
 using Microsoft.EntityFrameworkCore;
 
 namespace Business.Concrete
 {
-    public class ExpenseManager : IExpenseService
+    public class ExpenseManager : Manager<Expense>, IExpenseService
     {
         private readonly IExpenseDal _expenseDal;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ExpenseManager(IExpenseDal expenseDal, IMapper mapper, IUnitOfWork unitOfWork)
+        public ExpenseManager(IExpenseDal expenseDal, IMapper mapper, IUnitOfWork unitOfWork) : base(expenseDal)
         {
             _expenseDal = expenseDal;
             _mapper = mapper;
@@ -26,8 +27,8 @@ namespace Business.Concrete
             var expenses = _expenseDal
                 .GetAllQueryable()
                 .Include(x => x.User)
-                .Include(x => x.CaseFile)
                 .Include(x => x.Category)
+                .Where(e => e.Status.Equals(true))
                 .OrderByDescending(x => x.ExpenseDate)
                 .ToList();
 
@@ -40,8 +41,8 @@ namespace Business.Concrete
             var expense = await _expenseDal
                 .Where(x => x.ID == id)
                 .Include(x => x.User)
-                .Include(x => x.CaseFile)
                 .Include(x => x.Category)
+                .Where(e => e.Status.Equals(true))
                 .FirstOrDefaultAsync();
 
             if (expense == null)
@@ -56,8 +57,8 @@ namespace Business.Concrete
             var expenses = _expenseDal
                 .Where(x => x.UserID == userId)
                 .Include(x => x.User)
-                .Include(x => x.CaseFile)
                 .Include(x => x.Category)
+                .Where(e => e.Status.Equals(true))
                 .OrderByDescending(x => x.ExpenseDate)
                 .ToList();
 
@@ -72,8 +73,8 @@ namespace Business.Concrete
             var expenses = _expenseDal
                 .Where(x => x.ExpenseDate >= startDate && x.ExpenseDate <= endDate)
                 .Include(x => x.User)
-                .Include(x => x.CaseFile)
                 .Include(x => x.Category)
+                .Where(e => e.Status.Equals(true))
                 .OrderByDescending(x => x.ExpenseDate)
                 .ToList();
 
@@ -86,8 +87,8 @@ namespace Business.Concrete
             var expenses = _expenseDal
                 .Where(x => x.PaymentStatus == paymentStatus)
                 .Include(x => x.User)
-                .Include(x => x.CaseFile)
                 .Include(x => x.Category)
+                .Where(e => e.Status.Equals(true))
                 .OrderByDescending(x => x.ExpenseDate)
                 .ToList();
 
@@ -98,6 +99,7 @@ namespace Business.Concrete
         public async Task<IResult> Add(ExpenseAddDto expenseDto)
         {
             var expense = _mapper.Map<Expense>(expenseDto);
+            expense.Status = true;
             await _expenseDal.AddAsync(expense);
             await _unitOfWork.SaveChangesAsync();
             return new SuccessResult("Gider kaydı eklendi");

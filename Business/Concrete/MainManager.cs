@@ -14,12 +14,15 @@ namespace Business.Concrete
         ICaseFileService _caseFileService;
         IAccountTransactionService _accountTransactionService;
         IUserService _userService;
-        public MainManager(ICaseFileService caseFileService, IAccountTransactionService accountTransactionService, IUserService userService)
+        IIncomeService _incomeService;
+        IExpenseService _expenseService;
+        public MainManager(ICaseFileService caseFileService, IAccountTransactionService accountTransactionService, IUserService userService, IIncomeService incomeService, IExpenseService expenseService)
         {
             _caseFileService = caseFileService;
             _accountTransactionService = accountTransactionService;
             _userService = userService;
-
+            _incomeService = incomeService;
+            _expenseService = expenseService;
         }
         public async Task<object> Totals()
         {
@@ -27,12 +30,16 @@ namespace Business.Concrete
             decimal totalDept = await _accountTransactionService.Where(c => c.Status.Equals(true) && c.DebtorID == 1).SumAsync(s => s.Amount);
             decimal totalCredit = await _accountTransactionService.Where(c => c.Status.Equals(true) && c.CreditID == 1).SumAsync(s => s.Amount);
             int totalUser = await _userService.Where(u=>u.Status.Equals(true)).CountAsync();
+            decimal totalIncome = await _incomeService.Where(c => c.Status.Equals(true)).SumAsync(s => s.Amount); //gelirler
+            decimal totalExpense = await _expenseService.Where(c => c.Status.Equals(true) && c.PaymentStatus == 1).SumAsync(s => s.Amount); //ödenen giderler
+            decimal totalIncomeExpense = totalIncome - totalExpense;
             TotalValueDto totalValueDto = new()
             {
                 TotalCaseFile = totalCaseFile,
                 TotalCredit = totalCredit,
                 TotalDebt = totalDept,
-                TotalUser = totalUser
+                TotalUser = totalUser,
+                TotalIncomeExpense=totalIncomeExpense
             };
             return totalValueDto;
         }

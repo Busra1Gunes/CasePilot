@@ -1,4 +1,5 @@
 ﻿using Core.Utilities.Results;
+using Entities.Concrete;
 using Entities.Dto.IncomeDto;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public interface IIncomeService
+    public interface IIncomeService : IService<Income>
     {
         Task<IDataResult<List<IncomeListDto>>> GetAll();
         Task<IDataResult<IncomeDetailDto>> GetById(int id);

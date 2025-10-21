@@ -12,7 +12,6 @@
 
         // Navigation Properties
         public virtual User User { get; set; }
-        public virtual CaseFile CaseFile { get; set; }
         public virtual ExpenseCategory Category { get; set; }
     }
 }

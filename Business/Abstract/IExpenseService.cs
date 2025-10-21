@@ -1,9 +1,10 @@
 ﻿using Core.Utilities.Results;
+using Entities.Concrete;
 using Entities.Dto.ExpenseDto;
 
 namespace Business.Abstract
 {
-    public interface IExpenseService
+    public interface IExpenseService : IService<Expense>
     {
         Task<IDataResult<List<ExpenseListDto>>> GetAll();
         Task<IDataResult<ExpenseDetailDto>> GetById(int id);

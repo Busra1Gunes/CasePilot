@@ -2,6 +2,7 @@
 using Business.Abstract;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using Entities.Dto.IncomeDto;
 using Microsoft.EntityFrameworkCore;
@@ -13,13 +14,13 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class IncomeManager : IIncomeService
+    public class IncomeManager : Manager<Income>, IIncomeService
     {
         private readonly IIncomeDal _incomeDal;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public IncomeManager(IIncomeDal incomeDal, IMapper mapper, IUnitOfWork unitOfWork)
+        public IncomeManager(IIncomeDal incomeDal, IMapper mapper, IUnitOfWork unitOfWork) : base(incomeDal)
         {
             _incomeDal = incomeDal;
             _mapper = mapper;
@@ -33,6 +34,7 @@ namespace Business.Concrete
                  .Include(x => x.User)
                  .Include(x => x.Category)
                  .OrderByDescending(x => x.IncomeDate)
+                 .Where(i => i.Status.Equals(true))
                  .ToList();
 
             var dto = _mapper.Map<List<IncomeListDto>>(incomes);
@@ -45,6 +47,7 @@ namespace Business.Concrete
                 .Where(x => x.ID == id)
                 .Include(x => x.User)
                 .Include(x => x.Category)
+                .Where(i => i.Status.Equals(true))
                 .FirstOrDefaultAsync();
 
             if (income == null)
@@ -60,6 +63,7 @@ namespace Business.Concrete
                 .Where(x => x.UserID == userId)
                 .Include(x => x.User)
                 .Include(x => x.Category)
+                .Where(i => i.Status.Equals(true))
                 .OrderByDescending(x => x.IncomeDate)
                 .ToList();
 
@@ -67,7 +71,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<IncomeListDto>>(dto);
         }
 
-     
+
 
         public async Task<IDataResult<List<IncomeListDto>>> GetByDateRange(DateTime startDate, DateTime endDate)
         {
@@ -75,6 +79,7 @@ namespace Business.Concrete
                 .Where(x => x.IncomeDate >= startDate && x.IncomeDate <= endDate)
                 .Include(x => x.User)
                 .Include(x => x.Category)
+                .Where(i => i.Status.Equals(true))
                 .OrderByDescending(x => x.IncomeDate)
                 .ToList();
 
@@ -85,7 +90,7 @@ namespace Business.Concrete
         public async Task<IResult> Add(IncomeAddDto incomeDto)
         {
             var income = _mapper.Map<Income>(incomeDto);
-
+            income.Status=true;
             await _incomeDal.AddAsync(income);
             await _unitOfWork.SaveChangesAsync();
             return new SuccessResult("Gelir kaydı eklendi");

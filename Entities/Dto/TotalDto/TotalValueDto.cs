@@ -12,5 +12,6 @@ namespace Entities.Dto.TotalDto
         public decimal TotalDebt { get; set; }
         public decimal TotalCredit { get; set; }
         public decimal TotalUser { get; set; }
+        public decimal TotalIncomeExpense { get; set; }
     }
 }

@@ -318,8 +318,7 @@ namespace Service.Mapping
             CreateMap<Expense, ExpenseUpdateDto>().ReverseMap();
 
             CreateMap<Expense, ExpenseListDto>()
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name + " " + src.User.Surname))
-                .ForMember(dest => dest.CaseFileName, opt => opt.MapFrom(src => src.CaseFile != null ? src.CaseFile.Name + " " + src.CaseFile.Surname : "-"))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name + " " + src.User.Surname)) 
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
                 .ForMember(dest => dest.PaymentStatusName, opt => opt.MapFrom(src =>
                     src.PaymentStatus == 1 ? "Ödendi" :
@@ -327,7 +326,6 @@ namespace Service.Mapping
 
             CreateMap<Expense, ExpenseDetailDto>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name + " " + src.User.Surname))
-                .ForMember(dest => dest.CaseFileName, opt => opt.MapFrom(src => src.CaseFile != null ? src.CaseFile.Name + " " + src.CaseFile.Surname : "-"))
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
                 .ForMember(dest => dest.PaymentStatusName, opt => opt.MapFrom(src =>
                     src.PaymentStatus == 1 ? "Ödendi" :
