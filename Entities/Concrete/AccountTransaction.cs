@@ -19,7 +19,6 @@ namespace Entities.Concrete
       //  public TransactionStatus TransactionStatus { get; set; }   // HareketDurumu → TransactionStatus
         public TransactionType Type { get; set; }       // HareketTuru → TransactionType
         public string Description { get; set; }         // Aciklama → Description
-        public DateTime PaymentDate { get; set; }       // OdemeTarihi → PaymentDate
         public DateTime PaymentReceivedDate { get; set; }// OdemeYapıldığıTarih → PaymentReceivedDate
         public DateTime FinalPaymentDate { get; set; }  // SonOdemeTarihi → FinalPaymentDate
         public int PaymentStatus { get; set; }         //1 ödendi , 2 ödenmedi , 3 mahsuplaşma

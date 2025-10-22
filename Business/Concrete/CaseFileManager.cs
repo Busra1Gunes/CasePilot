@@ -29,14 +29,16 @@ namespace Business.Concrete
         private ICaseFileDal _caseFileDal;
         private IMapper _mapper;
 		private IUnitOfWork _unitOfWork;
+        private IAccountTransactionDal _accountTransactionDal;
         private IHearingDal _hearingDal;
 
-		public CaseFileManager(ICaseFileDal caseFileDal, IMapper mapper, IUnitOfWork unitOfWork, IHearingDal hearingDal) : base(caseFileDal)
+		public CaseFileManager(ICaseFileDal caseFileDal, IMapper mapper, IUnitOfWork unitOfWork, IHearingDal hearingDal,IAccountTransactionDal accountTransactionDal) : base(caseFileDal)
         {
 			_caseFileDal = caseFileDal;
 			_mapper = mapper;
 			_unitOfWork = unitOfWork;
             _hearingDal = hearingDal;
+            _accountTransactionDal = accountTransactionDal;
 		}
 		public async Task<IResult> Add(CaseFileAddDto caseFile)
 		{
@@ -91,55 +93,109 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CaseFileListDto>>(_mapper.Map<List<CaseFileListDto>>(list));
         }
 
-        public async Task<IDataResult<List<CaseFileListDto>>> GetFilteredAsync(CaseFileFilterDto filter)
+        public async Task<IDataResult<CaseFileListWithSummaryDto>> GetFilteredAsync(CaseFileFilterDto filter)
         {
-
             var query = _caseFileDal.GetAllQueryable()
-                    .Include(d => d.CaseType)
-                    .Include(b => b.ApplicationType)
-                    .Include(i => i.City)
-                    .Include(c => c.District)
-                    .Include(cf => cf.CaseFileDefendant.Where(cfd => cfd.Status == true))
-                        .ThenInclude(cfd => cfd.Defendant)
-                    .Include(cf => cf.CaseFileShares.Where(cfs => cfs.Status == true))
-                       .ThenInclude(cfs => cfs.User)
-                    .Where(c => c.Status == true ) // aktif dosyalar
-                    .AsQueryable();
+                .Include(d => d.CaseType)
+                .Include(b => b.ApplicationType)
+                .Include(i => i.City)
+                .Include(c => c.District)
+                .Include(cf => cf.CaseFileDefendant.Where(cfd => cfd.Status == true))
+                    .ThenInclude(cfd => cfd.Defendant)
+                .Include(cf => cf.CaseFileShares.Where(cfs => cfs.Status == true))
+                    .ThenInclude(cfs => cfs.User)
+                .Where(c => c.Status == true)
+                .AsQueryable();
 
+            if (filter.CaseTypeID.HasValue)
+                query = query.Where(c => c.CaseTypeID == filter.CaseTypeID.Value);
 
-                if (filter.CaseTypeID.HasValue)
-                    query = query.Where(c => c.CaseTypeID == filter.CaseTypeID.Value);
+            if (filter.ApplicationTypeID.HasValue)
+                query = query.Where(c => c.ApplicationTypeID == filter.ApplicationTypeID.Value);
 
-                if (filter.ApplicationTypeID.HasValue)
-                    query = query.Where(c => c.ApplicationTypeID == filter.ApplicationTypeID.Value);
+            if (!string.IsNullOrEmpty(filter.Name))
+                query = query.Where(c => c.Name.Contains(filter.Name));
 
-                if (!string.IsNullOrEmpty(filter.Name))
-                    query = query.Where(c => c.Name.Contains(filter.Name));
+            if (!string.IsNullOrEmpty(filter.Surname))
+                query = query.Where(c => c.Surname.Contains(filter.Surname));
 
-                if (!string.IsNullOrEmpty(filter.Surname))
-                    query = query.Where(c => c.Surname.Contains(filter.Surname));
+            if (!string.IsNullOrEmpty(filter.IdentityNumber))
+                query = query.Where(c => c.IdentityNumber == filter.IdentityNumber);
 
-                if (!string.IsNullOrEmpty(filter.IdentityNumber))
-                    query = query.Where(c => c.IdentityNumber == filter.IdentityNumber);
+            if (!string.IsNullOrEmpty(filter.FileNumber))
+                query = query.Where(c => c.ID.ToString() == filter.FileNumber);
 
-                if (!string.IsNullOrEmpty(filter.FileNumber))
-                    query = query.Where(c => c.ID.ToString() == filter.FileNumber); 
+            if (!string.IsNullOrEmpty(filter.ShareUserName))
+                query = query.Where(c => c.CaseFileShares
+                    .Any(s => s.User.Name.Contains(filter.ShareUserName) ||
+                              s.User.Surname.Contains(filter.ShareUserName)));
 
-                if (!string.IsNullOrEmpty(filter.ShareUserName))
-                    query = query.Where(c => c.CaseFileShares
-                        .Any(s => s.User.Name.Contains(filter.ShareUserName) ||
-                                  s.User.Surname.Contains(filter.ShareUserName)));
+            if (!string.IsNullOrEmpty(filter.DefendantName))
+                query = query.Where(c => c.CaseFileDefendant
+                    .Any(d => d.Defendant.Name.Contains(filter.DefendantName)));
 
-                if (!string.IsNullOrEmpty(filter.DefendantName))
-                    query = query.Where(c => c.CaseFileDefendant
-                        .Any(d => d.Defendant.Name.Contains(filter.DefendantName)));
+            // Dosyaları çek
+            var caseFiles = await query.ToListAsync();
 
-                var list = await query.ToListAsync();
+            // DTO'ya map et
+            var resultList = _mapper.Map<List<CaseFileListDto>>(caseFiles);
 
-                return new SuccessDataResult<List<CaseFileListDto>>(
-                    _mapper.Map<List<CaseFileListDto>>(list));
-           
+            // Tüm masrafları toplayacağız
+            List<AccountTransaction> allExpenses = new List<AccountTransaction>();
 
+            foreach (var dto in resultList)
+            {
+                var expenses = await _accountTransactionDal
+                    .Where(x => x.CaseFileID == dto.ID &&
+                                x.Type == Entities.Enums.TransactionType.DosyaMasrafi &&
+                                x.Status == true)
+                    .Include(x => x.User1)
+                    .ToListAsync();
+
+                allExpenses.AddRange(expenses);
+
+                if (expenses.Any())
+                {
+                    var grouped = expenses
+                        .GroupBy(x => new { x.User1.ID, x.User1.Name, x.User1.Surname })
+                        .Select(g => new
+                        {
+                            UserFullName = g.Key.Name + " " + g.Key.Surname,
+                            TotalAmount = g.Sum(x => x.Amount)
+                        });
+
+                    dto.ExpenseSummary = string.Join(" | ", grouped.Select(g => $"{g.UserFullName} = {g.TotalAmount}₺"));
+                }
+                else
+                {
+                    dto.ExpenseSummary = "Masraf yok";
+                }
+            }
+
+            // Genel özet bilgileri hesapla
+            var totalCaseFiles = resultList.Count;
+            var expenseSummaryByUser = allExpenses
+                .GroupBy(x => new { x.User1.ID, x.User1.Name, x.User1.Surname })
+                .Select(g => new UserExpenseSummaryDto
+                {
+                    UserFullName = g.Key.Name + " " + g.Key.Surname,
+                    TotalAmount = g.Sum(x => x.Amount)
+                })
+                .OrderByDescending(x => x.TotalAmount)
+                .ToList();
+
+            var totalExpenses = expenseSummaryByUser.Sum(x => x.TotalAmount);
+
+            // Ana DTO'ya doldur
+            var summaryDto = new CaseFileListWithSummaryDto
+            {
+                CaseFiles = resultList,
+                TotalCaseFiles = totalCaseFiles,
+                TotalExpensesByUser = expenseSummaryByUser,
+                TotalExpenses = totalExpenses
+            };
+
+            return new SuccessDataResult<CaseFileListWithSummaryDto>(summaryDto, "Filtreli dosya listesi ve özet bilgileri getirildi.");
         }
         public  async Task<object> GetAllByCaseTypeId(int id)
 		{

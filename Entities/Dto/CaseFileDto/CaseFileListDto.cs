@@ -31,5 +31,6 @@ namespace Entities.Dto.CaseFileDto
         public bool Status { get; set; } = false;
         public string Defendants { get; set; }
         public string Shares { get; set; }
+        public string ExpenseSummary { get; set; }
     }
 }

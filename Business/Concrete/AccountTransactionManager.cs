@@ -27,17 +27,18 @@ namespace Business.Concrete
     {
         private IMapper _mapper;
         private IAccountTransactionDal _hesapHareketDal;
+        private ICaseFileShareDal _caseFileShareDal;
         private IUnitOfWork _unitOfWork;
 
-        public AccountTransactionManager(IAccountTransactionDal hesapHareketDal, IMapper mapper, IUnitOfWork unitOfWork) : base(hesapHareketDal)
+        public AccountTransactionManager(IAccountTransactionDal hesapHareketDal, IMapper mapper, IUnitOfWork unitOfWork, ICaseFileShareDal caseFileShareDal) : base(hesapHareketDal)
         {
             _hesapHareketDal = hesapHareketDal;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _caseFileShareDal = caseFileShareDal;
         }
 
-        // MEVCUT METODLAR (Değiştirilmedi)
-        //[ValidationAspect(typeof(AccountTransactionAddDtoValidator))]
+
         public async Task<IResult> Add(AccountTransactionAddDto hareket)
         {
             var accountTransaction = _mapper.Map<AccountTransactionAddDto, AccountTransaction>(hareket);
@@ -45,6 +46,52 @@ namespace Business.Concrete
             await _hesapHareketDal.AddAsync(accountTransaction);
             await _unitOfWork.SaveChangesAsync();
             return new SuccessDataResult<int>(accountTransaction.ID, CommonMessages.EntityAdded);
+        }
+
+        public async Task<IResult> AddWithCaseFileSharesAsync(AccountTransactionAddDto accountTransaction)
+        {
+            // 1️⃣ Ön kontrol: CaseFileID var mı ve hareket türü DosyaMasrafı mı?
+            if (accountTransaction.caseFileID == null || accountTransaction.Type != TransactionType.DosyaMasrafi)
+                return new ErrorResult("Bu işlem sadece Dosya Masrafı türü için geçerlidir.");
+
+            int caseFileID = accountTransaction.caseFileID.Value;
+
+            // 2️⃣ CaseFileShare tablosundan aktif paydaşları al
+            var aktifPaylar = await _caseFileShareDal
+                .Where(x => x.Status == true && x.CaseFileID == caseFileID)
+                .ToListAsync();
+
+            if (aktifPaylar == null || !aktifPaylar.Any())
+                return new ErrorResult("Bu dosya için aktif pay bulunamadı.");
+
+            // 3️⃣ Toplam tutarı pay sayısına böl
+            decimal kisiBasiTutar =Convert.ToDecimal(accountTransaction.Amount / aktifPaylar.Count);
+
+            // 4️⃣ Her bir pay için ayrı hareket oluştur
+            foreach (var pay in aktifPaylar)
+            {
+                var yeniHareket = new AccountTransaction
+                {
+                    CaseFileID = caseFileID,
+                    DebtorID = pay.UserID,          // Her pay sahibi borçlu olacak
+                    CreditID = accountTransaction.CreditID,    // Genellikle sistem veya dosya sahibi
+                    Amount = kisiBasiTutar,
+                    Type = accountTransaction.Type,
+                    Description = $"Dosya masrafı payı - {kisiBasiTutar}₺ ({pay.User?.Name+" "+pay.User?.Surname})",
+                    PaymentReceivedDate = accountTransaction.PaymentReceivedDate,
+                    FinalPaymentDate = accountTransaction.FinalPaymentDate,
+                    PaymentStatus = accountTransaction.PaymentStatus,
+                    CreatedDate = DateTime.Now,
+                    Status = true
+                };
+
+                await _hesapHareketDal.AddAsync(yeniHareket);
+            }
+
+            // 5️⃣ Tümünü tek seferde kaydet
+            await _unitOfWork.SaveChangesAsync();
+
+            return new SuccessResult($"{aktifPaylar.Count} pay sahibine toplam {accountTransaction.Amount}₺ masraf paylaştırıldı.");
         }
 
         public async Task<IDataResult<AccountTransactionListDto>> GetAllByUserID(int userID)
