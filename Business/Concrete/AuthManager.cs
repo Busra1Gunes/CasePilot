@@ -28,15 +28,18 @@ namespace Business.Concrete
         private readonly IPasswordService _passwordService;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IRolePermissionService _permissionService;
+
 
         public AuthManager(IUserDal userDal, ITokenHelper tokenHelper, IPasswordService passwordService,
-                          IMapper mapper, IUnitOfWork unitOfWork)
+                          IMapper mapper, IUnitOfWork unitOfWork, IRolePermissionService permissionService)
         {
             _userDal = userDal;
             _tokenHelper = tokenHelper;
             _passwordService = passwordService;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _permissionService = permissionService;
         }
 
         [ValidationAspect(typeof(UserRegisterValidator))]
@@ -334,20 +337,8 @@ namespace Business.Concrete
 
                 if (user?.Role != null)
                 {
-                    // Örnek: Role'e göre sabit yetkiler
-                    if (user.Role.Name == "Admin")
-                    {
-                        permissions.Add(new Permissions { Name = "user.create" });
-                        permissions.Add(new Permissions { Name = "user.read" });
-                        permissions.Add(new Permissions { Name = "user.update" });
-                        permissions.Add(new Permissions { Name = "user.delete" });
-                        permissions.Add(new Permissions { Name = "admin.panel" });
-                    }
-                    else if (user.Role.Name == "User")
-                    {
-                        permissions.Add(new Permissions { Name = "user.read" });
-                        permissions.Add(new Permissions { Name = "profile.update" });
-                    }
+                    permissions = _permissionService.GetPermissionsByRoleAsync(user.ID).Result.Data.ToList(); ;
+                    
                 }
             }
             catch (Exception ex)

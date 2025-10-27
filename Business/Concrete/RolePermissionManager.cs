@@ -2,6 +2,7 @@
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dto.CaseFileDto;
 using Entities.Dto.PermissionDto;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -80,7 +81,7 @@ namespace Business.Concrete
             return new SuccessResult("Yetki rolden kaldırıldı");
         }
 
-        public async Task<List<Permissions>> GetPermissionsByRoleAsync(int roleId)
+        public async Task<IDataResult<List<Permissions>>> GetPermissionsByRoleAsync(int roleId)
         {
             var permissions = await _rolePermissionDal.Where(p => p.Status.Equals(true))
                 .Include(rp => rp.Permission)
@@ -88,7 +89,7 @@ namespace Business.Concrete
                 .Select(rp => rp.Permission)
                 .ToListAsync();
 
-            return permissions;
+            return new SuccessDataResult<List<Permissions>>(permissions);
         }
 
         public async Task<IResult> ClearPermissionsFromRoleAsync(int roleId)

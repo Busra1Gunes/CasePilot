@@ -75,7 +75,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetPermissionsByRole(int roleId)
         {
             var permissions = await _rolePermissionService.GetPermissionsByRoleAsync(roleId);
-            if (permissions == null || !permissions.Any())
+            if (permissions == null )
                 return NotFound("Role ait aktif yetki bulunamadı");
 
             return Ok(permissions);

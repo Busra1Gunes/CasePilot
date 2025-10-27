@@ -6,6 +6,7 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
+using Entities.Dto.CaseFileDto;
 using Entities.Dto.PermissionDto;
 using Entities.Dto.RoleDto;
 using System;
@@ -55,14 +56,14 @@ namespace Business.Concrete
             return new SuccessResult(CommonMessages.EntityDeleted);
         }
 
-        public async Task<List<Permissions>> GetAllPermissionAsync()
+        public async Task<IDataResult<List<Permissions>>> GetAllPermissionAsync()
         {
             List<Permissions>? permissionList = await _permissionDal.GetAllAsync(d=>d.Status.Equals(true));
-            return permissionList;
+            return new SuccessDataResult<List<Permissions>>(permissionList);
 
         }
 
-        public Task<Permissions> GetByIdAsync(int id)
+        public Task<IDataResult<Permissions>> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }

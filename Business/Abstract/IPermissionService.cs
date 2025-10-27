@@ -12,8 +12,8 @@ namespace Business.Abstract
 {
     public interface IPermissionService
     {
-        Task<List<Permissions>> GetAllPermissionAsync();
-        Task<Permissions> GetByIdAsync(int id);
+        Task<IDataResult<List<Permissions>>> GetAllPermissionAsync();
+        Task<IDataResult<Permissions>> GetByIdAsync(int id);
         Task<IResult> CreatePermissionAsync(PermissionAddDto permissionAddDto);
         Task<IResult> UpdatePermissionAsync(int id, PermissionAddDto permissionAddDto);
         Task<IResult> DeletePermissionAsync(int id);

@@ -23,7 +23,7 @@ namespace Business.Abstract
         /// <summary>
         /// Belirli bir role ait tüm yetkileri getirir
         /// </summary>
-        Task<List<Permissions>> GetPermissionsByRoleAsync(int roleId);
+        Task<IDataResult<List<Permissions>>> GetPermissionsByRoleAsync(int roleId);
 
         /// <summary>
         /// Role’nin tüm yetkilerini temizler (opsiyonel)
