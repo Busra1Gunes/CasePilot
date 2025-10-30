@@ -107,6 +107,7 @@ namespace Business.Concrete
                 .Where(c => c.Status == true)
                 .AsQueryable();
 
+            // 🔎 Filtreler
             if (filter.CaseTypeID.HasValue)
                 query = query.Where(c => c.CaseTypeID == filter.CaseTypeID.Value);
 
@@ -134,13 +135,13 @@ namespace Business.Concrete
                 query = query.Where(c => c.CaseFileDefendant
                     .Any(d => d.Defendant.Name.Contains(filter.DefendantName)));
 
-            // Dosyaları çek
+            // 📁 Dosyaları çek
             var caseFiles = await query.ToListAsync();
 
-            // DTO'ya map et
+            // 📋 DTO'ya map et
             var resultList = _mapper.Map<List<CaseFileListDto>>(caseFiles);
 
-            // Tüm masrafları toplayacağız
+            // 💰 Tüm masrafları toplayacağız
             List<AccountTransaction> allExpenses = new List<AccountTransaction>();
 
             foreach (var dto in resultList)
@@ -161,10 +162,13 @@ namespace Business.Concrete
                         .Select(g => new
                         {
                             UserFullName = g.Key.Name + " " + g.Key.Surname,
-                            TotalAmount = g.Sum(x => x.Amount)
+                            PaidAmount = g.Where(x => x.PaymentStatus == 1).Sum(x => x.Amount),
+                            UnpaidAmount = g.Where(x => x.PaymentStatus == 2).Sum(x => x.Amount)
                         });
 
-                    dto.ExpenseSummary = string.Join(" | ", grouped.Select(g => $"{g.UserFullName} = {g.TotalAmount}₺"));
+                    // 👇 Kullanıcı bazlı masraf detaylarını string olarak yaz
+                    dto.ExpenseSummary = string.Join(" | ", grouped.Select(g =>
+                        $"{g.UserFullName} → Ödenen: {g.PaidAmount}₺, Bekleyen: {g.UnpaidAmount}₺"));
                 }
                 else
                 {
@@ -172,21 +176,23 @@ namespace Business.Concrete
                 }
             }
 
-            // Genel özet bilgileri hesapla
+            // 📊 Genel özet bilgileri hesapla
             var totalCaseFiles = resultList.Count;
+
             var expenseSummaryByUser = allExpenses
                 .GroupBy(x => new { x.User1.ID, x.User1.Name, x.User1.Surname })
                 .Select(g => new UserExpenseSummaryDto
                 {
                     UserFullName = g.Key.Name + " " + g.Key.Surname,
-                    TotalAmount = g.Sum(x => x.Amount)
+                    PaidAmount = g.Where(x => x.PaymentStatus == 1).Sum(x => x.Amount),
+                    UnpaidAmount = g.Where(x => x.PaymentStatus == 2).Sum(x => x.Amount)
                 })
                 .OrderByDescending(x => x.TotalAmount)
                 .ToList();
 
             var totalExpenses = expenseSummaryByUser.Sum(x => x.TotalAmount);
 
-            // Ana DTO'ya doldur
+            // 🧾 Ana DTO'ya doldur
             var summaryDto = new CaseFileListWithSummaryDto
             {
                 CaseFiles = resultList,
@@ -195,7 +201,10 @@ namespace Business.Concrete
                 TotalExpenses = totalExpenses
             };
 
-            return new SuccessDataResult<CaseFileListWithSummaryDto>(summaryDto, "Filtreli dosya listesi ve özet bilgileri getirildi.");
+            return new SuccessDataResult<CaseFileListWithSummaryDto>(
+                summaryDto,
+                "Filtreli dosya listesi ve özet bilgileri getirildi."
+            );
         }
         public  async Task<object> GetAllByCaseTypeId(int id)
 		{

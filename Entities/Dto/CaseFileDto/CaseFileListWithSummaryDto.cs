@@ -8,12 +8,9 @@ namespace Entities.Dto.CaseFileDto
 {
     public class CaseFileListWithSummaryDto
     {
-        public List<CaseFileListDto> CaseFiles { get; set; } = new List<CaseFileListDto>();
-
+        public List<CaseFileListDto> CaseFiles { get; set; } = new();
         public int TotalCaseFiles { get; set; }
-
-        public List<UserExpenseSummaryDto> TotalExpensesByUser { get; set; } = new List<UserExpenseSummaryDto>();
-
+        public List<UserExpenseSummaryDto> TotalExpensesByUser { get; set; } = new();
         public decimal TotalExpenses { get; set; }
     }
 }
