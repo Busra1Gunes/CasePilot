@@ -29,8 +29,9 @@ namespace Entities.Concrete
         public int CaseStatus { get; set; } = 1;       // DosyaDurum → CaseStatus
         public City City { get; set; }
 		public District District { get; set; }
-        // Navigation Properties
-        public Court? Court { get; set; }
+		public string CaseNumber { get; set; }
+		// Navigation Properties
+		public Court? Court { get; set; }
         public ICollection<Hearing> Hearings { get; set; }
         public CaseType CaseType { get; set; }
 		public ApplicationType ApplicationType { get; set; }

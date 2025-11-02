@@ -29,8 +29,9 @@ namespace Entities.Dto.DosyaDto
         public DateTime? UpdatedDate { get; set; } = DateTime.Now;
         public DateTime? DeletedDate { get; set; } = DateTime.Now;
         public bool Status { get; set; } = false;
-
-        public List<CaseFileShareDto> CaseFileShares { get; set; } = new List<CaseFileShareDto>();
+		public string CourtID { get; set; }
+		public string CaseNumber { get; set; }
+		public List<CaseFileShareDto> CaseFileShares { get; set; } = new List<CaseFileShareDto>();
 		//DosyaPays alanını null döndürmemek için new List<DosyaPayListDto>() ile başlatmak mantıklıdır
 		public List<CaseFileDefendantListDto> caseFileDefendantListDtos { get; set; } = new List<CaseFileDefendantListDto>();
 

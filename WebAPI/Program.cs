@@ -38,8 +38,6 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.Configure<FileStorageSettings>(
 	builder.Configuration.GetSection("FileStorage"));
 
-
-
 // JWT AUTHENTICATION
 var jwtSettings = builder.Configuration.GetSection("JWT");
 var secretKey = jwtSettings["SecurityKey"];
@@ -64,16 +62,18 @@ builder.Services.AddAuthentication(options =>
 	};
 });
 
-// CORS
+// ============================================
+// CORS - DÜZELTİLDİ (Somee.com için optimize edildi)
+// ============================================
 builder.Services.AddCors(options =>
 {
-	options.AddPolicy("AllowAll",
-		builder =>
-		{
-			builder.AllowAnyOrigin()
-				   .AllowAnyMethod()
-				   .AllowAnyHeader();
-		});
+	options.AddPolicy("AllowAll", policy =>
+	{
+		policy.SetIsOriginAllowed(origin => true)  // Tüm origin'lere izin ver
+			  .AllowAnyMethod()
+			  .AllowAnyHeader()
+			  .AllowCredentials();  // Cookie/Auth için gerekli
+	});
 });
 
 // SWAGGER
@@ -86,34 +86,35 @@ builder.Services.AddSwaggerGen(c =>
 		Description = "Avukatlık Bürosu Yönetim Sistemi API"
 	});
 
-    // JWT Authentication için Swagger yapılandırması
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,  // ✅ ApiKey yerine Http
-        Scheme = "Bearer",               // ✅ Küçük harf "bearer" yerine "Bearer"
-        BearerFormat = "JWT"             // ✅ Yeni eklendi
-    });
+	// JWT Authentication için Swagger yapılandırması
+	c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+	{
+		Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+		Name = "Authorization",
+		In = ParameterLocation.Header,
+		Type = SecuritySchemeType.Http,
+		Scheme = "Bearer",
+		BearerFormat = "JWT"
+	});
 
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"  // ✅ "bearer" yerine "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
+	c.AddSecurityRequirement(new OpenApiSecurityRequirement
+	{
+		{
+			new OpenApiSecurityScheme
+			{
+				Reference = new OpenApiReference
+				{
+					Type = ReferenceType.SecurityScheme,
+					Id = "Bearer"
+				}
+			},
+			Array.Empty<string>()
+		}
+	});
 
-    c.EnableAnnotations();
+	c.EnableAnnotations();
 });
+
 // ============================================
 // CONTROLLERS & JSON OPTIONS
 // ============================================
@@ -132,18 +133,24 @@ var app = builder.Build();
 // SWAGGER
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "CasePilot API V1");
-        c.RoutePrefix = "swagger"; // https://localhost:7285/swagger
-    });
+	app.UseSwagger();
+	app.UseSwaggerUI(c =>
+	{
+		c.SwaggerEndpoint("/swagger/v1/swagger.json", "CasePilot API V1");
+		c.RoutePrefix = "swagger"; // https://localhost:7285/swagger
+	});
 }
 
-// MIDDLEWARE PIPELINE
+// ============================================
+// MIDDLEWARE PIPELINE - DOĞRU SIRALAMA
+// ============================================
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// ⚠️ ÖNEMLİ: CORS EN BAŞTA OLMALI!
+// UseAuthentication ve UseAuthorization'dan ÖNCE
 app.UseCors("AllowAll");
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

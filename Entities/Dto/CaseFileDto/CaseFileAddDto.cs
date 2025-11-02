@@ -23,5 +23,7 @@ namespace Entities.Dto.DosyaDto
         public DateTime OpeningDate { get; set; }     // AcilisTarihi → OpeningDate
         public DateTime ClosingDate { get; set; }     // KapanisTarihi → ClosingDate
         public int CaseStatus { get; set; }
+        public int CourtID { get; set; }
+        public string CaseNumber { get; set; }
     }
 }

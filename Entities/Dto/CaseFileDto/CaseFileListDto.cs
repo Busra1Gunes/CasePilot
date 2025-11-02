@@ -32,5 +32,7 @@ namespace Entities.Dto.CaseFileDto
         public string Defendants { get; set; }
         public string Shares { get; set; }
         public string ExpenseSummary { get; set; }
-    }
+		public string CourtName { get; set; }
+		public string CaseNumber { get; set; }
+	}
 }

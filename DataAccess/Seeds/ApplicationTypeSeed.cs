@@ -15,8 +15,8 @@ namespace Entities.Seeds
 		{
 			builder.HasData(new ApplicationType { ID = 1, CaseTypeID = 1, Name = "Menfi Tespit", Status = false },
 			new ApplicationType { ID = 2, CaseTypeID = 1, Name = "Alacak", Status = false },
-			new ApplicationType { ID = 3, CaseTypeID = 1, Name = "İdari Dava", Status = false },
-			new ApplicationType { ID = 4, CaseTypeID = 4, Name = "Kamulaştırma", Status = false });
+			new ApplicationType { ID = 3, CaseTypeID = 2, Name = "Menfi Tespit", Status = false },
+			new ApplicationType { ID = 4, CaseTypeID = 2, Name = "Alacak", Status = false });
 		}
 	}
 }

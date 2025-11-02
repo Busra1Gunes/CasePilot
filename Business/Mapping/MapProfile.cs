@@ -138,6 +138,7 @@ namespace Service.Mapping
             CreateMap<CaseFile, CaseFileListDto>()
         .ForMember(dest => dest.City, opt => opt.MapFrom(x => x.City.Name))
         .ForMember(dest => dest.District, opt => opt.MapFrom(x => x.District.Name))
+        .ForMember(dest => dest.CourtName, opt => opt.MapFrom(x => x.Court.Name))
         .ForMember(dest => dest.CaseType, opt => opt.MapFrom(x => x.CaseType.Name))
         .ForMember(dest => dest.ApplicationType, opt => opt.MapFrom(x => x.ApplicationType.Name))
         .ForMember(dest => dest.CaseStatus, opt => opt.MapFrom(x =>
