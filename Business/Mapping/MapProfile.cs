@@ -152,6 +152,20 @@ namespace Service.Mapping
 
 
 
+            CreateMap<CaseFile, CaseFileDetailWithSummaryDto>()
+        .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.Name))
+        .ForMember(dest => dest.DistrictName, opt => opt.MapFrom(src => src.District.Name))
+        .ForMember(dest => dest.CourtName, opt => opt.MapFrom(src => src.Court.Name))
+        .ForMember(dest => dest.CaseTypeName, opt => opt.MapFrom(src => src.CaseType.Name))
+        .ForMember(dest => dest.ApplicationTypeName, opt => opt.MapFrom(src => src.ApplicationType.Name))
+        .ForMember(dest => dest.CaseFileDefendants, opt => opt.MapFrom(src => src.CaseFileDefendant.Where(d => d.Status)))
+        .ForMember(dest => dest.CaseFileShares, opt => opt.Ignore()) // manuel map
+        .ForMember(dest => dest.Transactions, opt => opt.Ignore())    // manuel map
+        .ForMember(dest => dest.TotalExpensesByUser, opt => opt.Ignore())
+        .ForMember(dest => dest.TotalExpenses, opt => opt.Ignore())
+        .ReverseMap();
+
+
 
             CreateMap<CaseFile, CaseFileUpdateDto>().ReverseMap();
             CreateMap<CaseFileDocumentAddDto, CaseFileDocument>()

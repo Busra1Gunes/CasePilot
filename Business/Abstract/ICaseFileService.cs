@@ -20,6 +20,8 @@ namespace Business.Abstract
 		Task<IResult> Add(CaseFileAddDto caseFile);
 		Task<IResult> Update(int caseFileID, CaseFileUpdateDto caseFile);
         Task<IResult> Delete(int caseFileID);
+        Task<IDataResult<CaseFileCreateResponseDto>> CreateWithDetails(CaseFileCreateDto createDto);
+        Task<IDataResult<CaseFileDetailWithSummaryDto>> GetByIdWithDetails(int caseFileID);
 
     }
 }

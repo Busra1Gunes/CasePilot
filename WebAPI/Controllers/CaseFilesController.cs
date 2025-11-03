@@ -53,5 +53,16 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Delete(int caseFileID)
           => Ok(await _caseFileService.Delete(caseFileID));
 
+
+        [HttpPost]
+        public async Task<IActionResult> CreateWithDetails([FromBody] CaseFileCreateDto createDto)
+        => Ok(await _caseFileService.CreateWithDetails(createDto));
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetByIdWithDetails(int caseFileID)
+          => Ok(await _caseFileService.GetByIdWithDetails(caseFileID));
+
+
     }
 }

@@ -21,26 +21,241 @@ using Business.Exceptions.CaseFile;
 using Entities.Dto.CaseFileDto;
 using Entities.Dto.FilterDto;
 using DataAccess.Concrete.EntityFramework;
+using Entities.Dto.HesapHareketDto;
+using Entities.Enums;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Business.Concrete
 {
 	public class CaseFileManager : Manager<CaseFile>, ICaseFileService
     {
         private ICaseFileDal _caseFileDal;
+        private ICaseFileShareDal _caseFileShareDal;
         private IMapper _mapper;
 		private IUnitOfWork _unitOfWork;
         private IAccountTransactionDal _accountTransactionDal;
         private IHearingDal _hearingDal;
+        private IServiceProvider _serviceProvider;
 
-		public CaseFileManager(ICaseFileDal caseFileDal, IMapper mapper, IUnitOfWork unitOfWork, IHearingDal hearingDal,IAccountTransactionDal accountTransactionDal) : base(caseFileDal)
+
+        public CaseFileManager(ICaseFileDal caseFileDal, IMapper mapper, IUnitOfWork unitOfWork, 
+            IHearingDal hearingDal,IAccountTransactionDal accountTransactionDal,
+            ICaseFileShareDal caseFileShare,IServiceProvider serviceProvider) : base(caseFileDal)
         {
 			_caseFileDal = caseFileDal;
 			_mapper = mapper;
 			_unitOfWork = unitOfWork;
             _hearingDal = hearingDal;
             _accountTransactionDal = accountTransactionDal;
-		}
-		public async Task<IResult> Add(CaseFileAddDto caseFile)
+            _caseFileShareDal = caseFileShare;
+            _serviceProvider = serviceProvider;
+
+        }
+        public async Task<IDataResult<CaseFileCreateResponseDto>> CreateWithDetails(CaseFileCreateDto createDto)
+        {
+            // DbContext'i al ve transaction başlat
+            var context = _serviceProvider.GetRequiredService<CasePilotContext>();
+            using var transaction = await context.Database.BeginTransactionAsync();
+
+            try
+            {
+                // 1️⃣ DOSYA KAYDET
+                CaseFile caseFileAdd = _mapper.Map<CaseFileAddDto, CaseFile>(createDto.CaseFile);
+
+                if (_caseFileDal.Where(k => k.IdentityNumber == createDto.CaseFile.IdentityNumber).Any())
+                    throw new IdentyNumberAlreadyExistsException();
+
+                caseFileAdd.OpeningDate = DateTime.Now;
+                caseFileAdd.Status = true;
+
+                await _caseFileDal.AddAsync(caseFileAdd);
+                await _unitOfWork.SaveChangesWithoutTransactionAsync(); // Transaction olmadan kaydet
+
+                int caseFileID = caseFileAdd.ID;
+
+                // 2️⃣ PAYLARI KAYDET
+                int sharesCreated = 0;
+                if (createDto.Shares != null && createDto.Shares.Any())
+                {
+                    foreach (var shareDto in createDto.Shares)
+                    {
+                        var share = new CaseFileShare
+                        {
+                            CaseFileID = caseFileID, // Artık ID'yi biliyoruz
+                            UserID = shareDto.UserID,
+                            ShareRate = shareDto.ShareRate,
+                            FilePermission = shareDto.FilePermission,
+                            CreatedDate = DateTime.Now,
+                            Status = true
+                        };
+
+                        await _caseFileShareDal.AddAsync(share);
+                        sharesCreated++;
+                    }
+                    await _unitOfWork.SaveChangesWithoutTransactionAsync();
+                }
+
+                // 3️⃣ MASRAFLARI KAYDET
+                int transactionsCreated = 0;
+                if (createDto.Transactions != null && createDto.Transactions.Any())
+                {
+                    if (createDto.DistributeExpensesToShares && createDto.Shares != null && createDto.Shares.Any())
+                    {
+                        // Masrafları pay sahiplerine dağıt
+                        foreach (var transactionDto in createDto.Transactions)
+                        {
+                            decimal amountPerShare = transactionDto.Amount / createDto.Shares.Count;
+
+                            foreach (var share in createDto.Shares)
+                            {
+                                var newTransaction = new AccountTransaction
+                                {
+                                    CaseFileID = caseFileID,
+                                    DebtorID = share.UserID,
+                                    CreditID = transactionDto.CreditID,
+                                    Amount = amountPerShare,
+                                    Type = TransactionType.DosyaMasrafi,
+                                    Description = $"{transactionDto.Description} - Pay sahibi masrafı",
+                                    PaymentReceivedDate = transactionDto.PaymentReceivedDate,
+                                    FinalPaymentDate = transactionDto.FinalPaymentDate,
+                                    PaymentStatus = transactionDto.PaymentStatus,
+                                    CreatedDate = DateTime.Now,
+                                    Status = true
+                                };
+
+                                await _accountTransactionDal.AddAsync(newTransaction);
+                                transactionsCreated++;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Normal masraf kaydı (tek kişiye)
+                        foreach (var transactionDto in createDto.Transactions)
+                        {
+                            var transactions = new AccountTransaction
+                            {
+                                CaseFileID = caseFileID,
+                                DebtorID = transactionDto.DebtorID,
+                                CreditID = transactionDto.CreditID,
+                                Amount = transactionDto.Amount,
+                                Type = transactionDto.Type,
+                                Description = transactionDto.Description,
+                                PaymentReceivedDate = transactionDto.PaymentReceivedDate,
+                                FinalPaymentDate = transactionDto.FinalPaymentDate,
+                                PaymentStatus = transactionDto.PaymentStatus,
+                                CreatedDate = DateTime.Now,
+                                Status = true
+                            };
+
+                            await _accountTransactionDal.AddAsync(transactions);
+                            transactionsCreated++;
+                        }
+                    }
+                    await _unitOfWork.SaveChangesWithoutTransactionAsync();
+                }
+
+                // Tüm işlemler başarılı - transaction'ı onayla
+                await transaction.CommitAsync();
+
+                var response = new CaseFileCreateResponseDto
+                {
+                    CaseFileID = caseFileID,
+                    SharesCreated = sharesCreated,
+                    TransactionsCreated = transactionsCreated,
+                    Message = $"Dosya başarıyla kaydedildi. {sharesCreated} pay, {transactionsCreated} masraf eklendi."
+                };
+
+                return new SuccessDataResult<CaseFileCreateResponseDto>(response);
+            }
+            catch (Exception ex)
+            {
+                // Hata durumunda rollback
+                await transaction.RollbackAsync();
+                return new ErrorDataResult<CaseFileCreateResponseDto>($"İşlem başarısız: {ex.Message}");
+            }
+        }
+        public async Task<IDataResult<CaseFileDetailWithSummaryDto>> GetByIdWithDetails(int caseFileID)
+        {
+            var caseFile = await _caseFileDal.GetAllQueryable()
+      .Include(cf => cf.CaseType)
+      .Include(cf => cf.ApplicationType)
+      .Include(cf => cf.City)
+      .Include(cf => cf.District)
+      .Include(cf => cf.Court)
+      .Include(cf => cf.CaseFileShares.Where(cfs => cfs.Status))
+          .ThenInclude(cfs => cfs.User)
+      .Include(cf => cf.CaseFileDefendant.Where(cfd => cfd.Status))
+          .ThenInclude(cfd => cfd.Defendant)
+      .SingleOrDefaultAsync(cf => cf.ID == caseFileID && cf.Status);
+
+            if (caseFile == null)
+                throw new CaseFileNotFoundException(caseFileID);
+
+            // 2️⃣ Payları maple ve toplam pay oranını hesapla
+            var shares = caseFile.CaseFileShares.ToList();
+            var totalDto = new CaseFileShareTotalDto
+            {
+                TotalShareRate = shares.Sum(s => s.ShareRate)
+            };
+            var shareListDto = new CaseFileShareListDto
+            {
+                ShareDto = _mapper.Map<List<CaseFileShareDto>>(shares),
+                Total = totalDto
+            };
+
+            // 3️⃣ Masrafları detaylı çek
+            var transactions = await _accountTransactionDal
+                .Where(t => t.CaseFileID == caseFileID && t.Type == TransactionType.DosyaMasrafi && t.Status)
+                .Include(t => t.User1) // Borçlu
+                .Include(t => t.User2) // Alacaklı
+                .Include(t => t.CaseFile)
+                .ToListAsync();
+
+            var transactionDtos = _mapper.Map<List<AccountTransactionDto>>(transactions);
+
+            // 4️⃣ Bakiye hesapla
+            var balance = new AccountBalanceDto();
+            foreach (var t in transactions)
+            {
+                bool odendi = t.PaymentStatus == 1;
+                balance.TotalDebt += t.Amount;
+
+                if (odendi)
+                    balance.TotalCredit += t.Amount;
+                else
+                    balance.PendingDebt += t.Amount;
+            }
+            balance.NetBalance = balance.TotalCredit - balance.PendingDebt;
+
+            var transactionListDto = new AccountTransactionListDto
+            {
+                Transaction = transactionDtos,
+                Bakiye = balance
+            };
+
+            // 5️⃣ Ana DTO map
+            var dto = _mapper.Map<CaseFileDetailWithSummaryDto>(caseFile);
+            dto.CaseFileShares = shareListDto;
+            dto.Transactions = transactionListDto;
+
+            // Kullanıcı bazlı özet (isteğe bağlı)
+            var expenseSummaryByUser = transactions
+                .GroupBy(x => new { x.User1.ID, x.User1.Name, x.User1.Surname })
+                .Select(g => new UserExpenseSummaryDto
+                {
+                    UserFullName = $"{g.Key.Name} {g.Key.Surname}",
+                    PaidAmount = g.Where(x => x.PaymentStatus == 1).Sum(x => x.Amount),
+                    UnpaidAmount = g.Where(x => x.PaymentStatus == 2).Sum(x => x.Amount)
+                }).ToList();
+
+            dto.TotalExpensesByUser = expenseSummaryByUser;
+            dto.TotalExpenses = expenseSummaryByUser.Sum(x => x.TotalAmount);
+
+            return new SuccessDataResult<CaseFileDetailWithSummaryDto>(dto, "Detaylı dosya bilgisi, paylar ve masraflar getirildi.");
+        }
+
+        public async Task<IResult> Add(CaseFileAddDto caseFile)
 		{
 			CaseFile caseFileAdd = _mapper.Map<CaseFileAddDto, CaseFile>(caseFile);
 

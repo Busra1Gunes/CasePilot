@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,6 @@ namespace Business.Abstract
     public interface IUnitOfWork
     {
         Task SaveChangesAsync();
+        Task SaveChangesWithoutTransactionAsync(); // Yeni metot
     }
 }
