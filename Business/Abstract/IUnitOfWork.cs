@@ -10,6 +10,6 @@ namespace Business.Abstract
     public interface IUnitOfWork
     {
         Task SaveChangesAsync();
-        Task SaveChangesWithoutTransactionAsync(); // Yeni metot
+      
     }
 }

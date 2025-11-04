@@ -10,8 +10,8 @@ namespace Entities.Concrete
     public class AccountTransaction : Entity
     {
 
-        public int DebtorID { get; set; }               // BorcluID → DebtorId
-        public int CreditID { get; set; }               // AlacakId → CreditId
+        public int? DebtorID { get; set; }               // BorcluID → DebtorId
+        public int? CreditID { get; set; }               // AlacakId → CreditId
 
         public int? CaseFileID { get; set; } //Eger HareketTuru=DosyaMasrafi ise DosyaId deger alır dosyamasrafı değilse   null
 

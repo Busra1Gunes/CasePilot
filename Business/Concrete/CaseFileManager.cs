@@ -53,13 +53,10 @@ namespace Business.Concrete
         }
         public async Task<IDataResult<CaseFileCreateResponseDto>> CreateWithDetails(CaseFileCreateDto createDto)
         {
-            // DbContext'i al ve transaction başlat
-            var context = _serviceProvider.GetRequiredService<CasePilotContext>();
-            using var transaction = await context.Database.BeginTransactionAsync();
+            
 
             try
             {
-                // 1️⃣ DOSYA KAYDET
                 CaseFile caseFileAdd = _mapper.Map<CaseFileAddDto, CaseFile>(createDto.CaseFile);
 
                 if (_caseFileDal.Where(k => k.IdentityNumber == createDto.CaseFile.IdentityNumber).Any())
@@ -69,11 +66,9 @@ namespace Business.Concrete
                 caseFileAdd.Status = true;
 
                 await _caseFileDal.AddAsync(caseFileAdd);
-                await _unitOfWork.SaveChangesWithoutTransactionAsync(); // Transaction olmadan kaydet
-
+                await _unitOfWork.SaveChangesAsync();
                 int caseFileID = caseFileAdd.ID;
 
-                // 2️⃣ PAYLARI KAYDET
                 int sharesCreated = 0;
                 if (createDto.Shares != null && createDto.Shares.Any())
                 {
@@ -81,8 +76,8 @@ namespace Business.Concrete
                     {
                         var share = new CaseFileShare
                         {
-                            CaseFileID = caseFileID, // Artık ID'yi biliyoruz
-                            UserID = shareDto.UserID,
+                            CaseFileID = caseFileID,
+                            UserID = (int)shareDto.UserID,
                             ShareRate = shareDto.ShareRate,
                             FilePermission = shareDto.FilePermission,
                             CreatedDate = DateTime.Now,
@@ -90,91 +85,26 @@ namespace Business.Concrete
                         };
 
                         await _caseFileShareDal.AddAsync(share);
+                        await _unitOfWork.SaveChangesAsync();
                         sharesCreated++;
                     }
-                    await _unitOfWork.SaveChangesWithoutTransactionAsync();
                 }
-
-                // 3️⃣ MASRAFLARI KAYDET
-                int transactionsCreated = 0;
-                if (createDto.Transactions != null && createDto.Transactions.Any())
-                {
-                    if (createDto.DistributeExpensesToShares && createDto.Shares != null && createDto.Shares.Any())
-                    {
-                        // Masrafları pay sahiplerine dağıt
-                        foreach (var transactionDto in createDto.Transactions)
-                        {
-                            decimal amountPerShare = transactionDto.Amount / createDto.Shares.Count;
-
-                            foreach (var share in createDto.Shares)
-                            {
-                                var newTransaction = new AccountTransaction
-                                {
-                                    CaseFileID = caseFileID,
-                                    DebtorID = share.UserID,
-                                    CreditID = transactionDto.CreditID,
-                                    Amount = amountPerShare,
-                                    Type = TransactionType.DosyaMasrafi,
-                                    Description = $"{transactionDto.Description} - Pay sahibi masrafı",
-                                    PaymentReceivedDate = transactionDto.PaymentReceivedDate,
-                                    FinalPaymentDate = transactionDto.FinalPaymentDate,
-                                    PaymentStatus = transactionDto.PaymentStatus,
-                                    CreatedDate = DateTime.Now,
-                                    Status = true
-                                };
-
-                                await _accountTransactionDal.AddAsync(newTransaction);
-                                transactionsCreated++;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Normal masraf kaydı (tek kişiye)
-                        foreach (var transactionDto in createDto.Transactions)
-                        {
-                            var transactions = new AccountTransaction
-                            {
-                                CaseFileID = caseFileID,
-                                DebtorID = transactionDto.DebtorID,
-                                CreditID = transactionDto.CreditID,
-                                Amount = transactionDto.Amount,
-                                Type = transactionDto.Type,
-                                Description = transactionDto.Description,
-                                PaymentReceivedDate = transactionDto.PaymentReceivedDate,
-                                FinalPaymentDate = transactionDto.FinalPaymentDate,
-                                PaymentStatus = transactionDto.PaymentStatus,
-                                CreatedDate = DateTime.Now,
-                                Status = true
-                            };
-
-                            await _accountTransactionDal.AddAsync(transactions);
-                            transactionsCreated++;
-                        }
-                    }
-                    await _unitOfWork.SaveChangesWithoutTransactionAsync();
-                }
-
-                // Tüm işlemler başarılı - transaction'ı onayla
-                await transaction.CommitAsync();
-
                 var response = new CaseFileCreateResponseDto
                 {
                     CaseFileID = caseFileID,
                     SharesCreated = sharesCreated,
-                    TransactionsCreated = transactionsCreated,
-                    Message = $"Dosya başarıyla kaydedildi. {sharesCreated} pay, {transactionsCreated} masraf eklendi."
+                    TransactionsCreated = 0,
+                    Message = ""
                 };
-
+               
                 return new SuccessDataResult<CaseFileCreateResponseDto>(response);
             }
             catch (Exception ex)
             {
-                // Hata durumunda rollback
-                await transaction.RollbackAsync();
                 return new ErrorDataResult<CaseFileCreateResponseDto>($"İşlem başarısız: {ex.Message}");
             }
         }
+
         public async Task<IDataResult<CaseFileDetailWithSummaryDto>> GetByIdWithDetails(int caseFileID)
         {
             var caseFile = await _caseFileDal.GetAllQueryable()

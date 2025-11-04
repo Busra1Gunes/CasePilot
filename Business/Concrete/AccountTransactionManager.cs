@@ -74,7 +74,7 @@ namespace Business.Concrete
                 {
                     CaseFileID = caseFileID,
                     DebtorID = pay.UserID,          // Her pay sahibi borçlu olacak
-                    CreditID = accountTransaction.CreditID,    // Genellikle sistem veya dosya sahibi
+                    CreditID = (int)accountTransaction.CreditID,    // Genellikle sistem veya dosya sahibi
                     Amount = kisiBasiTutar,
                     Type = accountTransaction.Type,
                     Description = $"Dosya masrafı payı - {kisiBasiTutar}₺ ({pay.User?.Name+" "+pay.User?.Surname})",
@@ -217,7 +217,7 @@ namespace Business.Concrete
             }
         }
 
-        public async Task<IDataResult<AccountTransaction>> GetById(int transactionID)
+        public async Task<IDataResult<AccountTransactionUpdateDto>> GetById(int transactionID)
         {
             try
             {
@@ -230,23 +230,23 @@ namespace Business.Concrete
 
                 if (transaction == null)
                 {
-                    return new ErrorDataResult<AccountTransaction>("Hesap hareketi bulunamadı.");
+                    return new ErrorDataResult<AccountTransactionUpdateDto>("Hesap hareketi bulunamadı.");
                 }
-
-                return new SuccessDataResult<AccountTransaction>(transaction);
+                var dto = _mapper.Map<AccountTransactionUpdateDto>(transaction);
+                return new SuccessDataResult<AccountTransactionUpdateDto>(dto);
             }
             catch (Exception ex)
             {
-                return new ErrorDataResult<AccountTransaction>($"Hesap hareketi alınırken hata oluştu: {ex.Message}");
+                return new ErrorDataResult<AccountTransactionUpdateDto>($"Hesap hareketi alınırken hata oluştu: {ex.Message}");
             }
         }
 
-        public async Task<IResult> Update(AccountTransaction transaction)
+        public async Task<IResult> Update(int ID,AccountTransactionUpdateDto transaction)
         {
             try
             {
                 var existingTransaction = await _hesapHareketDal
-                    .Where(x => x.ID == transaction.ID && x.Status == true)
+                    .Where(x => x.ID == ID && x.Status == true)
                     .FirstOrDefaultAsync();
 
                 if (existingTransaction == null)
@@ -263,6 +263,47 @@ namespace Business.Concrete
             catch (Exception ex)
             {
                 return new ErrorResult($"Hesap hareketi güncellenirken hata oluştu: {ex.Message}");
+            }
+        }
+        public async Task<IResult> TogglePaymentStatusAsync(int accountTransactionID)
+        {
+            try
+            {
+                var transaction = await _hesapHareketDal
+                    .Where(x => x.ID == accountTransactionID && x.Status == true)
+                    .FirstOrDefaultAsync();
+
+                if (transaction == null)
+                    return new ErrorResult("Hesap hareketi bulunamadı.");
+
+                // Current status mapping:
+                // 1 -> Ödendi
+                // 2 -> Ödenmedi
+                // 3 -> Mahsuplasma (treat as other)
+
+                if (transaction.PaymentStatus == 1)
+                {
+                    transaction.PaymentStatus = 2; // Ödendi -> Ödenmedi
+                }
+                else if (transaction.PaymentStatus == 2)
+                {
+                    transaction.PaymentStatus = 1; // Ödenmedi -> Ödendi
+                }
+                else
+                {
+                    // If it's a different status (e.g. mahsuplaşma), toggle to Ödendi
+                    transaction.PaymentStatus = 1;
+                }
+
+                transaction.UpdatedDate = DateTime.Now;
+                _hesapHareketDal.Update(transaction);
+                await _unitOfWork.SaveChangesAsync();
+
+                return new SuccessResult("Ödeme durumu başarıyla güncellendi.");
+            }
+            catch (Exception ex)
+            {
+                return new ErrorResult($"Ödeme durumu güncellenirken hata oluştu: {ex.Message}");
             }
         }
     }

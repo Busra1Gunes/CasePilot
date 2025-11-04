@@ -63,7 +63,27 @@ namespace WebAPI.Controllers
         /// </summary>
         [HttpPut]
         [SwaggerOperation(Summary = "Hesap hareketi günceller")]
-        public async Task<IActionResult> Update([FromBody] AccountTransaction transaction)
-            => Ok(await _transactionService.Update(transaction));
+        public async Task<IActionResult> Update(int ID,[FromBody] AccountTransactionUpdateDto transaction)
+            => Ok(await _transactionService.Update(ID,transaction));
+
+
+        /// <summary>
+        /// Ödeme durumunu tersine çevirir: Ödendi (1) -> Ödenmedi (2), Ödenmedi (2) -> Ödendi (1).
+        /// Diğer durumlar için varsayılan olarak Ödendi (1) olur.
+        /// </summary>
+        [HttpPost]
+        [SwaggerOperation(Summary = "Ödeme durumu: Ödendi <-> Ödenmedi (toggle)")]
+        public async Task<IActionResult> TogglePaymentStatus(int transactionID)
+        {
+            var result = await _transactionService.TogglePaymentStatusAsync(transactionID);
+            if (result == null)
+                return StatusCode(500, "Beklenmeyen bir hata oluştu.");
+
+            if (result.Success)
+                return Ok(result);
+
+            // Hata durumunda uygun status kodu dönebiliriz (400/404/500). Service mesajına göre 400 döndürüyoruz.
+            return BadRequest(result);
+        }
     }
 }

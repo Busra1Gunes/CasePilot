@@ -19,8 +19,8 @@ using System.Threading.Tasks;
 
 namespace Business.DependencyResolvers.Autofac
 {
-	public class AutofacBusinessModule : Module
-	{
+    public class AutofacBusinessModule : Module
+    {
         protected override void Load(ContainerBuilder builder)
         {
             // ============================================
@@ -114,14 +114,16 @@ namespace Business.DependencyResolvers.Autofac
             .PropertiesAutowired();
 
             // ============================================
-            // DbContext (async güvenli)
+            // NOTE:
+            // CasePilotContext and UnitOfWork are registered in Program.cs (AddDbContext / AddScoped).
+            // Do NOT register them again here to avoid duplicate registrations and lifetime conflicts.
+            // If you prefer to register DbContext & UnitOfWork via Autofac, remove the Program.cs registrations instead.
             // ============================================
-            builder.RegisterType<CasePilotContext>()
-                   .AsSelf()
-                   .InstancePerDependency(); // Her kullanımda yeni context
 
             // ============================================
-            // INTERCEPTORS (FileManager hariç)
+            // INTERCEPTORS (Assembly-level registration)
+            // IMPORTANT: Use InstancePerLifetimeScope to avoid capturing scoped dependencies into singletons.
+            // If you already registered the individual services above, you may remove this block to avoid duplicate registrations.
             // ============================================
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
@@ -132,8 +134,8 @@ namespace Business.DependencyResolvers.Autofac
                 {
                     Selector = new AspectInterceptorSelector()
                 })
-                .SingleInstance();
+                // Use InstancePerLifetimeScope to prevent singleton capturing of scoped dependencies (DbContext, etc.)
+                .InstancePerLifetimeScope();
         }
-
     }
 }

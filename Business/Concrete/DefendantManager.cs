@@ -35,7 +35,7 @@ namespace Business.Concrete
         {
             var defendant = _mapper.Map<Defendant>(defendantAddDto);
             await _defendantDal.AddAsync(defendant);
-            _unitOfWork.SaveChangesAsync();
+           await _unitOfWork.SaveChangesAsync();
             return new SuccessDataResult<int>(defendant.ID, CommonMessages.EntityAdded);
         }
         public async  Task<IDataResult<List<DefendantListDto>>> GetAllDefendant()

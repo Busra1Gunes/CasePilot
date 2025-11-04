@@ -2,59 +2,57 @@
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Transactions;
 
 namespace Business.Concrete
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly CasePilotContext _context;
+        private readonly ILogger<UnitOfWork> _logger;
 
-        public UnitOfWork(IServiceProvider serviceProvider)
+        public UnitOfWork(CasePilotContext context, ILogger<UnitOfWork> logger)
         {
-            _serviceProvider = serviceProvider;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _logger = logger;
         }
 
-        // Mevcut metot - kendi transaction'ını yönetir
         public async Task SaveChangesAsync()
         {
-            CasePilotContext context = _serviceProvider.GetRequiredService<CasePilotContext>();
-            using var transaction = await context.Database.BeginTransactionAsync();
+            _logger?.LogDebug("UnitOfWork: SaveChangesAsync (with explicit transaction) started.");
+
+            // BeginTransactionAsync ile transaction alıyoruz
+            await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                await ApplyAuditInfo(context);
-                await context.SaveChangesAsync();
+                var affected = await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
+                _logger?.LogInformation("UnitOfWork: Transaction committed. Affected rows: {count}", affected);
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
-                throw new TransactionException("Transaction yönetiminde hata oluştu!", ex);
+                _logger?.LogError(ex, "UnitOfWork: Transaction failed, rolling back.");
+                try
+                {
+                    await transaction.RollbackAsync();
+                }
+                catch (Exception rbEx)
+                {
+                    _logger?.LogError(rbEx, "UnitOfWork: Rollback failed.");
+                }
+                throw;
             }
         }
 
-        // Yeni metot - transaction olmadan sadece SaveChanges
-        public async Task SaveChangesWithoutTransactionAsync()
+        // IMPORTANT: Do NOT dispose the DbContext here if it's provided by the DI container (scoped).
+        // Let the DI container manage DbContext lifetime. Removing manual dispose avoids double-dispose issues.
+        public void Dispose()
         {
-            CasePilotContext context = _serviceProvider.GetRequiredService<CasePilotContext>();
-            await ApplyAuditInfo(context);
-            await context.SaveChangesAsync();
+            // intentionally left blank
+            // _context is disposed by the DI container (the request scope). Do not call _context.Dispose() here.
         }
 
-        // Ortak audit bilgilerini uygula
-        private async Task ApplyAuditInfo(CasePilotContext context)
-        {
-            var turkeyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
-            var turkeyTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, turkeyTimeZone);
-
-            var entries = context.ChangeTracker.Entries<Entity>();
-            foreach (var entry in entries)
-            {
-                if (entry.State == EntityState.Added)
-                    entry.Entity.CreatedDate = turkeyTime;
-            }
-        }
     }
 }

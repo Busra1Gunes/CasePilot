@@ -243,6 +243,7 @@ namespace Service.Mapping
              .ReverseMap();
 
             CreateMap<AccountTransaction, AccountTransactionAddDto>().ReverseMap();
+            CreateMap<AccountTransaction, AccountTransactionUpdateDto>().ReverseMap();
 
 
             CreateMap<User, UserLoginDto>().ReverseMap();

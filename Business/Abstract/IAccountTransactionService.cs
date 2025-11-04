@@ -13,12 +13,15 @@ namespace Business.Abstract
     public interface IAccountTransactionService:IService<AccountTransaction>
     {
         Task<IDataResult<List<AccountTransaction>>> GetAll();
-        Task<IDataResult<AccountTransactionListDto>> GetAllByUserID(int userID);  
+        Task<IDataResult<AccountTransactionListDto>> GetAllByUserID(int userID);
         Task<IDataResult<AccountTransactionListDto>> GetAllByCaseFileID(int caseFileID);
-		Task<IDataResult<AccountTransaction>> GetById(int transactionID);
+        Task<IDataResult<AccountTransactionUpdateDto>> GetById(int transactionID);
         Task<IResult> Add(AccountTransactionAddDto accountTransactionAddDto);
         Task<IResult> AddWithCaseFileSharesAsync(AccountTransactionAddDto accountTransaction);
-        Task<IResult> Update(AccountTransaction transaction);
+        Task<IResult> Update(int ID, AccountTransactionUpdateDto transaction);
         Task<IResult> Delete(int accountTransactionID);
+
+        // New: toggle payment status (Ödendi <-> Ödenmedi)
+        Task<IResult> TogglePaymentStatusAsync(int accountTransactionID);
     }
 }
