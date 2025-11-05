@@ -46,7 +46,7 @@ namespace Business.Concrete
             var note = _mapper.Map<CaseFileNoteAddDto, CaseFileNote>(noteDto);
 
             await _noteDal.AddAsync(note);
-            _unitOfWork.SaveChangesAsync();
+           await _unitOfWork.SaveChangesAsync();
             return new SuccessDataResult<int>(note.ID, CommonMessages.EntityAdded);
         }
 
@@ -60,7 +60,7 @@ namespace Business.Concrete
                 return new ErrorResult("Note not found");
             note.Status = false;
              _noteDal.Update(note);
-            _unitOfWork.SaveChangesAsync();
+          await  _unitOfWork.SaveChangesAsync();
             return new SuccessResult(CommonMessages.EntityDeleted);
         }
 
