@@ -207,13 +207,21 @@ namespace Business.Concrete
             if (caseFiles == null)
                 throw new InvalidCaseFileException();
 
-            // Önce bu dosyaya ait duruşmaları sil
+            // bu dosyaya ait duruşmaları sil
             var hearings = _hearingDal.Where(h => h.CaseFileID == caseFileID && h.Status == true).ToList();
             foreach (var hearing in hearings)
             {
                 hearing.Status = false;
                 hearing.DeletedDate = DateTime.Now;
                 _hearingDal.Update(hearing);
+            }
+            //masrafları sil
+            var accountTransactions = _accountTransactionDal.Where(h => h.CaseFileID == caseFileID && h.Status == true).ToList();
+            foreach (var accountTransaction in accountTransactions)
+            {
+                accountTransaction.Status = false;
+                accountTransaction.DeletedDate = DateTime.Now;
+                _accountTransactionDal.Update(accountTransaction);
             }
 
             // Sonra dosyayı sil

@@ -27,8 +27,8 @@ namespace Business.Concrete
         public async Task<object> Totals()
         {
             int totalCaseFile =await _caseFileService.Where(c => c.Status.Equals(true)).CountAsync();
-            decimal totalDept = await _accountTransactionService.Where(c => c.Status.Equals(true) && c.DebtorID == 1).SumAsync(s => s.Amount);
-            decimal totalCredit = await _accountTransactionService.Where(c => c.Status.Equals(true) && c.CreditID == 1).SumAsync(s => s.Amount);
+            decimal totalDept = await _accountTransactionService.Where(c => c.Status.Equals(true) && c.DebtorID == 1 && c.PaymentStatus == 1).SumAsync(s => s.Amount);
+            decimal totalCredit = await _accountTransactionService.Where(c => c.Status.Equals(true) && c.CreditID == 1 && c.PaymentStatus==1).SumAsync(s => s.Amount);
             int totalUser = await _userService.Where(u=>u.Status.Equals(true)).CountAsync();
             decimal totalIncome = await _incomeService.Where(c => c.Status.Equals(true)).SumAsync(s => s.Amount); //gelirler
             decimal totalExpense = await _expenseService.Where(c => c.Status.Equals(true) && c.PaymentStatus == 1).SumAsync(s => s.Amount); //ödenen giderler
