@@ -156,4 +156,4 @@ namespace Business.Concrete
             return new SuccessResult("Yetkiler role başarıyla eklendi");
         }
     }
-}
+} 

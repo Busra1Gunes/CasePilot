@@ -16,41 +16,42 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-	public class CaseTypeManager : ICaseTypeService
-	{
-		ICaseTypeDal _caseTypeDal;
-		readonly IMapper _mapper;
-		IUnitOfWork _unitOfWork;
-        public CaseTypeManager(ICaseTypeDal caseTypeDal ,IMapper mapper, IUnitOfWork unitOfWork)
+    public class CaseTypeManager : ICaseTypeService
+    {
+        ICaseTypeDal _caseTypeDal;
+        readonly IMapper _mapper;
+        IUnitOfWork _unitOfWork;
+        public CaseTypeManager(ICaseTypeDal caseTypeDal, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _caseTypeDal = caseTypeDal;
-			_mapper = mapper; 
-			_unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
         public async Task<IResult> Add(CaseTypeAddDto caseTypedto)
         {
             var casetype = _mapper.Map<CaseType>(caseTypedto);
-            _caseTypeDal.AddAsync(casetype); 
-			_unitOfWork.SaveChangesAsync();
+            casetype.Status = true;
+            await _caseTypeDal.AddAsync(casetype);
+            await _unitOfWork.SaveChangesAsync();
             return new SuccessDataResult<int>(casetype.ID, CommonMessages.EntityAdded);
         }
 
-		public async Task<IDataResult<List<CaseType>>> GetAll()
-		{
-		   List<CaseType> casetypeList= _caseTypeDal.GetAllQueryable().ToList();
-			return new SuccessDataResult<List<CaseType>>(casetypeList);
-		}
+        public async Task<IDataResult<List<CaseType>>> GetAll()
+        {
+            List<CaseType> casetypeList = _caseTypeDal.GetAllQueryable(a => a.Status.Equals(true)).ToList();
+            return new SuccessDataResult<List<CaseType>>(casetypeList);
+        }
 
-		public async Task<IDataResult<CaseType>> Get(int casetypeID)
-		{
-			CaseType casetype= _caseTypeDal.GetByIdAsync(casetypeID).Result;
-			return new SuccessDataResult<CaseType>(casetype);
-		}
+        public async Task<IDataResult<CaseType>> Get(int casetypeID)
+        {
+            CaseType casetype = _caseTypeDal.GetByIdAsync(casetypeID).Result;
+            return new SuccessDataResult<CaseType>(casetype);
+        }
 
-		public async Task<IResult> Update(CaseType caseType)
-		{
-			throw new NotImplementedException();
-		}
+        public async Task<IResult> Update(CaseType caseType)
+        {
+            throw new NotImplementedException();
+        }
         public async Task<IResult> DeleteCaseTypeAsync(int id)
         {
             CaseType? caseType = _caseTypeDal.Where(d => d.ID == id && d.Status.Equals(true)).SingleOrDefault();

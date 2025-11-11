@@ -33,6 +33,7 @@ namespace Business.Concrete
         public async Task<IResult> Add(ApplicationTypeAddDto applicationType)
         {
             var applicationType1 = _mapper.Map<ApplicationType>(applicationType);
+            applicationType1.Status = true;
             await _applicationTypeDal.AddAsync(applicationType1);
             await _unitOfWork.SaveChangesAsync();
             return new SuccessDataResult<int>(applicationType1.ID, CommonMessages.EntityAdded);
@@ -41,7 +42,7 @@ namespace Business.Concrete
         public async Task<IDataResult<List<ApplicationTypeDto>>> GetByCaseTypeID(int caseTypeID)
         {
             List<ApplicationType> applicationTypes = await _applicationTypeDal
-                .GetAllQueryable(a => a.CaseTypeID.Equals(caseTypeID))
+                .GetAllQueryable(a => a.CaseTypeID.Equals(caseTypeID) && a.Status.Equals(true))
                 .ToListAsync();
             return new SuccessDataResult<List<ApplicationTypeDto>>(_mapper.Map<List<ApplicationTypeDto>>(applicationTypes));
         }
