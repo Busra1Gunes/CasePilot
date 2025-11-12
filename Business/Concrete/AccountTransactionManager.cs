@@ -196,7 +196,7 @@ namespace Business.Concrete
             return new SuccessResult(CommonMessages.EntityDeleted);
         }
 
-        public async Task<IDataResult<List<AccountTransaction>>> GetAll()
+        public async Task<IDataResult<List<AccountTransactionDto>>> GetAll()
         {
             try
             {
@@ -208,12 +208,12 @@ namespace Business.Concrete
                     .Include(x => x.CaseFile)
                     .OrderByDescending(x => x.CreatedDate)
                     .ToListAsync();
-
-                return new SuccessDataResult<List<AccountTransaction>>(transactions);
+                var hareketDtos = _mapper.Map<List<AccountTransactionDto>>(transactions);
+                return new SuccessDataResult<List<AccountTransactionDto>>(hareketDtos);
             }
             catch (Exception ex)
             {
-                return new ErrorDataResult<List<AccountTransaction>>($"Hesap hareketleri alınırken hata oluştu: {ex.Message}");
+                return new ErrorDataResult<List<AccountTransactionDto>>($"Hesap hareketleri alınırken hata oluştu: {ex.Message}");
             }
         }
 
